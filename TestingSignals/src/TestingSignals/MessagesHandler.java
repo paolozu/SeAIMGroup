@@ -12,40 +12,39 @@ import org.json.simple.parser.ParseException;
 
 public class MessagesHandler implements HttpHandler {
 
+	// Counter for testing speed.
 	static int counter = 0;
 
     public static void main(String[] args) throws Exception {
 
     	HttpServer server = HttpServer.create(new InetSocketAddress(8000), 0);
     	server.createContext("/", new MessagesHandler());
-    	server.setExecutor(null); // creates a default executor
+    	server.setExecutor(null); 
     	server.start();
 
     }
 
-    InputStream robot_messages;
-
     @Override
     public void handle(HttpExchange exchange) throws IOException {
 
-    	robot_messages = exchange.getRequestBody();
-    	JSONObject message = null;
+    	InputStream robot_message = exchange.getRequestBody();
+    	JSONObject message;
     	JSONParser jsonParser = new JSONParser();
 
 
-    		/* message in formato {"signal_state":0,"cluster_id":12,"robot_id":123,"area_id":123}   */
+    		// Message formatted like {"signal_state":0,"cluster_id":12,"robot_id":123,"area_id":123}
 
     		try {
 				message = (JSONObject)jsonParser.parse(
-					      			  new InputStreamReader(robot_messages, "UTF-8"));
+					      			  new InputStreamReader(robot_message, "UTF-8"));
 			} catch (ParseException e) {
-				e.printStackTrace();
+				message = null;
 			}
 
     		System.out.println(message);
 
-    		//counter++;
-    		//System.out.println(counter);
+    		/*counter++;
+    		System.out.println(counter);*/
 
     		String response = "This is the response";
     		exchange.sendResponseHeaders(200, response.getBytes().length);
@@ -53,7 +52,7 @@ public class MessagesHandler implements HttpHandler {
     		os.write(response.getBytes());
     		os.close();
 
-    		robot_messages.close();
+    		robot_message.close();
 
     }
 }
