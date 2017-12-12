@@ -10,7 +10,7 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
-public class MessagesHandler implements HttpHandler {
+public class MessagesListener {
 
 	// Counter for testing speed.
 	static int counter = 0;
@@ -24,14 +24,16 @@ public class MessagesHandler implements HttpHandler {
 
     }
 
-    @Override
-    public void handle(HttpExchange exchange) throws IOException {
-
-    	InputStream robot_message = exchange.getRequestBody();
-    	JSONObject message;
-    	JSONParser jsonParser = new JSONParser();
-
-
+    static class MessagesHandler implements HttpHandler {
+    	
+	    @Override
+	    public void handle(HttpExchange exchange) throws IOException {
+	
+	    	InputStream robot_message = exchange.getRequestBody();
+	    	JSONObject message;
+	    	JSONParser jsonParser = new JSONParser();
+	
+	
     		// Message formatted like {"signal_state":0,"cluster_id":12,"robot_id":123,"area_id":123}
 
     		try {
@@ -53,6 +55,6 @@ public class MessagesHandler implements HttpHandler {
     		os.close();
 
     		robot_message.close();
-
+	    }
     }
 }
