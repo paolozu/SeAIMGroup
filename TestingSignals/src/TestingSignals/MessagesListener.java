@@ -1,19 +1,19 @@
 package TestingSignals;
 
+import com.sun.net.httpserver.*;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.InetSocketAddress;
-import com.sun.net.httpserver.*;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
 public class MessagesListener {
 
-	// Counter for testing speed.
-	static int counter = 0;
+    // Counter for testing speed.
+    static int counter = 0;
 
     public static void main(String[] args) throws Exception {
 
@@ -38,7 +38,7 @@ public class MessagesListener {
 
     		try {
 		        message = (JSONObject)jsonParser.parse(new InputStreamReader(robot_message, "UTF-8"));
-			} 
+		} 
                 catch (ParseException e) {
 			message = null;
 		}
@@ -57,6 +57,6 @@ public class MessagesListener {
     		os.close();
 
     		robot_message.close();
-	    }
+	}
     }
 }
