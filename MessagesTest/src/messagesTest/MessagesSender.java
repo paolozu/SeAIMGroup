@@ -1,4 +1,4 @@
-package TestingSignals;
+package messagesTest;
 
 import java.io.BufferedInputStream;
 import java.io.InputStream;
@@ -8,7 +8,7 @@ import java.net.URL;
 
 import org.json.simple.JSONObject;
 
-public class SignalsSender {
+public class MessagesSender {
 	
 	public static void main(String[] args) throws Exception {
 
@@ -44,6 +44,7 @@ public class SignalsSender {
 	            in.close();
 	            conn.disconnect();
             }
+            
             long endTime   = System.currentTimeMillis();
             long totalTime = endTime - startTime;
             System.out.println(totalTime);
