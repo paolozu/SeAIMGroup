@@ -11,5 +11,15 @@
 			<attribute name="module" value="true"/>
 		</attributes>
 	</classpathentry>
+	<classpathentry kind="lib" path="C:/Users/Stefano_Martella/Desktop/httpcomponents-client-4.5.4/lib/commons-codec-1.10.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Stefano_Martella/Desktop/httpcomponents-client-4.5.4/lib/commons-logging-1.2.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Stefano_Martella/Desktop/httpcomponents-client-4.5.4/lib/fluent-hc-4.5.4.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Stefano_Martella/Desktop/httpcomponents-client-4.5.4/lib/httpclient-4.5.4.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Stefano_Martella/Desktop/httpcomponents-client-4.5.4/lib/httpclient-cache-4.5.4.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Stefano_Martella/Desktop/httpcomponents-client-4.5.4/lib/httpclient-win-4.5.4.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Stefano_Martella/Desktop/httpcomponents-client-4.5.4/lib/httpcore-4.4.7.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Stefano_Martella/Desktop/httpcomponents-client-4.5.4/lib/httpmime-4.5.4.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Stefano_Martella/Desktop/httpcomponents-client-4.5.4/lib/jna-4.4.0.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Stefano_Martella/Desktop/httpcomponents-client-4.5.4/lib/jna-platform-4.4.0.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
