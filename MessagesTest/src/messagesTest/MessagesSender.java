@@ -6,18 +6,19 @@ import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
-import org.json.simple.JSONObject;
+import org.json.JSONObject;
 
 public class MessagesSender {
 	
 	public static void main(String[] args) throws Exception {
 
+			// To keep trace of starting time.
 			long startTime = System.currentTimeMillis();
 		
             String query = "http://127.0.0.1:8000";
             JSONObject robot_message = new JSONObject();
             robot_message.put("robot_id", 123);
-            robot_message.put("signal_state", 123);
+            robot_message.put("signal_state", 0);
             robot_message.put("cluster_id", 123);
             robot_message.put("area_id", 123);
             
@@ -37,14 +38,14 @@ public class MessagesSender {
 	            os.write(robot_message.toString().getBytes("UTF-8"));
 	            os.close();
 	
-	            // read the response
+	            // Reading the response.
 	            InputStream in = new BufferedInputStream(conn.getInputStream());
-	
 	
 	            in.close();
 	            conn.disconnect();
             }
             
+            // Printing execution time.
             long endTime   = System.currentTimeMillis();
             long totalTime = endTime - startTime;
             System.out.println(totalTime);
