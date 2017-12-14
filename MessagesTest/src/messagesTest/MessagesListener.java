@@ -87,9 +87,7 @@ public class MessagesListener {
     		// time of an array of 90000 robots using json'datas.
     		
     		/*try {
-				robots[counter].signal_catch(message.getInt("signal_state"));
-				robots[counter].update_DownTime();
-				robots[counter++].update_IR();
+				robots[counter++] = new Robot(message.getInt("robot_id"), message.getInt("cluster_id"));
 			} catch (JSONException e) {
 				e.printStackTrace();
 			}*/
