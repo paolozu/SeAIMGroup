@@ -75,9 +75,8 @@ public class MessagesListener {
     		// Down time and IR shouldn't be updated here.
     		
     		try {
-				robots[counter].signal_catch(message.getInt("signal_state"));
-				robots[counter].update_DownTime();
-				robots[counter++].update_IR();
+				robots[counter].signalCatch(message.getInt("signal_state"));
+				robots[counter++].updateIR();
 			} catch (JSONException e) {
 				e.printStackTrace();
 			}
