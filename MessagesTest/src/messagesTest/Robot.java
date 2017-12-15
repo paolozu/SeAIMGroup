@@ -37,18 +37,15 @@ public class Robot {
 	// Other methods
 	
 	public void signalCatch(int signal) {
-		if ( signal == 1 ){ 
-			if ( down_signals > 0 ) {
-				this.down_signals -= 1;
-				if( down_signals == 0 )
-					this.updateDownTime(this.start_downtime);
-			}
+		if ( signal == 1 ){
+			this.down_signals -= 1;
+			if( down_signals == 0 )
+				this.updateDownTime(this.start_downtime);
 		}
 		else { // signal == 0 
 			this.down_signals += 1;
-			if( this.down_signals == 1 ) { 
+			if( this.down_signals == 1 )
 				this.start_downtime = new Timestamp(System.currentTimeMillis());
-			}
 		}	
 	}
 	
