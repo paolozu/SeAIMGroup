@@ -7,7 +7,7 @@ import java.util.TreeMap;
 
 public class Cluster {
 	
-	private TreeMap<Integer, Robot> robots_IR;   				// Map in which the key is robot_id and the value is robot_IR.
+	private TreeMap<Integer, Robot> robots_IR;   			// Map in which the key is robot_id and the value is robot_IR.
 	private int down_robots; 	              				// Counter of down robots in this cluster.
 	private double cluster_IR;
 	private int cluster_id;
@@ -41,6 +41,12 @@ public class Cluster {
 	public void setDowntimeIntervals(TreeMap<Timestamp, Long> downtime_intervals) { this.downtime_intervals = downtime_intervals; }
 	
 	// Other methods
+	
+	public void addUpRobot(Robot robot) {
+		if ( this.robots_IR.containsKey(robot.getRobotId()) ) {
+			this.updateRobotIR(robot);
+		}
+	}
 	
 	public void addRobot(Robot robot){
 		if ( this.robots_IR.containsKey(robot.getRobotId()) ) {
