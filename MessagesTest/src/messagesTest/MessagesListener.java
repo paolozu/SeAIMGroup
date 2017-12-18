@@ -8,6 +8,8 @@ import java.io.OutputStream;
 import java.io.Reader;
 import java.net.InetSocketAddress;
 import java.nio.charset.Charset;
+import java.util.TreeMap;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -17,17 +19,28 @@ public class MessagesListener {
 
 	// Counter to test speed.
 	static int counter = 0;
+	static int robots_counter = 0;
+	static TreeMap<Integer, Area> areas = new TreeMap<>();
 	
 	// Array to test robots initialization time
 	// using json'datas or to test updating time 
 	// always using json'datas.
-	static Robot[] robots = new Robot[90000];
+	//static Robot[] robots = new Robot[90000];
 
     public static void main(String[] args) throws Exception {
     	
-    	for ( int i = 0; i < 90000; i++ ) {
-    		robots[counter++] = new Robot(14, 6);
+    	for ( int i = 0; i < 10; i++ ) {
+    		areas.put(i, new Area(i));
+    		for(int x = 0; x < 10; x++) {
+    			areas.get(i).addCluster(new Cluster(x, i));
+    			for(int y = 0; y < 900; y++) {
+    				areas.get(i).getClustersIR().get(x).addUpRobot(new Robot(y, x));
+    				robots_counter++;
+    			}
+    		}
     	}
+    	
+    	System.out.println(robots_counter);
 
     	HttpServer server = HttpServer.create(new InetSocketAddress(8000), 0);
     	server.createContext("/", new MessagesReceiver());
@@ -68,18 +81,20 @@ public class MessagesListener {
     		os.write(response.getBytes());
     		os.close();
     		
+    		    		
+    		
     		// Comment the 2 try-catch below to test json reception speed.
     		
     		// Updating robots signal from information of received json
     		// and also updating down time and IR time.
     		// Down time and IR shouldn't be updated here.
     		
-    		try {
+    		/*try {
 				robots[counter].signalCatch(message.getInt("signal_state"));
 				robots[counter++].updateIR();
 			} catch (JSONException e) {
 				e.printStackTrace();
-			}
+			}*/
     		
     		// Uncomment the try-catch below, the for cycle inside the main function
     		// and comment the try-catch above to test initialization 

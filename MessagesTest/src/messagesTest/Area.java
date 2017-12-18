@@ -22,6 +22,11 @@ public class Area {
 	
 	// Other methods
 	
+	public void addCluster(Cluster cluster) {
+		if ( ! this.clusters_IR.containsKey(cluster.getClusterId()) ) 
+			this.clusters_IR.put(cluster.getClusterId(), cluster);		
+	}
+	
 	@Override
 	public String toString() {
 		return ( "Area ID: " + this.area_id );

@@ -27,7 +27,7 @@ public class Cluster {
 	public TreeMap<Integer, Robot> getRobotsIR() { return robots_IR; }
 	public int getDownRobots() { return this.down_robots; }
 	public double getClusterIR() { return cluster_IR; }
-	public int getClusterid() { return cluster_id; }
+	public int getClusterId() { return cluster_id; }
 	public int getAreaId() { return area_id; }
 	public Timestamp getStartDowntime() { return start_downtime; }
 	public TreeMap<Timestamp, Long> getDowntimeIntervals() { return this.downtime_intervals; }
