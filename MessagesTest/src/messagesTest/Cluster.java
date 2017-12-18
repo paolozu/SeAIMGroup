@@ -8,7 +8,7 @@ import java.util.TreeMap;
 
 public class Cluster {
 	
-	private Map<Integer, Robot> robots_IR;   				// Map in which the key is robot_id and the value is robot_IR.
+	private TreeMap<Integer, Robot> robots_IR;   				// Map in which the key is robot_id and the value is robot_IR.
 	private int down_robots; 	              				// Counter of down robots in this cluster.
 	private double cluster_IR;
 	private int cluster_id;
@@ -16,13 +16,16 @@ public class Cluster {
 	private Timestamp start_downtime;        				 // To keep trace when down time starts.
 	private TreeMap<Timestamp, Long> downtime_intervals;
 	
-	public Cluster(){
-		robots_IR = new HashMap<Integer, Robot>(); 
+	public Cluster(int cluster_id, int area_id){
+		this.cluster_id = cluster_id;
+		this.area_id = area_id;
+		this.robots_IR = new TreeMap<>();
+		this.downtime_intervals = new TreeMap<>();
 	}
 	
 	// Getters and Setters
 	
-	public Map<Integer, Robot> getRobotsIR() { return robots_IR; }
+	public TreeMap<Integer, Robot> getRobotsIR() { return robots_IR; }
 	public int getDownRobots() { return this.down_robots; }
 	public double getClusterIR() { return cluster_IR; }
 	public int getClusterid() { return cluster_id; }
@@ -30,7 +33,7 @@ public class Cluster {
 	public Timestamp getStartDowntime() { return start_downtime; }
 	public TreeMap<Timestamp, Long> getDowntimeIntervals() { return this.downtime_intervals; }
 
-	public void setRobotsIR(Map<Integer, Robot> robots_IR) { this.robots_IR = robots_IR; }
+	public void setRobotsIR(TreeMap<Integer, Robot> robots_IR) { this.robots_IR = robots_IR; }
 	public void setDownRobots(int down_robots) { this.down_robots = down_robots; }
 	public void setClusterIR(int cluster_IR) { this.cluster_IR = cluster_IR; }
 	public void setClusterId(int cluster_id) { this.cluster_id = cluster_id; }
@@ -118,7 +121,7 @@ public class Cluster {
 	// Function to force IR update in case we need current IR and the down_robots is greater than 0.
 	// We need this function because otherwise we update total_downtime only when down_signals counter
 	// returns to be 0.
-	public double forceUpdateIR(Timestamp time) {
+	public double forceUpdateIR() {
 		if ( down_robots > 0 ) {
 			this.updateDownTime();
 			this.start_downtime = new Timestamp(System.currentTimeMillis());
@@ -128,6 +131,6 @@ public class Cluster {
 		
 	@Override
 	public String toString() {
-		return ( "Cluster ID: " + this.cluster_id + "\nCluster IR: " + this.cluster_IR );
+		return ( "Cluster ID: " + this.cluster_id + "\nCluster IR: " + this.cluster_IR + "%" );
 	}
 }

@@ -20,6 +20,7 @@ public class Robot {
 	public Robot(int robot_id, int cluster_id) {
 		this.robot_id = robot_id;
 		this.cluster_id = cluster_id;
+		this.downtime_intervals = new TreeMap<>();
 	}
 		
 	// Getters and Setters
@@ -102,7 +103,7 @@ public class Robot {
 	// Function to force IR update in case we need current IR and the down_signals is greater than 0.
 	// We need this function because otherwise we update total_downtime only when down_signals counter
 	// returns to be 0.
-	public double forceUpdateIR(Timestamp time) {
+	public double forceUpdateIR() {
 		if ( down_signals > 0 ) {
 			this.updateDownTime();
 			this.start_downtime = new Timestamp(System.currentTimeMillis());
@@ -113,6 +114,6 @@ public class Robot {
 	@Override
 	public String toString() {
 		return( "Robot ID: " + this.robot_id + "\nCluster ID: " + this.cluster_id +
-				"\nDown signals " + this.down_signals + "\nRobot IR: " + this.robot_IR );
+				"\nDown signals: " + this.down_signals + "\nRobot IR: " + this.robot_IR + "%" );
 	}
 }
