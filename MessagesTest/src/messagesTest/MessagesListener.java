@@ -9,10 +9,8 @@ import java.io.Reader;
 import java.net.InetSocketAddress;
 import java.nio.charset.Charset;
 import java.util.TreeMap;
-
 import org.json.JSONException;
 import org.json.JSONObject;
-
 import com.sun.net.httpserver.*;
 
 public class MessagesListener {
@@ -81,32 +79,59 @@ public class MessagesListener {
     		os.write(response.getBytes());
     		os.close();
     		
-    		    		
+    		try {
+    			int area_id = message.getInt("area_id");
+	    		int cluster_id = message.getInt("cluster_id");
+	    		int robot_id = message.getInt("robot_id");
+	    		int signal_state = message.getInt("signal_state");
     		
-    		// Comment the 2 try-catch below to test json reception speed.
-    		
-    		// Updating robots signal from information of received json
-    		// and also updating down time and IR time.
-    		// Down time and IR shouldn't be updated here.
-    		
-    		/*try {
+
+				if( areas.containsKey(area_id) ) {
+					if( areas.get(area_id).getClustersIR().containsKey(cluster_id) ) {
+						
+					}
+					else {
+						Robot current_robot = new Robot(robot_id, cluster_id);
+						Cluster current_cluster = new Cluster(cluster_id, area_id);
+						current_robot.signalCatch(signal_state);
+						current_cluster.addRobot(current_robot);
+						
+						areas.get(area_id).addCluster(current_cluster);
+					}
+				}
+				else {
+					areas.put(area_id, new Area(area_id));
+				}
+	
+    		} 
+    		catch (JSONException e) {
+				e.printStackTrace();
+			}
+			// Comment the 2 try-catch below to test json reception speed.
+			
+			// Updating robots signal from information of received json
+			// and also updating down time and IR time.
+			// Down time and IR shouldn't be updated here.
+			
+			/*try {
 				robots[counter].signalCatch(message.getInt("signal_state"));
 				robots[counter++].updateIR();
 			} catch (JSONException e) {
 				e.printStackTrace();
 			}*/
-    		
-    		// Uncomment the try-catch below, the for cycle inside the main function
-    		// and comment the try-catch above to test initialization 
-    		// time of an array of 90000 robots using json'datas.
-    		
-    		/*try {
+			
+			// Uncomment the try-catch below, the for cycle inside the main function
+			// and comment the try-catch above to test initialization 
+			// time of an array of 90000 robots using json'datas.
+			
+			/*try {
 				robots[counter++] = new Robot(message.getInt("robot_id"), message.getInt("cluster_id"));
 			} catch (JSONException e) {
 				e.printStackTrace();
 			}*/
-    		
+				
     		robot_message.close();
+			
 	    }
 	    
 	    // Function to parse received json.
