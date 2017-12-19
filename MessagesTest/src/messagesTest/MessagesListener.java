@@ -32,7 +32,7 @@ public class MessagesListener {
     		for(int x = 0; x < 10; x++) {
     			areas.get(i).addCluster(new Cluster(x, i));
     			for(int y = 0; y < 900; y++) {
-    				areas.get(i).getClustersIR().get(x).addUpRobot(new Robot(y, x));
+    				areas.get(i).getClustersIR().get(x).addRobot(new Robot(y, x));
     				robots_counter++;
     			}
     		}
@@ -84,15 +84,25 @@ public class MessagesListener {
 	    		int cluster_id = message.getInt("cluster_id");
 	    		int robot_id = message.getInt("robot_id");
 	    		int signal_state = message.getInt("signal_state");
-    		
-
+	    			
 				if( areas.containsKey(area_id) ) {
 					if( areas.get(area_id).getClustersIR().containsKey(cluster_id) ) {
-						
+						if( areas.get(area_id).getClustersIR().get(cluster_id).getRobotsIR().containsKey(robot_id) ) {
+							areas.get(area_id).getClustersIR().get(cluster_id).getRobotsIR().get(robot_id).signalCatch(signal_state);
+							areas.get(area_id).getClustersIR().get(cluster_id)
+								 .addRobot(areas.get(area_id).getClustersIR()
+							     .get(cluster_id).getRobotsIR().get(robot_id));
+						}
+						else {
+							Robot current_robot = new Robot(robot_id, cluster_id);
+							current_robot.signalCatch(signal_state);
+							
+							areas.get(area_id).getClustersIR().get(cluster_id).addRobot(current_robot);
+						}
 					}
 					else {
 						Robot current_robot = new Robot(robot_id, cluster_id);
-						Cluster current_cluster = new Cluster(cluster_id, area_id);
+			    		Cluster current_cluster = new Cluster(cluster_id, area_id);
 						current_robot.signalCatch(signal_state);
 						current_cluster.addRobot(current_robot);
 						
@@ -101,6 +111,11 @@ public class MessagesListener {
 				}
 				else {
 					areas.put(area_id, new Area(area_id));
+					Robot current_robot = new Robot(robot_id, cluster_id);
+		    		Cluster current_cluster = new Cluster(cluster_id, area_id);
+					current_cluster.addRobot(current_robot);
+					
+					areas.get(area_id).getClustersIR().put(cluster_id, current_cluster);
 				}
 	
     		} 

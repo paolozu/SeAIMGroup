@@ -42,12 +42,6 @@ public class Cluster {
 	
 	// Other methods
 	
-	public void addUpRobot(Robot robot) {
-		if ( this.robots_IR.containsKey(robot.getRobotId()) ) {
-			this.updateRobotIR(robot);
-		}
-	}
-	
 	public void addRobot(Robot robot){
 		if ( this.robots_IR.containsKey(robot.getRobotId()) ) {
 			this.updateRobotIR(robot);
@@ -58,7 +52,8 @@ public class Cluster {
 			// so the first message of the new robot needs to be a down signal
 			// so we increase the down_robots counter for this cluster.
 			this.robots_IR.put(robot.getRobotId(), robot);
-			this.down_robots++;
+			if( robot.getDownSignals() == 1 )
+				this.down_robots++;
 		}
 	}
 	
@@ -66,19 +61,14 @@ public class Cluster {
 		
 		switch( robot.getDownSignals() ) {
 
-			case 0:		this.robots_IR.put(robot.getRobotId(), robot);
-						if( --this.down_robots == 0 )
+			case 0:		if( --this.down_robots == 0 )
 							this.updateDownTime();
 						break;
 					
 			case 1:		if( robot.getPreviuosDownSignals() != 2 ) {
 							this.down_robots++;
-							this.robots_IR.put(robot.getRobotId(), robot);
 							this.start_downtime = new Timestamp(System.currentTimeMillis());
-							break;
 						}
-					
-			default:	this.robots_IR.put(robot.getRobotId(), robot);
 		
 		}
 	}
