@@ -33,12 +33,9 @@ public class MessagesListener {
     			areas.get(i).addCluster(new Cluster(x, i));
     			for(int y = 0; y < 900; y++) {
     				areas.get(i).getClustersIR().get(x).handleRobot(new Robot(y, x));
-    				robots_counter++;
     			}
     		}
     	}
-    	
-    	System.out.println(robots_counter);
 
     	HttpServer server = HttpServer.create(new InetSocketAddress(8000), 0);
     	server.createContext("/", new MessagesReceiver());
