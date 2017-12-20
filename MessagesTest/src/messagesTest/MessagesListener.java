@@ -27,14 +27,22 @@ public class MessagesListener {
 
     public static void main(String[] args) throws Exception {
     	
+    	// Useful variables to increase robots and clusters ids
+    	// to no repeat them in cluster and areas respectively. 
+    	int robot_counter = 0;
+    	int cluster_counter = 0;
+    	
     	for ( int i = 0; i < 10; i++ ) {
     		areas.put(i, new Area(i));
     		for(int x = 0; x < 10; x++) {
-    			areas.get(i).addCluster(new Cluster(x, i));
+    			areas.get(i).addCluster(new Cluster(x + cluster_counter, i));
     			for(int y = 0; y < 900; y++) {
-    				areas.get(i).getClustersIR().get(x).handleRobot(new Robot(y, x));
+    				areas.get(i).getClustersIR().get(x + cluster_counter)
+    					 .handleRobot(new Robot(y + robot_counter, x + cluster_counter));
     			}
+    			robot_counter += 900;
     		}
+			cluster_counter += 10;
     	}
 
     	HttpServer server = HttpServer.create(new InetSocketAddress(8000), 0);
