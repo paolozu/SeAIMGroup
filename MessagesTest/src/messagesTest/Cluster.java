@@ -42,7 +42,9 @@ public class Cluster {
 	
 	// Other methods
 	
-	public void addRobot(Robot robot){
+	// This function in called either to add a robot to this cluster 
+	// or to update robot's values and then cluster's down robots.
+	public void handleRobot(Robot robot){
 		if ( this.robots_IR.containsKey(robot.getRobotId()) ) {
 			this.updateRobotIR(robot);
 		}
