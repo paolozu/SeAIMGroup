@@ -34,17 +34,19 @@ public class MessagesListener {
     	
     	for ( int i = 0; i < 10; i++ ) {
     		areas.put(i, new Area(i));
-    		for(int x = 0; x < 10; x++) {
+    		for( int x = 0; x < 10; x++ ) {
     			areas.get(i).addCluster(new Cluster(x + cluster_counter, i));
-    			for(int y = 0; y < 900; y++) {
-    				areas.get(i).getClustersIR().get(x + cluster_counter)
+    			for( int y = 0; y < 900; y++ ) {
+    				areas.get(i).getClusters().get(x + cluster_counter)
     					 .handleRobot(new Robot(y + robot_counter, x + cluster_counter));
     			}
     			robot_counter += 900;
     		}
 			cluster_counter += 10;
     	}
-
+    	
+    	System.out.println( areas.get(4).getClusters().get(3) );
+    	
     	HttpServer server = HttpServer.create(new InetSocketAddress(8000), 0);
     	server.createContext("/", new MessagesReceiver());
     	server.setExecutor(null); 
@@ -91,18 +93,18 @@ public class MessagesListener {
 	    		int signal_state = message.getInt("signal_state");
 	    			
 				if( areas.containsKey(area_id) ) {
-					if( areas.get(area_id).getClustersIR().containsKey(cluster_id) ) {
-						if( areas.get(area_id).getClustersIR().get(cluster_id).getRobotsIR().containsKey(robot_id) ) {
-							areas.get(area_id).getClustersIR().get(cluster_id).getRobotsIR().get(robot_id).signalCatch(signal_state);
-							areas.get(area_id).getClustersIR().get(cluster_id)
-								 .handleRobot(areas.get(area_id).getClustersIR()
-							     .get(cluster_id).getRobotsIR().get(robot_id));
+					if( areas.get(area_id).getClusters().containsKey(cluster_id) ) {
+						if( areas.get(area_id).getClusters().get(cluster_id).getRobots().containsKey(robot_id) ) {
+							areas.get(area_id).getClusters().get(cluster_id).getRobots().get(robot_id).signalCatch(signal_state);
+							areas.get(area_id).getClusters().get(cluster_id)
+								 .handleRobot(areas.get(area_id).getClusters()
+							     .get(cluster_id).getRobots().get(robot_id));
 						}
 						else {
 							Robot current_robot = new Robot(robot_id, cluster_id);
 							current_robot.signalCatch(signal_state);
 							
-							areas.get(area_id).getClustersIR().get(cluster_id).handleRobot(current_robot);
+							areas.get(area_id).getClusters().get(cluster_id).handleRobot(current_robot);
 						}
 					}
 					else {
@@ -121,7 +123,7 @@ public class MessagesListener {
 		    		current_cluster.handleRobot(current_robot);
 		    		
 					areas.put(area_id, new Area(area_id));
-					areas.get(area_id).getClustersIR().put(cluster_id, current_cluster);
+					areas.get(area_id).getClusters().put(cluster_id, current_cluster);
 				}
 	
     		} 
@@ -152,8 +154,8 @@ public class MessagesListener {
 				e.printStackTrace();
 			}*/
     		
-    		if (++counter == 70000) {
-    			System.out.println( areas.get(4).getClustersIR().get(3) );
+    		if( ++counter == 90000 ) {
+    			System.out.println( areas.get(4).getClusters().get(0) );
     		}
 				
     		robot_message.close();

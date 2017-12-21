@@ -5,26 +5,26 @@ import java.util.HashMap;
 public class Area {
 	
 	private int area_id;
-	private HashMap<Integer, Cluster> clusters_IR;
+	private HashMap<Integer, Cluster> clusters;
 	
 	public Area(int area_id) {
 		this.area_id = area_id;
-		this.clusters_IR = new HashMap<>();
+		this.clusters = new HashMap<>();
 	}
 	
 	// Getters and Setters
 	
 	public int getAreaId() { return this.area_id; }
-	public HashMap<Integer, Cluster> getClustersIR() { return this.clusters_IR; }
+	public HashMap<Integer, Cluster> getClusters() { return this.clusters; }
 	
 	public void setAreaId(int area_id) { this.area_id = area_id; } 
-	public void setClustersIR(HashMap<Integer, Cluster> clusters_IR) { this.clusters_IR = clusters_IR; }
+	public void setClusters(HashMap<Integer, Cluster> clusters) { this.clusters = clusters; }
 	
 	// Other methods
 	
 	public void addCluster(Cluster cluster) {
-		if ( ! this.clusters_IR.containsKey(cluster.getClusterId()) ) 
-			this.clusters_IR.put(cluster.getClusterId(), cluster);		
+		if ( ! this.clusters.containsKey(cluster.getClusterId()) ) 
+			this.clusters.put(cluster.getClusterId(), cluster);		
 	}
 	
 	@Override

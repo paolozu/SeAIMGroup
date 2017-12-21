@@ -32,10 +32,10 @@ public class MessagesSender {
 			// Initializing areas, clusters and robots.
 			for ( int i = 0; i < 10; i++ ) {
 	    		areas.put(i, new Area(i));
-	    		for(int x = 0; x < 10; x++) {
+	    		for( int x = 0; x < 10; x++ ) {
 	    			areas.get(i).addCluster(new Cluster(x + cluster_counter, i));
-	    			for(int y = 0; y < 900; y++) {
-	    				areas.get(i).getClustersIR().get(x + cluster_counter)
+	    			for( int y = 0; y < 900; y++ ) {
+	    				areas.get(i).getClusters().get(x + cluster_counter)
 	    					 .handleRobot(new Robot(y + robot_counter, x + cluster_counter));
 	    			}
 	    			robot_counter += 900;
@@ -47,7 +47,7 @@ public class MessagesSender {
 			
 			startTime = System.currentTimeMillis();
 			
-			// Variables to generete random messages.
+			// Variables to generate random messages.
 			Integer area_id;
 			Integer cluster_id;
 			Integer robot_id;
@@ -59,19 +59,19 @@ public class MessagesSender {
             	area_id = new Random().nextInt(10);
             	cluster_id =  ThreadLocalRandom.current().nextInt(((area_id)*10), ((area_id)*10)+10);
             	robot_id = ThreadLocalRandom.current().nextInt(((cluster_id)*900), ((cluster_id)*900)+900);  
-            	down_signals = areas.get(area_id).getClustersIR().get(cluster_id).getRobotsIR().get(robot_id).getDownSignals();
+            	down_signals = areas.get(area_id).getClusters().get(cluster_id).getRobots().get(robot_id).getDownSignals();
             	
             	if( down_signals == 0 ) {
             		signal_state = 0;
-            		areas.get(area_id).getClustersIR().get(cluster_id).getRobotsIR().get(robot_id).signalCatch(signal_state);
+            		areas.get(area_id).getClusters().get(cluster_id).getRobots().get(robot_id).signalCatch(signal_state);
             	}
             	else if ( down_signals == 7 ){
             		signal_state = 1;
-            		areas.get(area_id).getClustersIR().get(cluster_id).getRobotsIR().get(robot_id).signalCatch(signal_state);
+            		areas.get(area_id).getClusters().get(cluster_id).getRobots().get(robot_id).signalCatch(signal_state);
             	}
             	else {
             		signal_state += new Random().nextInt(2);
-            		areas.get(area_id).getClustersIR().get(cluster_id).getRobotsIR().get(robot_id).signalCatch(signal_state);
+            		areas.get(area_id).getClusters().get(cluster_id).getRobots().get(robot_id).signalCatch(signal_state);
             	}
             	
             	

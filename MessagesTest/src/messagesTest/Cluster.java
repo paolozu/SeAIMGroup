@@ -7,7 +7,7 @@ import java.util.HashMap;
 
 public class Cluster {
 	
-	private HashMap<Integer, Robot> robots_IR;   			// Map in which the key is robot_id and the value is robot_IR.
+	private HashMap<Integer, Robot> robots;   			// Map in which the key is robot_id and the value is robot_IR.
 	private int down_robots; 	              				// Counter of down robots in this cluster.
 	private double cluster_IR;
 	private int cluster_id;
@@ -18,13 +18,13 @@ public class Cluster {
 	public Cluster(int cluster_id, int area_id){
 		this.cluster_id = cluster_id;
 		this.area_id = area_id;
-		this.robots_IR = new HashMap<>();
+		this.robots = new HashMap<>();
 		this.downtime_intervals = new HashMap<>();
 	}
 	
 	// Getters and Setters
 	
-	public HashMap<Integer, Robot> getRobotsIR() { return robots_IR; }
+	public HashMap<Integer, Robot> getRobots() { return robots; }
 	public int getDownRobots() { return this.down_robots; }
 	public double getClusterIR() { return cluster_IR; }
 	public int getClusterId() { return cluster_id; }
@@ -32,7 +32,7 @@ public class Cluster {
 	public Timestamp getStartDowntime() { return start_downtime; }
 	public HashMap<Timestamp, Long> getDowntimeIntervals() { return this.downtime_intervals; }
 
-	public void setRobotsIR(HashMap<Integer, Robot> robots_IR) { this.robots_IR = robots_IR; }
+	public void setRobots(HashMap<Integer, Robot> robots) { this.robots = robots; }
 	public void setDownRobots(int down_robots) { this.down_robots = down_robots; }
 	public void setClusterIR(int cluster_IR) { this.cluster_IR = cluster_IR; }
 	public void setClusterId(int cluster_id) { this.cluster_id = cluster_id; }
@@ -45,7 +45,7 @@ public class Cluster {
 	// This function in called either to add a robot to this cluster 
 	// or to update robot's values and then cluster's down robots.
 	public void handleRobot(Robot robot){
-		if ( this.robots_IR.containsKey(robot.getRobotId()) ) {
+		if ( this.robots.containsKey(robot.getRobotId()) ) {
 			this.updateRobotIR(robot);
 		}
 		else {
@@ -53,7 +53,7 @@ public class Cluster {
 			// Here the new robot is no still present
 			// so the first message of the new robot needs to be a down signal
 			// so we increase the down_robots counter for this cluster.
-			this.robots_IR.put(robot.getRobotId(), robot);
+			this.robots.put(robot.getRobotId(), robot);
 			if( robot.getDownSignals() == 1 )
 				this.down_robots++;
 		}
