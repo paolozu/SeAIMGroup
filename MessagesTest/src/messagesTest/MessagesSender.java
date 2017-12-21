@@ -16,7 +16,7 @@ public class MessagesSender {
 	public static void main(String[] args) throws Exception {
 
 			// To keep trace of starting time.
-			long startTime;
+			//long startTime;
 			
 	    	// Useful variables to increase robots and clusters ids
 	    	// to no repeat them in cluster and areas respectively. 
@@ -45,7 +45,7 @@ public class MessagesSender {
             
 			System.out.println("Initialization terminated");
 			
-			startTime = System.currentTimeMillis();
+			//startTime = System.currentTimeMillis();
 			
 			// Variables to generate random messages.
 			Integer area_id;
@@ -102,9 +102,9 @@ public class MessagesSender {
             }
             
             // Printing execution time.
-            long endTime   = System.currentTimeMillis();
-            long totalTime = endTime - startTime;
-            System.out.println(totalTime);
+            //long endTime   = System.currentTimeMillis();
+            //long totalTime = endTime - startTime;
+            //System.out.println(totalTime);
     
 	}
 }

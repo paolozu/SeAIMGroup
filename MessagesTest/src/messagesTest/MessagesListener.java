@@ -45,8 +45,6 @@ public class MessagesListener {
 			cluster_counter += 10;
     	}
     	
-    	System.out.println( areas.get(4).getClusters().get(3) );
-    	
     	HttpServer server = HttpServer.create(new InetSocketAddress(8000), 0);
     	server.createContext("/", new MessagesReceiver());
     	server.setExecutor(null); 
@@ -155,7 +153,8 @@ public class MessagesListener {
 			}*/
     		
     		if( ++counter == 90000 ) {
-    			System.out.println( areas.get(4).getClusters().get(0) );
+    			areas.get(9).getClusters().get(91).forceUpdateIR();
+    			System.out.println( areas.get(9).getClusters().get(91) );
     		}
 				
     		robot_message.close();
