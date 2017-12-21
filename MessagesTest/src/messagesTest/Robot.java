@@ -3,7 +3,7 @@ package messagesTest;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Map;
-import java.util.TreeMap;
+import java.util.HashMap;
 
 public class Robot {
 	
@@ -13,14 +13,14 @@ public class Robot {
 	private int down_signals;								// To keep trace of down signals numbers.
 	private double robot_IR;
 	private Timestamp start_downtime;						// To keep trace when down time starts.
-	private TreeMap<Timestamp, Long> downtime_intervals;
+	private HashMap<Timestamp, Long> downtime_intervals;
 	
 	public Robot() {}
 	
 	public Robot(int robot_id, int cluster_id) {
 		this.robot_id = robot_id;
 		this.cluster_id = cluster_id;
-		this.downtime_intervals = new TreeMap<>();
+		this.downtime_intervals = new HashMap<>();
 	}
 		
 	// Getters and Setters
@@ -31,7 +31,7 @@ public class Robot {
 	public int getPreviuosDownSignals() { return this.previous_down_signals; }
 	public Timestamp getStartDowntime() { return this.start_downtime; }
 	public double getRobotIR() { return this.robot_IR; }
-	public TreeMap<Timestamp, Long> getDowntimeIntervals() { return this.downtime_intervals; }
+	public HashMap<Timestamp, Long> getDowntimeIntervals() { return this.downtime_intervals; }
 	
 	public void setRobotId(int robot_id) { this.robot_id = robot_id; }
 	public void setClusterId(int cluster_id) { this.cluster_id = cluster_id; }
@@ -39,7 +39,7 @@ public class Robot {
 	public void setPreviousDownSignal(int previous_down_signals) { this.previous_down_signals = previous_down_signals; }
 	public void setStartDowntime(Timestamp start_downtime) { this.start_downtime = start_downtime; }
 	public void setRobotIR(int robot_IR) { this.robot_IR = robot_IR; }
-	public void setDowntimeIntervals(TreeMap<Timestamp, Long> downtime_intervals) { this.downtime_intervals = downtime_intervals; }
+	public void setDowntimeIntervals(HashMap<Timestamp, Long> downtime_intervals) { this.downtime_intervals = downtime_intervals; }
 	
 	// Other methods
 	

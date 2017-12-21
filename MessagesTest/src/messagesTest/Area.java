@@ -1,24 +1,24 @@
 package messagesTest;
 
-import java.util.TreeMap;
+import java.util.HashMap;
 
 public class Area {
 	
 	private int area_id;
-	private TreeMap<Integer, Cluster> clusters_IR;
+	private HashMap<Integer, Cluster> clusters_IR;
 	
 	public Area(int area_id) {
 		this.area_id = area_id;
-		this.clusters_IR = new TreeMap<>();
+		this.clusters_IR = new HashMap<>();
 	}
 	
 	// Getters and Setters
 	
 	public int getAreaId() { return this.area_id; }
-	public TreeMap<Integer, Cluster> getClustersIR() { return this.clusters_IR; }
+	public HashMap<Integer, Cluster> getClustersIR() { return this.clusters_IR; }
 	
 	public void setAreaId(int area_id) { this.area_id = area_id; } 
-	public void setClustersIR(TreeMap<Integer, Cluster> clusters_IR) { this.clusters_IR = clusters_IR; }
+	public void setClustersIR(HashMap<Integer, Cluster> clusters_IR) { this.clusters_IR = clusters_IR; }
 	
 	// Other methods
 	

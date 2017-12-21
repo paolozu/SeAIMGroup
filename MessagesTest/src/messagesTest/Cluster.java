@@ -3,42 +3,42 @@ package messagesTest;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Map;
-import java.util.TreeMap;
+import java.util.HashMap;
 
 public class Cluster {
 	
-	private TreeMap<Integer, Robot> robots_IR;   			// Map in which the key is robot_id and the value is robot_IR.
+	private HashMap<Integer, Robot> robots_IR;   			// Map in which the key is robot_id and the value is robot_IR.
 	private int down_robots; 	              				// Counter of down robots in this cluster.
 	private double cluster_IR;
 	private int cluster_id;
 	private int area_id;
 	private Timestamp start_downtime;        				 // To keep trace when down time starts.
-	private TreeMap<Timestamp, Long> downtime_intervals;
+	private HashMap<Timestamp, Long> downtime_intervals;
 	
 	public Cluster(int cluster_id, int area_id){
 		this.cluster_id = cluster_id;
 		this.area_id = area_id;
-		this.robots_IR = new TreeMap<>();
-		this.downtime_intervals = new TreeMap<>();
+		this.robots_IR = new HashMap<>();
+		this.downtime_intervals = new HashMap<>();
 	}
 	
 	// Getters and Setters
 	
-	public TreeMap<Integer, Robot> getRobotsIR() { return robots_IR; }
+	public HashMap<Integer, Robot> getRobotsIR() { return robots_IR; }
 	public int getDownRobots() { return this.down_robots; }
 	public double getClusterIR() { return cluster_IR; }
 	public int getClusterId() { return cluster_id; }
 	public int getAreaId() { return area_id; }
 	public Timestamp getStartDowntime() { return start_downtime; }
-	public TreeMap<Timestamp, Long> getDowntimeIntervals() { return this.downtime_intervals; }
+	public HashMap<Timestamp, Long> getDowntimeIntervals() { return this.downtime_intervals; }
 
-	public void setRobotsIR(TreeMap<Integer, Robot> robots_IR) { this.robots_IR = robots_IR; }
+	public void setRobotsIR(HashMap<Integer, Robot> robots_IR) { this.robots_IR = robots_IR; }
 	public void setDownRobots(int down_robots) { this.down_robots = down_robots; }
 	public void setClusterIR(int cluster_IR) { this.cluster_IR = cluster_IR; }
 	public void setClusterId(int cluster_id) { this.cluster_id = cluster_id; }
 	public void setAreaId(int area_id) { this.area_id = area_id; }
 	public void setStartDowntime(Timestamp start_downtime) { this.start_downtime = start_downtime; }
-	public void setDowntimeIntervals(TreeMap<Timestamp, Long> downtime_intervals) { this.downtime_intervals = downtime_intervals; }
+	public void setDowntimeIntervals(HashMap<Timestamp, Long> downtime_intervals) { this.downtime_intervals = downtime_intervals; }
 	
 	// Other methods
 	

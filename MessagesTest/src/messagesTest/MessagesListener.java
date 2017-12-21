@@ -8,7 +8,7 @@ import java.io.OutputStream;
 import java.io.Reader;
 import java.net.InetSocketAddress;
 import java.nio.charset.Charset;
-import java.util.TreeMap;
+import java.util.HashMap;
 import org.json.JSONException;
 import org.json.JSONObject;
 import com.sun.net.httpserver.*;
@@ -18,7 +18,7 @@ public class MessagesListener {
 	// Counter to test speed.
 	static int counter = 0;
 	static int robots_counter = 0;
-	static TreeMap<Integer, Area> areas = new TreeMap<>();
+	static HashMap<Integer, Area> areas = new HashMap<>();
 	
 	// Array to test robots initialization time
 	// using json'datas or to test updating time 
@@ -151,6 +151,10 @@ public class MessagesListener {
 			} catch (JSONException e) {
 				e.printStackTrace();
 			}*/
+    		
+    		if (++counter == 70000) {
+    			System.out.println( areas.get(4).getClustersIR().get(3) );
+    		}
 				
     		robot_message.close();
 			

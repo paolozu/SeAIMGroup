@@ -5,7 +5,9 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.util.TreeMap;
+import java.util.Random;
+import java.util.HashMap;
+import java.util.concurrent.ThreadLocalRandom;
 
 import org.json.JSONObject;
 
@@ -16,12 +18,6 @@ public class MessagesSender {
 			// To keep trace of starting time.
 			long startTime;
 			
-			// Values of each message.
-			int robot_id = 0;
-			int cluster_id = 0;
-			int area_id = 0;
-			int signal_state = 0;
-			
 	    	// Useful variables to increase robots and clusters ids
 	    	// to no repeat them in cluster and areas respectively. 
 			int robot_counter = 0;
@@ -31,7 +27,7 @@ public class MessagesSender {
 			String query = "http://127.0.0.1:8000";
 			
 			// Data structure to keep trace of areas --> clusters --> robots.
-			TreeMap<Integer, Area> areas = new TreeMap<>();
+			HashMap<Integer, Area> areas = new HashMap<>();
 			
 			// Initializing areas, clusters and robots.
 			for ( int i = 0; i < 10; i++ ) {
@@ -51,7 +47,33 @@ public class MessagesSender {
 			
 			startTime = System.currentTimeMillis();
 			
+			// Variables to generete random messages.
+			Integer area_id;
+			Integer cluster_id;
+			Integer robot_id;
+			Integer signal_state = 0;		
+			Integer down_signals;
+			
             for( int i = 0; i < 90000; i++ ) {
+            	
+            	area_id = new Random().nextInt(10);
+            	cluster_id =  ThreadLocalRandom.current().nextInt(((area_id)*10), ((area_id)*10)+10);
+            	robot_id = ThreadLocalRandom.current().nextInt(((cluster_id)*900), ((cluster_id)*900)+900);  
+            	down_signals = areas.get(area_id).getClustersIR().get(cluster_id).getRobotsIR().get(robot_id).getDownSignals();
+            	
+            	if( down_signals == 0 ) {
+            		signal_state = 0;
+            		areas.get(area_id).getClustersIR().get(cluster_id).getRobotsIR().get(robot_id).signalCatch(signal_state);
+            	}
+            	else if ( down_signals == 7 ){
+            		signal_state = 1;
+            		areas.get(area_id).getClustersIR().get(cluster_id).getRobotsIR().get(robot_id).signalCatch(signal_state);
+            	}
+            	else {
+            		signal_state += new Random().nextInt(2);
+            		areas.get(area_id).getClustersIR().get(cluster_id).getRobotsIR().get(robot_id).signalCatch(signal_state);
+            	}
+            	
             	
             	JSONObject robot_message = new JSONObject();
                 robot_message.put("robot_id", robot_id);
@@ -66,7 +88,6 @@ public class MessagesSender {
 	            conn.setDoOutput(true);
 	            conn.setDoInput(true);
 	            conn.setRequestMethod("POST");
-	
 	            
 	            OutputStream os = conn.getOutputStream();
 	            
