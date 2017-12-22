@@ -13,7 +13,8 @@ public class Robot {
 	private int down_signals;								// To keep trace of down signals numbers.
 	private double robot_IR;
 	private Timestamp start_downtime;						// To keep trace when down time starts.
-	private HashMap<Timestamp, Long> downtime_intervals;
+	private HashMap<Timestamp, Long> downtime_intervals;	// Map in which the key is the down time starts and the value is the 
+	 														// down time duration.
 	
 	public Robot() {}
 	

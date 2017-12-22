@@ -65,7 +65,7 @@ public class MessagesSender {
             		signal_state = 0;
             		areas.get(area_id).getClusters().get(cluster_id).getRobots().get(robot_id).signalCatch(signal_state);
             	}
-            	else if ( down_signals == 7 ){
+            	else if ( down_signals == 7 ) {
             		signal_state = 1;
             		areas.get(area_id).getClusters().get(cluster_id).getRobots().get(robot_id).signalCatch(signal_state);
             	}

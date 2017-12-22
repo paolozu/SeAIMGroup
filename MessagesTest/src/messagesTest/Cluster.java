@@ -7,13 +7,14 @@ import java.util.HashMap;
 
 public class Cluster {
 	
-	private HashMap<Integer, Robot> robots;   			// Map in which the key is robot_id and the value is robot_IR.
+	private HashMap<Integer, Robot> robots;   			    // Map in which the key is robot_id and the value is robot itself.
 	private int down_robots; 	              				// Counter of down robots in this cluster.
 	private double cluster_IR;
 	private int cluster_id;
 	private int area_id;
 	private Timestamp start_downtime;        				 // To keep trace when down time starts.
-	private HashMap<Timestamp, Long> downtime_intervals;
+	private HashMap<Timestamp, Long> downtime_intervals;	 // Map in which the key is the down time starts and the value is the 
+															 // down time duration.
 	
 	public Cluster(int cluster_id, int area_id){
 		this.cluster_id = cluster_id;
