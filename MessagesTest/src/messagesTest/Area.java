@@ -29,6 +29,6 @@ public class Area {
 	
 	@Override
 	public String toString() {
-		return ( "Area ID: " + this.area_id );
+		return ( "Area ID: " + this.area_id + "\n\n" );
 	}
 }

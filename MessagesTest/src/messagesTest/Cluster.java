@@ -129,6 +129,6 @@ public class Cluster {
 	@Override
 	public String toString() {
 		return ( "Cluster ID: " + this.cluster_id + "\nCluster IR: " + this.cluster_IR + "%" +
-				 "\nDown robots: " + this.down_robots );
+				 "\nDown robots: " + this.down_robots + "\n\n" );
 	}
 }

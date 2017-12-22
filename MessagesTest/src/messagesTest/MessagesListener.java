@@ -9,6 +9,8 @@ import java.io.Reader;
 import java.net.InetSocketAddress;
 import java.nio.charset.Charset;
 import java.util.HashMap;
+import java.util.Map;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 import com.sun.net.httpserver.*;
@@ -153,8 +155,19 @@ public class MessagesListener {
 			}*/
     		
     		if( ++counter == 90000 ) {
+    			
+    			// Uncomment the following two lines to print the IR of cluster 91.
+    			
+    			//areas.get(9).getClusters().get(91).forceUpdateIR();
+    			//System.out.println(areas.get(9).getClusters().get(91));
+    			
+    			// Printing all robots informations of cluster 91. 
+    			
     			areas.get(9).getClusters().get(91).forceUpdateIR();
-    			System.out.println( areas.get(9).getClusters().get(91) );
+    			for( Map.Entry<Integer, Robot> robot : areas.get(9).getClusters().get(91).getRobots().entrySet() ) {
+    				robot.getValue().forceUpdateIR();
+    				System.out.println(robot.getValue());
+    			}
     		}
 				
     		robot_message.close();

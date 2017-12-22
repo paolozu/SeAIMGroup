@@ -114,6 +114,6 @@ public class Robot {
 	@Override
 	public String toString() {
 		return( "Robot ID: " + this.robot_id + "\nCluster ID: " + this.cluster_id +
-				"\nDown signals: " + this.down_signals + "\nRobot IR: " + this.robot_IR + "%" );
+				"\nDown signals: " + this.down_signals + "\nRobot IR: " + this.robot_IR + "%\n\n" );
 	}
 }
