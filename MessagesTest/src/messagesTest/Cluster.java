@@ -51,9 +51,6 @@ public class Cluster {
 		}
 		else {
 			// Here we insert new robot in this cluster.
-			// Here the new robot is no still present
-			// so the first message of the new robot needs to be a down signal
-			// so we increase the down_robots counter for this cluster.
 			this.robots.put(robot.getRobotId(), robot);
 			if( robot.getDownSignals() == 1 )
 				this.down_robots++;

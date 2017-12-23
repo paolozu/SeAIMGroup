@@ -31,10 +31,21 @@ public class MessagesListener {
     	
     	// Useful variables to increase robots and clusters ids
     	// to no repeat them in cluster and areas respectively. 
-    	int robot_counter = 0;
-    	int cluster_counter = 0;
     	
-    	for ( int i = 0; i < 10; i++ ) {
+    	//int robot_counter = 0;
+    	//int cluster_counter = 0;
+    	
+    	// We are supposing we have 10 areas, 10 clusters for area and 900 robots for cluster.
+    	// Whit the following for cycle we initialize all areas, clusters and robots.
+    	// In the real system we don't know how many robots for cluster are present and we don't even know 
+    	// how many clusters for area are present, 
+    	// 
+    	// WE DON'T NEED THIS CYCLE IN THE FINAL PRESENTATION.
+    	//
+    	// It's just for testing, we are able to handle robots and clusters according to the received messages.
+    	// in the MessagesHandler class.
+    	
+    	/*for ( int i = 0; i < 10; i++ ) {
     		areas.put(i, new Area(i));
     		for( int x = 0; x < 10; x++ ) {
     			areas.get(i).addCluster(new Cluster(x + cluster_counter, i));
@@ -45,7 +56,7 @@ public class MessagesListener {
     			robot_counter += 900;
     		}
 			cluster_counter += 10;
-    	}
+    	}*/
     	
     	HttpServer server = HttpServer.create(new InetSocketAddress(8000), 0);
     	server.createContext("/", new MessagesReceiver());
@@ -168,10 +179,10 @@ public class MessagesListener {
     				robot.getValue().forceUpdateIR();
     				System.out.println(robot.getValue());
     			}
+    			
     		}
 				
     		robot_message.close();
-			
 	    }
 	    
 	    // Function to parse received json.

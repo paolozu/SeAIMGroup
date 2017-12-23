@@ -45,9 +45,10 @@ public class Robot {
 	// Other methods
 	
 	// Function to update robots according to the received message.
-	// In case the number of down signals became 0 we update total down time.
 	// In case the number of down signals passes from 0 to 1 the we store
 	// the current time to keep trace of down time beginning.
+	// In case the number of down signals return 0 we store 
+	// the down time beginning and its duration in downtime_intervals map.
 	public void signalCatch(int signal) {
 		if ( signal == 0 ){ 
 			this.previous_down_signals = this.down_signals;
