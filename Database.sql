@@ -1,0 +1,21 @@
+DROP DATABASE IF EXISTS `IR_VIEWER`;
+CREATE DATABASE `IR_VIEWER`;
+
+USE `IR_VIEWER`;
+
+/* ROBOT */
+
+CREATE TABLE `robot`(
+  `robot_id` INT PRIMARY KEY AUTO_INCREMENT,
+  `cluster_id` INT NOT NULL,
+  `robot_IR`INT NOT NULL DEFAULT '0',
+  FOREIGN KEY (cluster_id) REFERENCES cluster(`cluster_id`) ON DELETE CASCADE
+);
+
+/* CLUSTER */
+
+CREATE TABLE `cluster`(
+  `cluster_id` INT PRIMARY KEY AUTO_INCREMENT,
+  `area_id` INT NOT NULL,
+  `cluster_IR`INT NOT NULL DEFAULT '0'
+);
