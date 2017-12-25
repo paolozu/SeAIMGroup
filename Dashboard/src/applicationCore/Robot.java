@@ -1,4 +1,4 @@
-package messagesTest;
+package applicationCore;
 
 import java.sql.Timestamp;
 import java.util.ArrayList;

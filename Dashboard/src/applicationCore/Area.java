@@ -1,4 +1,4 @@
-package messagesTest;
+package applicationCore;
 
 import java.util.HashMap;
 
