@@ -1,5 +1,6 @@
 package server;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedQueue;
@@ -15,12 +16,33 @@ public class ServerSide {
 	
 	// Queue of all opened sessions.
 	private static Queue<Session> queue = new ConcurrentLinkedQueue<Session>();
+	//private static Thread thread ; //rate publisher thread
+	
+	/*static{
+		//rate publisher thread, generates a new value for USD rate every 2 seconds.
+		thread=new Thread(){
+			public void run() {
+				DecimalFormat df = new DecimalFormat("#.####");
+				while(true) {
+					double d=2+Math.random();     
+					if( queue != null )
+						sendAll("USD Rate: "+df.format(d));    
+					try {
+						sleep(2000);
+					}
+					catch (InterruptedException e) {      
+					}
+				}
+			};
+		} ;
+		thread.start();
+	}*/
 	 
 	@OnMessage
-	public void onMessage(Session session, String msg) {
-	//provided for completeness, in out scenario clients don't send any msg.
+	public void onMessage(Session session, String message) {
+	//provided for completeness, in out scenario clients don't send any messages.
 		try {   
-			System.out.println("received msg " + msg + " from " + session.getId());
+			System.out.println("received msg " + message + " from " + session.getId());
 		}
 		catch (Exception e) {
 			e.printStackTrace();
