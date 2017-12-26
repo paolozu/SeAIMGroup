@@ -1,5 +1,6 @@
 package server;
 
+import java.util.ArrayList;
 import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import javax.websocket.OnClose;
@@ -42,5 +43,27 @@ public class ServerSide {
 	 public void closedConnection(Session session) { 
 		 queue.remove(session);
 		 System.out.println("session closed: " + session.getId());
+	 }
+	 
+	 private static void sendAll(String message) {
+		 try {
+			 /* Send the new rate to all open WebSocket sessions */  
+			 ArrayList<Session> closedSessions= new ArrayList<>();
+			 for ( Session session : queue ) {
+				 if( !session.isOpen() ) {
+					 closedSessions.add(session);
+				 }
+				 else {
+					 session.getBasicRemote().sendText(message);
+					 //session.getBasicRemote().sendObject(message);
+					 //session.getBasicRemote().sendStream(message);
+				 }    
+			 }
+			 queue.removeAll(closedSessions);
+			 //System.out.println("Sending " + message + " to " + queue.size() + " clients");
+		 }
+		 catch (Throwable e) {
+			 e.printStackTrace();
+		 }
 	 }
 }
