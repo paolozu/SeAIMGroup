@@ -58,7 +58,7 @@ public class MessagesSender {
 			Integer signal_state = 0;		
 			Integer down_signals;
 			
-            for( int i = 0; i < 10000; i++ ) {
+            for( int i = 0; i < 90000; i++ ) {
             	
             	area_id = new Random().nextInt(10);
             	cluster_id =  ThreadLocalRandom.current().nextInt(((area_id)*10), ((area_id)*10)+10);

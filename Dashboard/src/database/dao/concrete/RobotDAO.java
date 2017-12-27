@@ -20,7 +20,7 @@ public class RobotDAO implements RobotDAOInterface {
 	
 	public void insertRobot(Robot robot) {
 		try {
-			Connection connection = DatabaseConnector.openConnection();
+			Connection connection = DatabaseConnector.getInstance().getConnection();
 		    PreparedStatement ps = connection.prepareStatement(INSERT);
 		    ps.setInt(1, robot.getRobotId());
 		    ps.setInt(2, robot.getClusterId());
@@ -36,7 +36,7 @@ public class RobotDAO implements RobotDAOInterface {
 	
 	public void updateRobot(Robot robot) {
 		try {
-			Connection connection = DatabaseConnector.openConnection();
+			Connection connection = DatabaseConnector.getInstance().getConnection();
 		    PreparedStatement ps = connection.prepareStatement(UPDATE);
 		    ps.setDouble(1, robot.getRobotIR());
 		    ps.setInt(2, robot.getRobotId());

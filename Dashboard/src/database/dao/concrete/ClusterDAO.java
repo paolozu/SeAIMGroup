@@ -19,7 +19,7 @@ public class ClusterDAO implements ClusterDAOInterface {
 	
 	public void insertCluster(Cluster cluster) {
 		try {
-			Connection connection = DatabaseConnector.openConnection();
+			Connection connection = DatabaseConnector.getInstance().getConnection();
 		    PreparedStatement ps = connection.prepareStatement(INSERT);
 		    ps.setInt(1, cluster.getClusterId());
 		    ps.setInt(2, cluster.getAreaId());
@@ -35,7 +35,7 @@ public class ClusterDAO implements ClusterDAOInterface {
 	
 	public void updateCluster(Cluster cluster) {
 		try {
-			Connection connection = DatabaseConnector.openConnection();
+			Connection connection = DatabaseConnector.getInstance().getConnection();
 		    PreparedStatement ps = connection.prepareStatement(UPDATE);
 		    ps.setDouble(1, cluster.getClusterIR());
 		    ps.setInt(2, cluster.getClusterId());
