@@ -5,7 +5,7 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 
 public class DatabaseConnector {
-	private static String URL = "jdbc:mysql://localhost/ir_viewver?autoReconnect=true&useSSL=false";
+	private static String URL = "jdbc:mysql://localhost/ir_viewer?autoReconnect=true&useSSL=false";
 	private static String DRIVER = "com.mysql.jdbc.Driver";
 	private static String USER = "aimgroup";
 	private static String PASSWORD = "aim";

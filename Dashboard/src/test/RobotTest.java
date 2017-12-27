@@ -1,14 +1,12 @@
-package applicationCore;
+package test;
 
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Map;
 
-import database.dao.concrete.RobotDAO;
-
 import java.util.HashMap;
 
-public class Robot {
+public class RobotTest {
 	
 	private int robot_id;
 	private int cluster_id;
@@ -19,14 +17,12 @@ public class Robot {
 	private HashMap<Timestamp, Long> downtime_intervals;	// Map in which the key is the down time starts and the value is the 
 	 														// down time duration.
 	
-	public Robot() {}
+	public RobotTest() {}
 	
-	public Robot(int robot_id, int cluster_id) {
+	public RobotTest(int robot_id, int cluster_id) {
 		this.robot_id = robot_id;
 		this.cluster_id = cluster_id;
 		this.downtime_intervals = new HashMap<>();
-		// Add robot to database.
-		new RobotDAO().insertRobot(this);
 	}
 		
 	// Getters and Setters
@@ -105,9 +101,6 @@ public class Robot {
 		// divide to 60   --> IR not in percentage
 		// divide to 60   --> IR in percentage
  		this.robot_IR = (double)((downtime_last_hour * 1.6667e-5) / 60) * 100;
- 		
- 		// Update database.
- 		new RobotDAO().updateRobot(this);
 	}
 	
 	// Function to force IR update in case we need current IR and the down_signals is greater than 0.

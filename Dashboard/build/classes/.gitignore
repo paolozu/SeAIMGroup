@@ -2,3 +2,7 @@
 /server/
 /dao/
 /applicationCore/
+/Area.class
+/Cluster.class
+/Robot.class
+/test/

@@ -11,6 +11,10 @@ import java.util.concurrent.ThreadLocalRandom;
 
 import org.json.JSONObject;
 
+import test.AreaTest;
+import test.ClusterTest;
+import test.RobotTest;
+
 public class MessagesSender {
 	
 	public static void main(String[] args) throws Exception {
@@ -27,16 +31,16 @@ public class MessagesSender {
 			String query = "http://127.0.0.1:8000";
 			
 			// Data structure to keep trace of areas --> clusters --> robots.
-			HashMap<Integer, Area> areas = new HashMap<>();
+			HashMap<Integer, AreaTest> areas = new HashMap<>();
 			
 			// Initializing areas, clusters and robots.
 			for ( int i = 0; i < 10; i++ ) {
-	    		areas.put(i, new Area(i));
+	    		areas.put(i, new AreaTest(i));
 	    		for( int x = 0; x < 10; x++ ) {
-	    			areas.get(i).addCluster(new Cluster(x + cluster_counter, i));
+	    			areas.get(i).addCluster(new ClusterTest(x + cluster_counter, i));
 	    			for( int y = 0; y < 900; y++ ) {
 	    				areas.get(i).getClusters().get(x + cluster_counter)
-	    					 .handleRobot(new Robot(y + robot_counter, x + cluster_counter));
+	    					 .handleRobot(new RobotTest(y + robot_counter, x + cluster_counter));
 	    			}
 	    			robot_counter += 900;
 	    		}
@@ -54,7 +58,7 @@ public class MessagesSender {
 			Integer signal_state = 0;		
 			Integer down_signals;
 			
-            for( int i = 0; i < 90000; i++ ) {
+            for( int i = 0; i < 10000; i++ ) {
             	
             	area_id = new Random().nextInt(10);
             	cluster_id =  ThreadLocalRandom.current().nextInt(((area_id)*10), ((area_id)*10)+10);

@@ -15,7 +15,7 @@ public class ServerSide {
 	
 	// Queue of all opened sessions.
 	private static Queue<Session> queue = new ConcurrentLinkedQueue<Session>();
-	private static Thread thread ; //rate publisher thread
+	private static Thread thread;
 	
 	// Thread that sends messages via socket to clients.
 	static{

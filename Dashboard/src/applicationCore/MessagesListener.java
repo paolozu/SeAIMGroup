@@ -10,7 +10,6 @@ import java.net.InetSocketAddress;
 import java.nio.charset.Charset;
 import java.util.HashMap;
 import java.util.Map;
-
 import org.json.JSONException;
 import org.json.JSONObject;
 import com.sun.net.httpserver.*;
@@ -21,43 +20,9 @@ public class MessagesListener {
 	static int counter = 0;
 	static int robots_counter = 0;
 	static HashMap<Integer, Area> areas = new HashMap<>();
-	
-	// Array to test robots initialization time
-	// using json'datas or to test updating time 
-	// always using json'datas.
-	//static Robot[] robots = new Robot[90000];
 
     public static void main(String[] args) throws Exception {
-    	
-    	// Useful variables to increase robots and clusters ids
-    	// to no repeat them in cluster and areas respectively. 
-    	
-    	//int robot_counter = 0;
-    	//int cluster_counter = 0;
-    	
-    	// We are supposing we have 10 areas, 10 clusters for area and 900 robots for cluster.
-    	// Whit the following for cycle we initialize all areas, clusters and robots.
-    	// In the real system we don't know how many robots for cluster are present and we don't even know 
-    	// how many clusters for area are present, 
-    	// 
-    	// WE DON'T NEED THIS CYCLE IN THE FINAL PRESENTATION.
-    	//
-    	// It's just for testing, we are able to handle robots and clusters according to the received messages.
-    	// in the MessagesHandler class.
-    	
-    	/*for ( int i = 0; i < 10; i++ ) {
-    		areas.put(i, new Area(i));
-    		for( int x = 0; x < 10; x++ ) {
-    			areas.get(i).addCluster(new Cluster(x + cluster_counter, i));
-    			for( int y = 0; y < 900; y++ ) {
-    				areas.get(i).getClusters().get(x + cluster_counter)
-    					 .handleRobot(new Robot(y + robot_counter, x + cluster_counter));
-    			}
-    			robot_counter += 900;
-    		}
-			cluster_counter += 10;
-    	}*/
-    	
+    
     	HttpServer server = HttpServer.create(new InetSocketAddress(8000), 0);
     	server.createContext("/", new MessagesReceiver());
     	server.setExecutor(null); 
@@ -65,7 +30,7 @@ public class MessagesListener {
 
     }
 
-    static class MessagesReceiver implements HttpHandler {
+    static class MessagesReceiver implements HttpHandler {    	
     	
 	    @Override
 	    public void handle(HttpExchange exchange) throws IOException {
@@ -73,31 +38,14 @@ public class MessagesListener {
 	    	
 	    	InputStream robot_message = exchange.getRequestBody();
 	    	JSONObject message;
-	
+	    	
     		// Message formatted like {"signal_state":1,"cluster_id":12,"robot_id":123,"area_id":123}
 
     		try {
     			BufferedReader rd = new BufferedReader(new InputStreamReader(robot_message, Charset.forName("UTF-8")));
     			String jsonText = readAll(rd);
     		    message = new JSONObject(jsonText);
-    		    
-			} catch (JSONException e) {
-				message = null;
-			}
-    		
-    		// Uncomment the lines below to print counter on json reception
-    		// or to print received json itself.
-	    	
-    		//System.out.println(message);
-    		//System.out.println(counter++);
 
-    		String response = "This is the response";
-    		exchange.sendResponseHeaders(200, response.getBytes().length);
-    		OutputStream os = exchange.getResponseBody();
-    		os.write(response.getBytes());
-    		os.close();
-    		
-    		try {
     			int area_id = message.getInt("area_id");
 	    		int cluster_id = message.getInt("cluster_id");
 	    		int robot_id = message.getInt("robot_id");
@@ -119,8 +67,9 @@ public class MessagesListener {
 						}
 					}
 					else {
-						Robot current_robot = new Robot(robot_id, cluster_id);
+						// IT'S IMPORTANT TO CREATE FIRST THE CLUSTER
 			    		Cluster current_cluster = new Cluster(cluster_id, area_id);
+			    		Robot current_robot = new Robot(robot_id, cluster_id);
 						current_robot.signalCatch(signal_state);
 						current_cluster.handleRobot(current_robot);
 						
@@ -128,8 +77,9 @@ public class MessagesListener {
 					}
 				}
 				else {
-					Robot current_robot = new Robot(robot_id, cluster_id);
+					// IT'S IMPORTANT TO CREATE FIRST THE CLUSTER
 		    		Cluster current_cluster = new Cluster(cluster_id, area_id);
+		    		Robot current_robot = new Robot(robot_id, cluster_id);
 		    		current_robot.signalCatch(signal_state);
 		    		current_cluster.handleRobot(current_robot);
 		    		
@@ -138,32 +88,20 @@ public class MessagesListener {
 				}
 	
     		} 
-    		catch (JSONException e) {
+    		catch(JSONException e) {
 				e.printStackTrace();
 			}
-    		
-			// Comment the 2 try-catch below to test json reception speed.
 			
-			// Updating robots signal from information of received json
-			// and also updating down time and IR time.
-			// Down time and IR shouldn't be updated here.
-			
-			/*try {
-				robots[counter].signalCatch(message.getInt("signal_state"));
-				robots[counter++].updateIR();
-			} catch (JSONException e) {
-				e.printStackTrace();
-			}*/
-			
-			// Uncomment the try-catch below, the for cycle inside the main function
-			// and comment the try-catch above to test initialization 
-			// time of an array of 90000 robots using json'datas.
-			
-			/*try {
-				robots[counter++] = new Robot(message.getInt("robot_id"), message.getInt("cluster_id"));
-			} catch (JSONException e) {
-				e.printStackTrace();
-			}*/
+	
+    		//System.out.println(message);
+    		//System.out.println(counter++);
+
+    		String response = "This is the response";
+    		exchange.sendResponseHeaders(200, response.getBytes().length);
+    		OutputStream os = exchange.getResponseBody();
+    		os.write(response.getBytes());
+    		os.close();
+ 
     		
     		if( ++counter == 90000 ) {
     			

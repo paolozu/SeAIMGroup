@@ -17,25 +17,35 @@ public class ClusterDAO implements ClusterDAOInterface {
 	UPDATE = "UPDATE cluster SET cluster.cluster_ir = ? WHERE cluster_id = ?;";
 
 	
-	public void insertCluster(Cluster cluster) throws SQLException{
-		Connection connection = DatabaseConnector.openConnection();
-	    PreparedStatement ps = connection.prepareStatement(INSERT);
-	    ps.setInt(1, cluster.getClusterId());
-	    ps.setInt(2, cluster.getAreaId());
-	    ps.setDouble(3, cluster.getClusterIR());
-	    ps.executeUpdate();
-	    ps.close();
-	    connection.close();
+	public void insertCluster(Cluster cluster) {
+		try {
+			Connection connection = DatabaseConnector.openConnection();
+		    PreparedStatement ps = connection.prepareStatement(INSERT);
+		    ps.setInt(1, cluster.getClusterId());
+		    ps.setInt(2, cluster.getAreaId());
+		    ps.setDouble(3, cluster.getClusterIR());
+		    ps.executeUpdate();
+		    ps.close();
+		    connection.close();
+		}
+		catch(SQLException e) {
+			e.printStackTrace();
+		}
 	}
 	
-	public void updateCluster(Cluster cluster) throws SQLException{
-		Connection connection = DatabaseConnector.openConnection();
-	    PreparedStatement ps = connection.prepareStatement(UPDATE);
-	    ps.setDouble(1, cluster.getClusterIR());
-	    ps.setInt(1, cluster.getClusterId());
-	    ps.executeUpdate();
-	    ps.close();
-	    connection.close();
+	public void updateCluster(Cluster cluster) {
+		try {
+			Connection connection = DatabaseConnector.openConnection();
+		    PreparedStatement ps = connection.prepareStatement(UPDATE);
+		    ps.setDouble(1, cluster.getClusterIR());
+		    ps.setInt(2, cluster.getClusterId());
+		    ps.executeUpdate();
+		    ps.close();
+		    connection.close();
+		}
+		catch(SQLException e) {
+			e.printStackTrace();
+		}
 	}
 	
 }
