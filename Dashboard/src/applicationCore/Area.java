@@ -7,6 +7,8 @@ public class Area {
 	private int area_id;
 	private HashMap<Integer, Cluster> clusters;			// Map in which the key is cluster_id and the value is the cluster itself.
 	
+	public Area() {}
+	
 	public Area(int area_id) {
 		this.area_id = area_id;
 		this.clusters = new HashMap<>();

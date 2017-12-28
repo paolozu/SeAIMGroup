@@ -21,12 +21,22 @@ public class Robot {
 	
 	public Robot() {}
 	
+	// Using this constructor the cluster 
+	// is inserted into the database.
 	public Robot(int robot_id, int cluster_id) {
 		this.robot_id = robot_id;
 		this.cluster_id = cluster_id;
 		this.downtime_intervals = new HashMap<>();
 		// Add robot to database.
 		new RobotDAO().insertRobot(this);
+	}
+	
+	// Use this constructor to have an 
+	// instance of a robot to query the database.
+	public Robot(int robot_id, int cluster_id, double robot_IR) {
+		this.robot_id = robot_id;
+		this.cluster_id = cluster_id;
+		this.robot_IR = robot_IR;
 	}
 		
 	// Getters and Setters
@@ -67,13 +77,13 @@ public class Robot {
 		}	
 	}
 	
-	public void updateDownTime() {
+	private void updateDownTime() {
 		long downtime_duration = new Timestamp(System.currentTimeMillis()).getTime() - start_downtime.getTime();
 		this.downtime_intervals.put(start_downtime, downtime_duration);
 		this.updateIR();
 	}
 
-	public void updateIR() {
+	private void updateIR() {
 		
 		long downtime_last_hour = 0;
 		ArrayList<Timestamp> more_than_an_hour_ago = new ArrayList<>();

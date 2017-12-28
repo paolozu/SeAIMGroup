@@ -17,7 +17,7 @@ public class RobotDAO implements RobotDAOInterface {
 	private static final String
 	UPDATE = "UPDATE robot SET robot.robot_ir = ? WHERE robot_id = ?;";
 	
-	
+	@Override
 	public void insertRobot(Robot robot) {
 		try {
 			Connection connection = DatabaseConnector.getInstance().getConnection();
@@ -34,6 +34,7 @@ public class RobotDAO implements RobotDAOInterface {
 		}
 	}
 	
+	@Override
 	public void updateRobot(Robot robot) {
 		try {
 			Connection connection = DatabaseConnector.getInstance().getConnection();

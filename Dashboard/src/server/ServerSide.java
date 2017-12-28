@@ -20,13 +20,13 @@ public class ServerSide {
 	// Thread that sends messages via socket to clients.
 	static{
 		thread = new Thread(){
+			int counter = 0;
 			public void run() {
-				int increase_me = 0;
 				while(true) {     
-					if( queue != null ) 
-						sendAll("Counter: " + increase_me++);  
+					if( queue != null )
+						sendAll("Counter: " + counter++);
 					try {
-						sleep(1000);
+						sleep(5000);
 					}
 					catch (InterruptedException e) {      
 					}

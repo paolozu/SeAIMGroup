@@ -2,9 +2,11 @@ package database.dao.concrete;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
-
+import java.util.ArrayList;
 import applicationCore.Cluster;
+import applicationCore.Robot;
 import database.DatabaseConnector;
 import database.dao.interfaces.ClusterDAOInterface;
 
@@ -15,8 +17,11 @@ public class ClusterDAO implements ClusterDAOInterface {
 	
 	private static final String
 	UPDATE = "UPDATE cluster SET cluster.cluster_ir = ? WHERE cluster_id = ?;";
-
 	
+	private static final String
+	ROBOTS = "SELECT * FROM robot WHERE cluster_id = ?;";
+
+	@Override
 	public void insertCluster(Cluster cluster) {
 		try {
 			Connection connection = DatabaseConnector.getInstance().getConnection();
@@ -33,6 +38,7 @@ public class ClusterDAO implements ClusterDAOInterface {
 		}
 	}
 	
+	@Override
 	public void updateCluster(Cluster cluster) {
 		try {
 			Connection connection = DatabaseConnector.getInstance().getConnection();
@@ -47,5 +53,29 @@ public class ClusterDAO implements ClusterDAOInterface {
 			e.printStackTrace();
 		}
 	}
+	
+	@Override
+	public ArrayList<Robot> getRobots(Cluster cluster) {
+		
+	    ArrayList<Robot> robots = new ArrayList<>();
+	    
+	    try {
+		    Connection connection = DatabaseConnector.getInstance().getConnection();
+		    PreparedStatement ps = connection.prepareStatement(ROBOTS);
+		    ps.setInt(1, cluster.getClusterId());
+		    ResultSet rset = ps.executeQuery();
+		    while (rset.next()){
+		      Robot robot = new Robot(rset.getInt(1), rset.getInt(2), rset.getDouble(3));
+		      robots.add(robot);
+		    }
+		    ps.close();
+		    rset.close();
+		    connection.close();
+	    }
+	    catch(SQLException e) {
+	    	e.printStackTrace();
+	    }
+	    return robots;
+	  }
 	
 }

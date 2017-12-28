@@ -19,6 +19,10 @@ public class Cluster {
 	private HashMap<Timestamp, Long> downtime_intervals;	 // Map in which the key is the down time starts and the value is the 
 															 // down time duration.
 	
+	public Cluster() {}
+	
+	// Using this constructor the robot 
+	// is inserted into the database.
 	public Cluster(int cluster_id, int area_id){
 		this.cluster_id = cluster_id;
 		this.area_id = area_id;
@@ -26,6 +30,14 @@ public class Cluster {
 		this.downtime_intervals = new HashMap<>();
 		// Add cluster to database.
 		new ClusterDAO().insertCluster(this);
+	}
+	
+	// Use this constructor to have an 
+	// instance of a cluster to query the database.
+	public Cluster(int cluster_id, int area_id, double cluster_IR){
+		this.cluster_id = cluster_id;
+		this.area_id = area_id;
+		this.cluster_IR = cluster_IR;
 	}
 	
 	// Getters and Setters
@@ -52,17 +64,18 @@ public class Cluster {
 	// or to update robot's values and then cluster's down robots.
 	public void handleRobot(Robot robot){
 		if ( this.robots.containsKey(robot.getRobotId()) ) {
-			this.updateRobotIR(robot);
+			this.updateRobot(robot);
 		}
 		else {
 			// Here we insert new robot in this cluster.
 			this.robots.put(robot.getRobotId(), robot);
-			if( robot.getDownSignals() == 1 )
-				this.down_robots++;
+			if( robot.getDownSignals() > 0 )
+				if( ++down_robots == 1 )
+					this.start_downtime = new Timestamp(System.currentTimeMillis());
 		}
 	}
 	
-	public void updateRobotIR(Robot robot) {
+	private void updateRobot(Robot robot) {
 		
 		switch( robot.getDownSignals() ) {
 
@@ -70,21 +83,21 @@ public class Cluster {
 							this.updateDownTime();
 						break;
 					
-			case 1:		if( robot.getPreviuosDownSignals() != 2 ) {
-							this.down_robots++;
-							this.start_downtime = new Timestamp(System.currentTimeMillis());
+			case 1:		if( robot.getPreviuosDownSignals() == 0 ) {
+							if( ++this.down_robots == 1 )
+								this.start_downtime = new Timestamp(System.currentTimeMillis());
 						}
 		
 		}
 	}
 	
-	public void updateDownTime() {
+	private void updateDownTime() {
 		long downtime_duration = new Timestamp(System.currentTimeMillis()).getTime() - start_downtime.getTime();
 		this.downtime_intervals.put(start_downtime, downtime_duration);
 		this.updateIR();
 	}
 
-	public void updateIR() {
+	private void updateIR() {
 		
 		long downtime_last_hour = 0;
 		ArrayList<Timestamp> more_than_an_hour_ago = new ArrayList<>();

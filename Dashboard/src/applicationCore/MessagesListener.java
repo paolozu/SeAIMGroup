@@ -20,6 +20,9 @@ public class MessagesListener {
 	static int counter = 0;
 	static int robots_counter = 0;
 	static HashMap<Integer, Area> areas = new HashMap<>();
+	//private static Thread IRUpdater;
+	
+		
 
     public static void main(String[] args) throws Exception {
     
@@ -27,6 +30,34 @@ public class MessagesListener {
     	server.createContext("/", new MessagesReceiver());
     	server.setExecutor(null); 
     	server.start();
+    	
+    	/*IRUpdater = new Thread(){
+			public void run() {
+				try {
+					sleep(30000);
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
+				while( true ) {
+					if( ! areas.isEmpty() ) {
+						for( Area area : areas.values() ) {
+			    			for( Cluster cluster : areas.get(area.getAreaId()).getClusters().values() ) {
+			    				for( Robot robot : areas.get(area.getAreaId()).getClusters().get(cluster.getClusterId()).getRobots().values() ) {
+			    					robot.forceUpdateIR();
+			    				}
+			    				cluster.forceUpdateIR();
+			    			}	
+			    		}
+						try {
+							sleep(60000);
+						} catch (InterruptedException e) {
+							e.printStackTrace();
+						}
+					}
+				}
+			}
+		};
+		IRUpdater.start();*/
 
     }
 
@@ -103,8 +134,15 @@ public class MessagesListener {
     		os.close();
  
     		
-    		if( ++counter == 90000 ) {
-    			
+    		if( ++counter == 90000 || counter == 180000 || counter == 270000 || counter == 360000 ) {
+    		
+	    		/*for( Area area : areas.values() ) {
+	    			System.out.println("\n\n");
+	    			for( Cluster cluster : areas.get(area.getAreaId()).getClusters().values() ) {
+	    				System.out.println(cluster.getDownRobots());
+	    			}
+	    		}*/
+	    		
     			// Uncomment the following two lines to print the IR of cluster 91.
     			
     			//areas.get(9).getClusters().get(91).forceUpdateIR();
