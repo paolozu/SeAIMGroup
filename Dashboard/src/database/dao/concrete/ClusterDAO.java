@@ -55,14 +55,14 @@ public class ClusterDAO implements ClusterDAOInterface {
 	}
 	
 	@Override
-	public ArrayList<Robot> getRobots(Cluster cluster) {
+	public ArrayList<Robot> getRobots(Integer cluster_id) {
 		
 	    ArrayList<Robot> robots = new ArrayList<>();
 	    
 	    try {
 		    Connection connection = DatabaseConnector.getInstance().getConnection();
 		    PreparedStatement ps = connection.prepareStatement(ROBOTS);
-		    ps.setInt(1, cluster.getClusterId());
+		    ps.setInt(1, cluster_id);
 		    ResultSet rset = ps.executeQuery();
 		    while (rset.next()){
 		      Robot robot = new Robot(rset.getInt(1), rset.getInt(2), rset.getDouble(3));

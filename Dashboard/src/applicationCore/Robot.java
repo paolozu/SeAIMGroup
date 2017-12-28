@@ -21,7 +21,7 @@ public class Robot {
 	
 	public Robot() {}
 	
-	// Using this constructor the cluster 
+	// Using this constructor the robot 
 	// is inserted into the database.
 	public Robot(int robot_id, int cluster_id) {
 		this.robot_id = robot_id;
@@ -31,8 +31,9 @@ public class Robot {
 		new RobotDAO().insertRobot(this);
 	}
 	
-	// Use this constructor to have an 
-	// instance of a robot to query the database.
+	// This constructor is called from ClusterDAO class
+	// to return a collection of robots.
+	// This constructor doesn't insert the robot into the database.
 	public Robot(int robot_id, int cluster_id, double robot_IR) {
 		this.robot_id = robot_id;
 		this.cluster_id = cluster_id;

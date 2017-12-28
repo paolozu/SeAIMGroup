@@ -134,7 +134,9 @@ public class MessagesListener {
     		os.close();
  
     		
-    		if( ++counter == 90000 || counter == 180000 || counter == 270000 || counter == 360000 ) {
+    		if( ++counter == 90000 || counter == 180000 || counter == 270000 || counter == 360000 ||
+    			 counter == 450000 || counter == 540000 || counter == 630000 || counter == 720000 ||
+    			 counter == 810000 || counter == 900000 || counter == 990000 || counter == 1080000) {
     		
 	    		/*for( Area area : areas.values() ) {
 	    			System.out.println("\n\n");

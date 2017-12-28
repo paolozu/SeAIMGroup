@@ -8,5 +8,5 @@ public interface ClusterDAOInterface {
 	
 	public void insertCluster(Cluster cluster);
 	public void updateCluster(Cluster cluster);
-	public ArrayList<Robot> getRobots(Cluster cluster);
+	public ArrayList<Robot> getRobots(Integer cluster_id);
 }

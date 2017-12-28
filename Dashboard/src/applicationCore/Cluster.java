@@ -32,8 +32,9 @@ public class Cluster {
 		new ClusterDAO().insertCluster(this);
 	}
 	
-	// Use this constructor to have an 
-	// instance of a cluster to query the database.
+	// This constructor is called from AreaDAO class
+	// to return a collection of clusters.
+	// This constructor doesn't insert the cluster into the database.
 	public Cluster(int cluster_id, int area_id, double cluster_IR){
 		this.cluster_id = cluster_id;
 		this.area_id = area_id;
