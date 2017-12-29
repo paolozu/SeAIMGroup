@@ -9,7 +9,6 @@ import java.io.Reader;
 import java.net.InetSocketAddress;
 import java.nio.charset.Charset;
 import java.util.HashMap;
-import java.util.Map;
 import org.json.JSONException;
 import org.json.JSONObject;
 import com.sun.net.httpserver.*;
@@ -20,9 +19,7 @@ public class MessagesListener {
 	static int counter = 0;
 	static int robots_counter = 0;
 	static HashMap<Integer, Area> areas = new HashMap<>();
-	//private static Thread IRUpdater;
-	
-		
+	private static Thread IRUpdater;
 
     public static void main(String[] args) throws Exception {
     
@@ -31,25 +28,31 @@ public class MessagesListener {
     	server.setExecutor(null); 
     	server.start();
     	
-    	/*IRUpdater = new Thread(){
+    	IRUpdater = new Thread(){
 			public void run() {
 				try {
-					sleep(30000);
+					sleep(300000);
 				} catch (InterruptedException e) {
 					e.printStackTrace();
 				}
 				while( true ) {
 					if( ! areas.isEmpty() ) {
+						long startTime = System.currentTimeMillis();
 						for( Area area : areas.values() ) {
 			    			for( Cluster cluster : areas.get(area.getAreaId()).getClusters().values() ) {
 			    				for( Robot robot : areas.get(area.getAreaId()).getClusters().get(cluster.getClusterId()).getRobots().values() ) {
-			    					robot.forceUpdateIR();
+			    					if( robot.getDownSignals() > 0)
+			    						robot.forceUpdateIR();
 			    				}
-			    				cluster.forceUpdateIR();
+			    				if ( cluster.getDownRobots() > 0 )
+			    					cluster.forceUpdateIR();
 			    			}	
 			    		}
+						long endTime   = System.currentTimeMillis();
+			            long totalTime = endTime - startTime;
+			            System.out.println(totalTime);
 						try {
-							sleep(60000);
+							sleep(240000);
 						} catch (InterruptedException e) {
 							e.printStackTrace();
 						}
@@ -57,7 +60,7 @@ public class MessagesListener {
 				}
 			}
 		};
-		IRUpdater.start();*/
+		IRUpdater.start();
 
     }
 
@@ -152,11 +155,13 @@ public class MessagesListener {
     			
     			// Printing all robots informations of cluster 91. 
     			
-    			areas.get(9).getClusters().get(91).forceUpdateIR();
+    			/*areas.get(9).getClusters().get(91).forceUpdateIR();
     			for( Map.Entry<Integer, Robot> robot : areas.get(9).getClusters().get(91).getRobots().entrySet() ) {
     				robot.getValue().forceUpdateIR();
     				System.out.println(robot.getValue());
-    			}
+    			}*/
+    			
+    			System.out.println("Messages: " + counter);
     			
     		}
 				

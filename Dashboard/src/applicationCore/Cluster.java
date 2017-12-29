@@ -3,9 +3,7 @@ package applicationCore;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Map;
-
 import database.dao.concrete.ClusterDAO;
-
 import java.util.HashMap;
 
 public class Cluster {
@@ -92,7 +90,7 @@ public class Cluster {
 		}
 	}
 	
-	private void updateDownTime() {
+	synchronized private void updateDownTime() {
 		long downtime_duration = new Timestamp(System.currentTimeMillis()).getTime() - start_downtime.getTime();
 		this.downtime_intervals.put(start_downtime, downtime_duration);
 		this.updateIR();

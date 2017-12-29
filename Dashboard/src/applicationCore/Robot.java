@@ -3,9 +3,7 @@ package applicationCore;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Map;
-
 import database.dao.concrete.RobotDAO;
-
 import java.util.HashMap;
 
 public class Robot {
@@ -78,7 +76,7 @@ public class Robot {
 		}	
 	}
 	
-	private void updateDownTime() {
+	synchronized private void updateDownTime() {
 		long downtime_duration = new Timestamp(System.currentTimeMillis()).getTime() - start_downtime.getTime();
 		this.downtime_intervals.put(start_downtime, downtime_duration);
 		this.updateIR();
@@ -137,4 +135,5 @@ public class Robot {
 		return( "Robot ID: " + this.robot_id + "\nCluster ID: " + this.cluster_id +
 				"\nDown signals: " + this.down_signals + "\nRobot IR: " + this.robot_IR + "%\n\n" );
 	}
+	
 }
