@@ -35,6 +35,28 @@ public class MessagesListener {
 				} catch (InterruptedException e) {
 					e.printStackTrace();
 				}
+				/*
+				 * 
+				 *************************				ITERATION OVER LISTS					*************************
+				 *
+				 *
+				 * WE NEED TO ITERATE OVER A TEMPORARY LISTS INSTEAD OF ON:
+				 * 
+				 * 1) areas.values()
+				 * 2) areas.get(area.getAreaId()).getClusters().values()
+				 * 3) areas.get(area.getAreaId()).getClusters().get(cluster.getClusterId()).getRobots().values()
+				 * 
+				 * BECAUSE THE LISTS SIZE CHANGE(before having the maximum values: 10 areas, 100 clusters, 90000 robots)
+				 * WHILE WE ARE ITERATING OVER THEM AND THIS COUSES PROBLEMS.
+				 * 
+				 *
+				 *************************				THE UPDATE IS TOO SLOW					*************************
+				 *
+				 *
+				 * WE NEED TO FIND A BETTER WAY TO UPDATE ROBOTS AND CLUSTERS IR(or improve this one)
+				 * BECAUSE THIS TAKE TOO MUCH TIME TO GET THE DATABASE UPDATED.
+				 * 
+				 * */
 				while( true ) {
 					if( ! areas.isEmpty() ) {
 						long startTime = System.currentTimeMillis();
