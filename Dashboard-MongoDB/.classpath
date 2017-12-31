@@ -14,9 +14,7 @@
 	</classpathentry>
 	<classpathentry kind="con" path="org.eclipse.jst.j2ee.internal.web.container"/>
 	<classpathentry kind="con" path="org.eclipse.jst.j2ee.internal.module.container"/>
-	<classpathentry kind="lib" path="C:/Users/Stefano_Martella/Desktop/seAIMgroup/java-json.jar"/>
-	<classpathentry kind="lib" path="C:/Users/Stefano_Martella/Desktop/Coding/Java/Programs/GamingPlatform/src/model/database/mysql-connector-java-5.1.43-bin.jar"/>
-	<classpathentry kind="lib" path="C:/Users/Stefano_Martella/Desktop/seAIMgroup/c3p0-0.9.5.2.jar"/>
-	<classpathentry kind="lib" path="C:/Users/Stefano_Martella/Desktop/seAIMgroup/mchange-commons-java-0.2.11.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Stefano_Martella/Desktop/seAIMgroup/libraries/java-json.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Stefano_Martella/Desktop/seAIMgroup/libraries/mongo-java-driver-3.6.1.jar"/>
 	<classpathentry kind="output" path="build/classes"/>
 </classpath>
