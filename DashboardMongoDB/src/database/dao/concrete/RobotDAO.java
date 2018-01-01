@@ -17,7 +17,7 @@ public class RobotDAO implements RobotDAOInterface {
 		//MongoClient client = DatabaseConnector.CONNECTION.getClient();
 		MongoDatabase database = DatabaseConnector.CONNECTION.getDatabase();
 		MongoCollection<Document> collection = database.getCollection("robot");
-		Document robot_db = new Document().append("robot_id", robot.getRobotId())
+		Document robot_db = new Document().append("_id", robot.getRobotId())
 										  .append("cluster_id", robot.getClusterId())
 										  .append("robot_ir", robot.getRobotIR());
 		collection.insertOne(robot_db);
@@ -28,7 +28,7 @@ public class RobotDAO implements RobotDAOInterface {
 		//MongoClient client = DatabaseConnector.CONNECTION.getClient();
 		MongoDatabase database = DatabaseConnector.CONNECTION.getDatabase();
 		MongoCollection<Document> collection = database.getCollection("robot");
-		collection.updateOne(Filters.eq("robot_id", robot.getRobotId()), Updates.set("robot_ir", robot.getRobotIR()));
+		collection.updateOne(Filters.eq("_id", robot.getRobotId()), Updates.set("robot_ir", robot.getRobotIR()));
 	}
 	
 }

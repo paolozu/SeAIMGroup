@@ -1,0 +1,10 @@
+INSERTION of robots and clusters randomly generated:
+
+MySQL    --> 56846 robots in 3,95243333 minutes.
+MongoDB  --> 56745 robots in 1,22835 minutes.
+
+
+UPDATE of almost all robots and clusters:
+
+MySQL    --> 77725 robots and 100 clusters in 3,41666667 minutes.
+MongoDB  --> 77568 robots and 100 clusters in 0,42798333 minutes.

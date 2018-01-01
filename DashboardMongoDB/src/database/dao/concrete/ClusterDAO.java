@@ -20,7 +20,7 @@ public class ClusterDAO implements ClusterDAOInterface {
 		//MongoClient client = DatabaseConnector.CONNECTION.getClient();
 		MongoDatabase database = DatabaseConnector.CONNECTION.getDatabase();
 		MongoCollection<Document> collection = database.getCollection("cluster");
-		Document cluster_db = new Document().append("cluster_id", cluster.getClusterId())
+		Document cluster_db = new Document().append("_id", cluster.getClusterId())
 											.append("area_id", cluster.getAreaId())
 											.append("cluster_ir", cluster.getClusterIR());
 		collection.insertOne(cluster_db);
@@ -31,7 +31,7 @@ public class ClusterDAO implements ClusterDAOInterface {
 		//MongoClient client = DatabaseConnector.CONNECTION.getClient();
 		MongoDatabase database = DatabaseConnector.CONNECTION.getDatabase();
 		MongoCollection<Document> collection = database.getCollection("cluster");
-		collection.updateOne(Filters.eq("cluster_id", cluster.getClusterId()), Updates.set("cluster_ir", cluster.getClusterIR()));
+		collection.updateOne(Filters.eq("_id", cluster.getClusterId()), Updates.set("cluster_ir", cluster.getClusterIR()));
 	}
 	
 	@Override

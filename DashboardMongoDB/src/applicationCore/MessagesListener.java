@@ -17,6 +17,7 @@ public class MessagesListener {
 
 	// Counter to test speed.
 	static int counter = 0;
+	static long startTime = System.currentTimeMillis();
 	static int robots_counter = 0;
 	static HashMap<Integer, Area> areas = new HashMap<>();
 	private static Thread IRUpdater;
@@ -165,6 +166,9 @@ public class MessagesListener {
     			 counter == 450000 || counter == 540000 || counter == 630000 || counter == 720000 ||
     			 counter == 810000 || counter == 900000 || counter == 990000 || counter == 1080000) {
     		
+    			long endTime   = System.currentTimeMillis();
+	            long totalTime = endTime - startTime;
+	            System.out.println(totalTime);
 	    		/*for( Area area : areas.values() ) {
 	    			System.out.println("\n\n");
 	    			for( Cluster cluster : areas.get(area.getAreaId()).getClusters().values() ) {
@@ -185,7 +189,7 @@ public class MessagesListener {
     				System.out.println(robot.getValue());
     			}*/
     			
-    			System.out.println("Messages: " + counter);
+    			//System.out.println("Messages: " + counter);
     			
     		}
 				
