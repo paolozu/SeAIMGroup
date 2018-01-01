@@ -1,0 +1,3 @@
+1) Robot rimossi per la manutenzione e poi reinseriti --> Come aggiornare il robot nel DB?
+2) Gestire la sincronizzazione tra il thread che aggiorna i robots(e il db) mentre arrivano i messaggi e tra quello
+   che si occupa di aggiornare il db ogni X secondi.

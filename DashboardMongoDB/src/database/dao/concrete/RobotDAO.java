@@ -1,7 +1,6 @@
 package database.dao.concrete;
 
 import org.bson.Document;
-//import com.mongodb.MongoClient;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
 import com.mongodb.client.model.Filters;
@@ -14,7 +13,6 @@ public class RobotDAO implements RobotDAOInterface {
 	
 	@Override
 	public void insertRobot(Robot robot) {
-		//MongoClient client = DatabaseConnector.CONNECTION.getClient();
 		MongoDatabase database = DatabaseConnector.CONNECTION.getDatabase();
 		MongoCollection<Document> collection = database.getCollection("robot");
 		Document robot_db = new Document().append("_id", robot.getRobotId())
@@ -25,7 +23,6 @@ public class RobotDAO implements RobotDAOInterface {
 	
 	@Override
 	public void updateRobot(Robot robot) {
-		//MongoClient client = DatabaseConnector.CONNECTION.getClient();
 		MongoDatabase database = DatabaseConnector.CONNECTION.getDatabase();
 		MongoCollection<Document> collection = database.getCollection("robot");
 		collection.updateOne(Filters.eq("_id", robot.getRobotId()), Updates.set("robot_ir", robot.getRobotIR()));

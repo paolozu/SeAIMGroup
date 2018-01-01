@@ -3,8 +3,8 @@ package database.dao.concrete;
 import java.util.ArrayList;
 
 import org.bson.Document;
-//import com.mongodb.MongoClient;
 import com.mongodb.client.MongoCollection;
+import com.mongodb.client.MongoCursor;
 import com.mongodb.client.MongoDatabase;
 import com.mongodb.client.model.Filters;
 import com.mongodb.client.model.Updates;
@@ -17,7 +17,6 @@ public class ClusterDAO implements ClusterDAOInterface {
 
 	@Override
 	public void insertCluster(Cluster cluster) {
-		//MongoClient client = DatabaseConnector.CONNECTION.getClient();
 		MongoDatabase database = DatabaseConnector.CONNECTION.getDatabase();
 		MongoCollection<Document> collection = database.getCollection("cluster");
 		Document cluster_db = new Document().append("_id", cluster.getClusterId())
@@ -28,7 +27,6 @@ public class ClusterDAO implements ClusterDAOInterface {
 	
 	@Override
 	public void updateCluster(Cluster cluster) {
-		//MongoClient client = DatabaseConnector.CONNECTION.getClient();
 		MongoDatabase database = DatabaseConnector.CONNECTION.getDatabase();
 		MongoCollection<Document> collection = database.getCollection("cluster");
 		collection.updateOne(Filters.eq("_id", cluster.getClusterId()), Updates.set("cluster_ir", cluster.getClusterIR()));
@@ -36,9 +34,23 @@ public class ClusterDAO implements ClusterDAOInterface {
 	
 	@Override
 	public ArrayList<Robot> getRobots(Integer cluster_id) {
-		
 		ArrayList<Robot> robots = new ArrayList<>();
-		
+		MongoDatabase database = DatabaseConnector.CONNECTION.getDatabase();
+		MongoCollection<Document> collection = database.getCollection("robot");
+		MongoCursor<Document> cursor = collection.find(Filters.eq("cluster_id", cluster_id)).iterator();
+		Document current;
+		try {
+		    while (cursor.hasNext()) {
+		    	current = cursor.next();
+		        Robot robot = new Robot(current.getInteger("_id"),
+		        						current.getInteger("cluster_id"),
+		        						current.getDouble("robot_ir"));
+		        robots.add(robot);
+		    }
+		} 
+		finally {
+		    cursor.close();
+		}
 		return robots;
 		
 	}

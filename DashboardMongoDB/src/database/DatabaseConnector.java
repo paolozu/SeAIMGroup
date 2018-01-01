@@ -14,7 +14,8 @@ public enum DatabaseConnector {
         try {
             client = new MongoClient("localhost" , 27017);
             database = client.getDatabase("ir_viewer");
-        } catch (Exception e) {
+        } 
+        catch (Exception e) {
             e.printStackTrace();
         }
     }
