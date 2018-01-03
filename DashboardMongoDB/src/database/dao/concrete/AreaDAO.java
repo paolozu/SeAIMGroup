@@ -18,10 +18,9 @@ public class AreaDAO implements AreaDAOInterface {
 		MongoDatabase database = DatabaseConnector.CONNECTION.getDatabase();
 		MongoCollection<Document> collection = database.getCollection("cluster");
 		MongoCursor<Document> cursor = collection.find(Filters.eq("area_id", area_id)).iterator();
-		Document current;
 		try {
 		    while (cursor.hasNext()) {
-		    	current = cursor.next();
+		        Document current = cursor.next();
 		        Cluster cluster = new Cluster(current.getInteger("_id"),
 		        							  current.getInteger("area_id"), 
 		        							  current.getDouble("cluster_id"));
