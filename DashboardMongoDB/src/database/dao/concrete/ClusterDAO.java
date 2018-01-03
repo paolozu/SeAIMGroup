@@ -38,10 +38,9 @@ public class ClusterDAO implements ClusterDAOInterface {
 		MongoDatabase database = DatabaseConnector.CONNECTION.getDatabase();
 		MongoCollection<Document> collection = database.getCollection("robot");
 		MongoCursor<Document> cursor = collection.find(Filters.eq("cluster_id", cluster_id)).iterator();
-		Document current;
 		try {
 		    while (cursor.hasNext()) {
-		    	current = cursor.next();
+		        Document current = cursor.next();
 		        Robot robot = new Robot(current.getInteger("_id"),
 		        						current.getInteger("cluster_id"),
 		        						current.getDouble("robot_ir"));
