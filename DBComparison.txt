@@ -12,6 +12,6 @@ MongoDB  --> 77568 robots and 100 clusters in 0,42798333 minutes.
 
 
 
-Time to get all useful informations from db:
+Time to get all useful informations from db(90000 robots):
 
-MongoDB  --> 0,1372 minutes. 
+MongoDB  --> 0,21126667 minutes. 

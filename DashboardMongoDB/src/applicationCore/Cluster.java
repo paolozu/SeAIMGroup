@@ -125,9 +125,10 @@ public class Cluster {
 		}
 		// total_downtime --> milliseconds
 		// * 1.6667e-5    --> minutes
-		// divide to 60   --> IR not in percentage
-		// divide to 60   --> IR in percentage
- 		this.cluster_IR = (double)((downtime_last_hour * 1.6667e-5) / 60) * 100;
+		// divide by 60   --> IR not in percentage
+		// divide by 60   --> IR in percentage
+		// Round, * 100d and than / 100d to have 2 decimal places.
+ 		this.cluster_IR = (double) Math.round((((downtime_last_hour * 1.6667e-5) / 60) * 100) * 100d) / 100d;
  		
  		// Update database.
  		new ClusterDAO().updateCluster(this);
