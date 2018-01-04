@@ -8,6 +8,7 @@ import java.io.OutputStream;
 import java.io.Reader;
 import java.net.InetSocketAddress;
 import java.nio.charset.Charset;
+import java.util.ArrayList;
 import java.util.HashMap;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -29,46 +30,32 @@ public class MessagesListener {
     	server.setExecutor(null); 
     	server.start();
     	
+    	// Thread to force IR update on robots and clusters each X milliseconds.
+    	// This procedure takes between 8 and 10 seconds to updates all records.
     	IRUpdater = new Thread(){
 			public void run() {
 				try {
-					sleep(10000);
+					sleep(15000);
 				} catch (InterruptedException e) {
 					e.printStackTrace();
 				}
-				/*
-				 * 
-				 *************************				ITERATION OVER LISTS					*************************
-				 *
-				 *
-				 * WE NEED TO ITERATE OVER A TEMPORARY LISTS INSTEAD OF ON:
-				 * 
-				 * 1) areas.values()
-				 * 2) areas.get(area.getAreaId()).getClusters().values()
-				 * 3) areas.get(area.getAreaId()).getClusters().get(cluster.getClusterId()).getRobots().values()
-				 * 
-				 * BECAUSE THE LISTS SIZE CHANGE(before having the maximum values: 10 areas, 100 clusters, 90000 robots)
-				 * WHILE WE ARE ITERATING OVER THEM AND THIS COUSES PROBLEMS.
-				 * 
-				 *
-				 *************************				THE UPDATE IS TOO SLOW					*************************
-				 *
-				 *
-				 * WE NEED TO FIND A BETTER WAY TO UPDATE ROBOTS AND CLUSTERS IR(or improve this one)
-				 * BECAUSE THIS TAKE TOO MUCH TIME TO GET THE DATABASE UPDATED.
-				 * 
-				 * */
+				
 				while( true ) {
 					if( ! areas.isEmpty() ) {
+						
 						long startTime = System.currentTimeMillis();
-						for( Area area : areas.values() ) {
-			    			for( Cluster cluster : areas.get(area.getAreaId()).getClusters().values() ) {
-			    				for( Robot robot : areas.get(area.getAreaId()).getClusters().get(cluster.getClusterId()).getRobots().values() ) {
+						
+						ArrayList<Area> current_areas = new ArrayList<Area>(areas.values());
+						for( Area current_area :  current_areas) {
+							ArrayList<Cluster> current_clusters = new ArrayList<Cluster>(current_area.getClusters().values());
+			    			for( Cluster current_cluster : current_clusters ) {
+			    				ArrayList<Robot> current_robots = new ArrayList<Robot>(current_cluster.getRobots().values());
+			    				for( Robot robot : current_robots ) {
 			    					if( robot.getDownSignals() > 0)
 			    						robot.forceUpdateIR();
 			    				}
-			    				if ( cluster.getDownRobots() > 0 )
-			    					cluster.forceUpdateIR();
+			    				if ( current_cluster.getDownRobots() > 0 )
+			    					current_cluster.forceUpdateIR();
 			    			}	
 			    		}
 						
@@ -77,7 +64,7 @@ public class MessagesListener {
 			            System.out.println(totalTime);
 			            
 						try {
-							sleep(240000);
+							sleep(90000);
 						} catch (InterruptedException e) {
 							e.printStackTrace();
 						}
