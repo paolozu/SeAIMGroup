@@ -32,7 +32,7 @@ public class MessagesListener {
     	IRUpdater = new Thread(){
 			public void run() {
 				try {
-					sleep(600000);
+					sleep(10000);
 				} catch (InterruptedException e) {
 					e.printStackTrace();
 				}

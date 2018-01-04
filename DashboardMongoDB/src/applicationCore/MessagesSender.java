@@ -8,6 +8,7 @@ import java.net.URL;
 import java.util.Random;
 import java.util.HashMap;
 import java.util.concurrent.ThreadLocalRandom;
+import java.util.concurrent.TimeUnit;
 
 import org.json.JSONObject;
 
@@ -58,53 +59,56 @@ public class MessagesSender {
 			Integer signal_state = 0;		
 			Integer down_signals;
 			
-            for( int i = 0; i < 90000; i++ ) {
-            	
-            	area_id = new Random().nextInt(10);
-            	cluster_id =  ThreadLocalRandom.current().nextInt(((area_id)*10), ((area_id)*10)+10);
-            	robot_id = ThreadLocalRandom.current().nextInt(((cluster_id)*900), ((cluster_id)*900)+900);  
-            	down_signals = areas.get(area_id).getClusters().get(cluster_id).getRobots().get(robot_id).getDownSignals();
-            	
-            	if( down_signals == 0 ) {
-            		signal_state = 0;
-            		areas.get(area_id).getClusters().get(cluster_id).getRobots().get(robot_id).signalCatch(signal_state);
-            	}
-            	else if ( down_signals == 7 ) {
-            		signal_state = 1;
-            		areas.get(area_id).getClusters().get(cluster_id).getRobots().get(robot_id).signalCatch(signal_state);
-            	}
-            	else {
-            		signal_state += new Random().nextInt(2);
-            		areas.get(area_id).getClusters().get(cluster_id).getRobots().get(robot_id).signalCatch(signal_state);
-            	}
-            	
-            	
-            	JSONObject robot_message = new JSONObject();
-                robot_message.put("robot_id", robot_id);
-                robot_message.put("cluster_id", cluster_id);
-                robot_message.put("area_id", area_id);
-                robot_message.put("signal_state", signal_state);
-
-	            URL url = new URL(query);
-	            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-	            conn.setConnectTimeout(0);
-	            conn.setRequestProperty("Content-Type", "application/json; charset=UTF-8");
-	            conn.setDoOutput(true);
-	            conn.setDoInput(true);
-	            conn.setRequestMethod("POST");
-	            
-	            OutputStream os = conn.getOutputStream();
-	            
-	            os.write(robot_message.toString().getBytes("UTF-8"));
-	            os.close();
+			for(int t = 0; t < 10; t++) {
+				// We send 90000 messages for 10 times each 60 seconds.
+	            for( int i = 0; i < 90000; i++ ) {
+	            	
+	            	area_id = new Random().nextInt(10);
+	            	cluster_id =  ThreadLocalRandom.current().nextInt(((area_id)*10), ((area_id)*10)+10);
+	            	robot_id = ThreadLocalRandom.current().nextInt(((cluster_id)*900), ((cluster_id)*900)+900);  
+	            	down_signals = areas.get(area_id).getClusters().get(cluster_id).getRobots().get(robot_id).getDownSignals();
+	            	
+	            	if( down_signals == 0 ) {
+	            		signal_state = 0;
+	            		areas.get(area_id).getClusters().get(cluster_id).getRobots().get(robot_id).signalCatch(signal_state);
+	            	}
+	            	else if ( down_signals == 7 ) {
+	            		signal_state = 1;
+	            		areas.get(area_id).getClusters().get(cluster_id).getRobots().get(robot_id).signalCatch(signal_state);
+	            	}
+	            	else {
+	            		signal_state += new Random().nextInt(2);
+	            		areas.get(area_id).getClusters().get(cluster_id).getRobots().get(robot_id).signalCatch(signal_state);
+	            	}
+	            	
+	            	
+	            	JSONObject robot_message = new JSONObject();
+	                robot_message.put("robot_id", robot_id);
+	                robot_message.put("cluster_id", cluster_id);
+	                robot_message.put("area_id", area_id);
+	                robot_message.put("signal_state", signal_state);
 	
-	            // Reading the response.
-	            InputStream in = new BufferedInputStream(conn.getInputStream());
-	
-	            in.close();
-	            conn.disconnect();
-            }
-            
+		            URL url = new URL(query);
+		            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+		            conn.setConnectTimeout(0);
+		            conn.setRequestProperty("Content-Type", "application/json; charset=UTF-8");
+		            conn.setDoOutput(true);
+		            conn.setDoInput(true);
+		            conn.setRequestMethod("POST");
+		            
+		            OutputStream os = conn.getOutputStream();
+		            
+		            os.write(robot_message.toString().getBytes("UTF-8"));
+		            os.close();
+		
+		            // Reading the response.
+		            InputStream in = new BufferedInputStream(conn.getInputStream());
+		
+		            in.close();
+		            conn.disconnect();
+	            }
+	            TimeUnit.MINUTES.sleep(1);
+			}
             // Printing execution time.
             //long endTime   = System.currentTimeMillis();
             //long totalTime = endTime - startTime;
