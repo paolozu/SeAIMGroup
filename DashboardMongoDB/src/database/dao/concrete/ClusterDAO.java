@@ -3,6 +3,8 @@ package database.dao.concrete;
 import java.util.ArrayList;
 
 import org.bson.Document;
+
+import com.mongodb.BasicDBObject;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoCursor;
 import com.mongodb.client.MongoDatabase;
@@ -37,6 +39,8 @@ public class ClusterDAO implements ClusterDAOInterface {
 		ArrayList<Robot> robots = new ArrayList<>();
 		MongoDatabase database = DatabaseConnector.CONNECTION.getDatabase();
 		MongoCollection<Document> collection = database.getCollection("robot");
+		BasicDBObject index = new BasicDBObject("cluster_id", 1);
+		collection.createIndex(index);
 		MongoCursor<Document> cursor = collection.find(Filters.eq("cluster_id", cluster_id)).iterator();
 		try {
 		    while (cursor.hasNext()) {

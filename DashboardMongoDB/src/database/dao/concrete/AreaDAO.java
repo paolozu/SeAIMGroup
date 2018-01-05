@@ -2,6 +2,8 @@ package database.dao.concrete;
 
 import java.util.ArrayList;
 import org.bson.Document;
+
+import com.mongodb.BasicDBObject;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoCursor;
 import com.mongodb.client.MongoDatabase;
@@ -17,6 +19,8 @@ public class AreaDAO implements AreaDAOInterface {
 		ArrayList<Cluster> clusters = new ArrayList<>();
 		MongoDatabase database = DatabaseConnector.CONNECTION.getDatabase();
 		MongoCollection<Document> collection = database.getCollection("cluster");
+		BasicDBObject index = new BasicDBObject("area_id", 1);
+		collection.createIndex(index);
 		MongoCursor<Document> cursor = collection.find(Filters.eq("area_id", area_id)).iterator();
 		try {
 		    while (cursor.hasNext()) {
