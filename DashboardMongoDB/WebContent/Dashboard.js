@@ -3,7 +3,8 @@
 *                   SOCKET                     *
 *                                              *
 ************************************************/
-var webSocket = new WebSocket("ws://localhost:8080/DashboardMySQL/test");
+
+var webSocket = new WebSocket("ws://localhost:8080/DashboardMongoDB/socket");
 
 selection = 0;
 received = null;
@@ -16,7 +17,7 @@ webSocket.onerror = function(message){ wsError(message); };
 function wsOpen(message){}
 
 function wsGetMessage(message){
-	//alert(message.data);
+	alert(message.data);
 }
 
 function wsClose(message){

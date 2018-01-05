@@ -10,7 +10,7 @@ import javax.websocket.OnOpen;
 import javax.websocket.Session;
 import javax.websocket.server.ServerEndpoint;
  
-@ServerEndpoint(value = "/test")
+@ServerEndpoint(value = "/socket")
 public class ServerSide {
 	
 	// Queue of all opened sessions.
@@ -20,11 +20,14 @@ public class ServerSide {
 	// Thread that sends messages via socket to clients.
 	static{
 		thread = new Thread(){
-			int counter = 0;
 			public void run() {
 				while(true) {     
-					if( queue != null )
-						sendAll("Counter: " + counter++);
+					if( queue != null ) {
+						ArrayList<String> a = new ArrayList<>();
+						a.add("ciao");
+						a.add("se");
+						sendAll(a);
+					}
 					try {
 						sleep(5000);
 					}
@@ -65,7 +68,7 @@ public class ServerSide {
 		 System.out.println("session closed: " + session.getId());
 	 }
 	 
-	 private static void sendAll(String message) {
+	 private static void sendAll(Object message) {
 		 try {
 			 /* Send the new rate to all open WebSocket sessions */  
 			 ArrayList<Session> closedSessions= new ArrayList<>();
@@ -74,8 +77,8 @@ public class ServerSide {
 					 closedSessions.add(session);
 				 }
 				 else {
-					 session.getBasicRemote().sendText(message);
-					 //session.getBasicRemote().sendObject(message);
+					 //session.getBasicRemote().sendText(message);
+					 session.getBasicRemote().sendObject(message);
 					 //session.getBasicRemote().sendStream(message);
 				 }    
 			 }
