@@ -1,0 +1,91 @@
+/* FOR MOBILE VERSION */
+
+@media screen and (max-width:1024px) {
+  #ir-viewer-container {
+    margin-left: 35px;
+    margin-bottom: 60px;
+  }
+
+  .object {
+    min-width: 25%;
+    display: inline-table;
+    border: 1px solid black;
+    border-radius: 5px;
+    padding: 4px;
+    margin: 4px;
+  }
+}
+
+/* FOR DESKTOP VERSION */
+
+body {
+  background-color: #e8e8e8;
+}
+
+@media screen and (min-width:1034px) {
+  #ir-viewer-container {
+    margin-left: 35px;
+    margin-bottom: 60px;
+  }
+
+  .object {
+    min-width: 8%;
+    display: inline-table;
+    border: 1px solid black;
+    border-radius: 5px;
+    padding: 4px;
+    margin: 4px;
+  }
+}
+
+/* FOR BOTH VERSION */
+
+* {
+   margin: 0;
+   padding: 0;
+   font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+   letter-spacing: 0.1px;
+   -moz-user-select: none;
+   user-select: none;
+   position: relative;
+}
+
+#top-div {
+  width: 100%;
+  margin-top: 40px;
+  margin-bottom: 60px;
+  text-align: center;
+}
+
+#section-container {
+  display: inline;
+}
+
+#section,
+#section-number {
+  font-size: 50px;
+}
+
+#section {
+  padding-right: 25px;
+}
+
+.object:hover {
+  /* choose an effect */
+}
+
+.object-id,
+.object-ir {
+  color: white;
+  display: flex;
+}
+
+.object-id {
+  border-bottom: 0.1px solid white;
+  font-size: 15px;
+}
+
+.object-ir {
+  margin-top: 8px;
+  font-size: 17px;
+}
