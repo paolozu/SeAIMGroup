@@ -15,7 +15,9 @@ webSocket.onerror = function(message){ wsError(message); };
 
 function wsOpen(message){}
 
-function wsGetMessage(message){}
+function wsGetMessage(message){
+	//alert(message.data);
+}
 
 function wsClose(message){
   alert("Connection closed");

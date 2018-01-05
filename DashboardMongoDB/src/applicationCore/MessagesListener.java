@@ -58,16 +58,14 @@ public class MessagesListener {
 			    					current_cluster.forceUpdateIR();
 			    			}	
 			    		}
-						
 						long endTime   = System.currentTimeMillis();
 			            long totalTime = endTime - startTime;
-			            System.out.println(totalTime);
-			            
-						try {
-							sleep(90000);
-						} catch (InterruptedException e) {
-							e.printStackTrace();
-						}
+			            System.out.println(totalTime);	
+					}
+					try {
+						sleep(90000);
+					} catch (InterruptedException e) {
+						e.printStackTrace();
 					}
 				}
 			}
