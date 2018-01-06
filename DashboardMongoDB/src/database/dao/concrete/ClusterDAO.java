@@ -1,14 +1,12 @@
 package database.dao.concrete;
 
 import java.util.ArrayList;
-
 import org.bson.Document;
-
-import com.mongodb.BasicDBObject;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoCursor;
 import com.mongodb.client.MongoDatabase;
 import com.mongodb.client.model.Filters;
+import com.mongodb.client.model.Indexes;
 import com.mongodb.client.model.Updates;
 import applicationCore.Cluster;
 import applicationCore.Robot;
@@ -20,28 +18,28 @@ public class ClusterDAO implements ClusterDAOInterface {
 	@Override
 	public void insertCluster(Cluster cluster) {
 		MongoDatabase database = DatabaseConnector.CONNECTION.getDatabase();
-		MongoCollection<Document> collection = database.getCollection("cluster");
+		MongoCollection<Document> clusters_collection = database.getCollection("cluster");
 		Document cluster_db = new Document().append("_id", cluster.getClusterId())
 											.append("area_id", cluster.getAreaId())
 											.append("cluster_ir", cluster.getClusterIR());
-		collection.insertOne(cluster_db);
+		
+		clusters_collection.insertOne(cluster_db);
 	}
 	
 	@Override
 	public void updateCluster(Cluster cluster) {
 		MongoDatabase database = DatabaseConnector.CONNECTION.getDatabase();
-		MongoCollection<Document> collection = database.getCollection("cluster");
-		collection.updateOne(Filters.eq("_id", cluster.getClusterId()), Updates.set("cluster_ir", cluster.getClusterIR()));
+		MongoCollection<Document> clusters_collection = database.getCollection("cluster");
+		clusters_collection.updateOne(Filters.eq("_id", cluster.getClusterId()), Updates.set("cluster_ir", cluster.getClusterIR()));
 	}
 	
 	@Override
 	public ArrayList<Robot> getRobots(Integer cluster_id) {
 		ArrayList<Robot> robots = new ArrayList<>();
 		MongoDatabase database = DatabaseConnector.CONNECTION.getDatabase();
-		MongoCollection<Document> collection = database.getCollection("robot");
-		BasicDBObject index = new BasicDBObject("cluster_id", 1);
-		collection.createIndex(index);
-		MongoCursor<Document> cursor = collection.find(Filters.eq("cluster_id", cluster_id)).iterator();
+		MongoCollection<Document> robots_collection = database.getCollection("robot");
+		robots_collection.createIndex(Indexes.ascending("cluster_id"));
+		MongoCursor<Document> cursor = robots_collection.find(Filters.eq("cluster_id", cluster_id)).iterator();
 		try {
 		    while (cursor.hasNext()) {
 		        Document current = cursor.next();

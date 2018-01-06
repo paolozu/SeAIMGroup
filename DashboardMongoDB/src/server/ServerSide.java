@@ -23,10 +23,7 @@ public class ServerSide {
 			public void run() {
 				while(true) {     
 					if( queue != null ) {
-						ArrayList<String> a = new ArrayList<>();
-						a.add("ciao");
-						a.add("se");
-						sendAll(a);
+						sendAll("");
 					}
 					try {
 						sleep(5000);
@@ -68,7 +65,7 @@ public class ServerSide {
 		 System.out.println("session closed: " + session.getId());
 	 }
 	 
-	 private static void sendAll(Object message) {
+	 private static void sendAll(String message) {
 		 try {
 			 /* Send the new rate to all open WebSocket sessions */  
 			 ArrayList<Session> closedSessions= new ArrayList<>();
@@ -77,8 +74,8 @@ public class ServerSide {
 					 closedSessions.add(session);
 				 }
 				 else {
-					 //session.getBasicRemote().sendText(message);
-					 session.getBasicRemote().sendObject(message);
+					 session.getBasicRemote().sendText(message);
+					 //session.getBasicRemote().sendObject(message);
 					 //session.getBasicRemote().sendStream(message);
 				 }    
 			 }

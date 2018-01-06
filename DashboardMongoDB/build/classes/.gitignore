@@ -1,4 +1,8 @@
-/applicationCore/
-/database/
-/test/
+/Dashboard.css
+/Dashboard.html
+/Dashboard.js
+/META-INF/
+/WEB-INF/
+/jquery-3.2.1.min.js
 /server/
+/test/

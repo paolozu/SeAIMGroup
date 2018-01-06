@@ -14,18 +14,19 @@ public class RobotDAO implements RobotDAOInterface {
 	@Override
 	public void insertRobot(Robot robot) {
 		MongoDatabase database = DatabaseConnector.CONNECTION.getDatabase();
-		MongoCollection<Document> collection = database.getCollection("robot");
+		MongoCollection<Document> robots_collection = database.getCollection("robot");
 		Document robot_db = new Document().append("_id", robot.getRobotId())
 										  .append("cluster_id", robot.getClusterId())
 										  .append("robot_ir", robot.getRobotIR());
-		collection.insertOne(robot_db);
+		
+		robots_collection.insertOne(robot_db);
 	}
 	
 	@Override
 	public void updateRobot(Robot robot) {
 		MongoDatabase database = DatabaseConnector.CONNECTION.getDatabase();
-		MongoCollection<Document> collection = database.getCollection("robot");
-		collection.updateOne(Filters.eq("_id", robot.getRobotId()), Updates.set("robot_ir", robot.getRobotIR()));
+		MongoCollection<Document> robots_collection = database.getCollection("robot");
+		robots_collection.updateOne(Filters.eq("_id", robot.getRobotId()), Updates.set("robot_ir", robot.getRobotIR()));
 	}
 	
 }
