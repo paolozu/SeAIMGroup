@@ -1,7 +1,6 @@
 package test;
 
 import org.bson.Document;
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import com.mongodb.client.DistinctIterable;
@@ -30,8 +29,7 @@ public class GetFromDBTest {
 			robots.add(robot);
 		}*/
 		
-		JSONObject robots_json = new JSONObject();
-		JSONObject clusters_json = new JSONObject();
+		JSONObject robots_and_clusters_IR = new JSONObject();
 		
 		MongoDatabase database = DatabaseConnector.CONNECTION.getDatabase();
 		MongoCollection<Document> robots_collection = database.getCollection("robot");
@@ -45,28 +43,31 @@ public class GetFromDBTest {
 		
 		try {
 			while(areas.hasNext()) {
-				MongoCursor<Document> clusters = clusters_collection.find(Filters.eq("area_id", areas.next())).iterator();
+				Integer current_area = areas.next();
+				MongoCursor<Document> clusters = clusters_collection.find(Filters.eq("area_id", current_area)).iterator();
+				JSONObject clusters_index_json = new JSONObject();
 				try {
 					while(clusters.hasNext()) {
-						Document current = clusters.next();
-						JSONArray robots_array = new JSONArray();
-						MongoCursor<Document> robots = robots_collection.find(Filters.eq("cluster_id", current.getInteger("_id"))).iterator();
+						Document current_cluster = clusters.next();
+						MongoCursor<Document> robots = robots_collection.find(Filters.eq("cluster_id", current_cluster.getInteger("_id"))).iterator();
+						JSONObject robots_json = new JSONObject();
+						JSONObject clusters_json = new JSONObject();
 						try {
 							while(robots.hasNext()) {
-								robots_array.put(robots.next().getInteger("_id"));
+								Document current_robot = robots.next();
+								robots_json.put(current_robot.getInteger("_id").toString(), current_robot.getDouble("robot_ir"));
 							}
 						}
 						finally {
-							try {
-								robots_json.put(current.getInteger("_id").toString(), (Object) robots_array);
-							} catch (JSONException e) {
-								e.printStackTrace();
-							}
+							clusters_json.put("cluster_ir", current_cluster.getDouble("cluster_ir"));
+							clusters_json.put("robots", robots_json);
+							clusters_index_json.put(current_cluster.getInteger("_id").toString(), clusters_json);
 							robots.close();
 						}
 					}
 				}
 				finally {
+					robots_and_clusters_IR.put(current_area.toString(), clusters_index_json);
 					clusters.close();
 				}
 			}
@@ -75,8 +76,11 @@ public class GetFromDBTest {
 			areas.close();
 		}
 		
+		/*JSONObject result = (JSONObject) robots_and_clusters_IR.get("5");
+		JSONObject test = (JSONObject) result.get("50");
+		JSONObject robots_count = (JSONObject) test.get("robots");
 		
-		System.out.println(robots_json.get("0"));
+		System.out.println(robots_count.length());*/
 		
 		long endTime   = System.currentTimeMillis();
         long totalTime = endTime - startTime;
