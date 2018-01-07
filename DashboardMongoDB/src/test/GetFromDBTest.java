@@ -19,15 +19,8 @@ import database.DatabaseConnector;
  */
 public class GetFromDBTest {
 	public static void main(String[] args) throws JSONException {
-
-		//ArrayList<ArrayList<Robot>> robots = new ArrayList<>();
 		
 		long startTime = System.currentTimeMillis();
-		
-		/*for(int i = 0; i < 100; i++) {
-			ArrayList<Robot> robot = new ClusterDAO().getRobots(i);
-			robots.add(robot);
-		}*/
 		
 		JSONObject robots_and_clusters_IR = new JSONObject();
 		
@@ -76,11 +69,11 @@ public class GetFromDBTest {
 			areas.close();
 		}
 		
-		/*JSONObject result = (JSONObject) robots_and_clusters_IR.get("5");
+		JSONObject result = (JSONObject) robots_and_clusters_IR.get("5");
 		JSONObject test = (JSONObject) result.get("50");
 		JSONObject robots_count = (JSONObject) test.get("robots");
 		
-		System.out.println(robots_count.length());*/
+		System.out.println(robots_count.toString());
 		
 		long endTime   = System.currentTimeMillis();
         long totalTime = endTime - startTime;

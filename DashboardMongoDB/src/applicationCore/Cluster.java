@@ -8,8 +8,8 @@ import java.util.HashMap;
 
 public class Cluster {
 	
-	private HashMap<Integer, Robot> robots;   			    // Map in which the key is robot_id and the value is robot itself.
-	private int down_robots; 	              				// Counter of down robots in this cluster.
+	private HashMap<Integer, Robot> robots;   			     // Map in which the key is robot_id and the value is robot itself.
+	private int down_robots; 	              				 // Counter of down robots in this cluster.
 	private double cluster_IR;
 	private int cluster_id;
 	private int area_id;

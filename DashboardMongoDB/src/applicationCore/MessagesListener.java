@@ -17,21 +17,19 @@ import com.sun.net.httpserver.*;
 public class MessagesListener {
 
 	// Counter to test speed.
-	static int counter = 0;
-	static long startTime = System.currentTimeMillis();
-	static int robots_counter = 0;
-	static HashMap<Integer, Area> areas = new HashMap<>();
+	private static int counter = 0;
+	private static long startTime = System.currentTimeMillis();
+	private static HashMap<Integer, Area> areas = new HashMap<>();
 	private static Thread IRUpdater;
 
     public static void main(String[] args) throws Exception {
     
     	HttpServer server = HttpServer.create(new InetSocketAddress(8000), 0);
-    	server.createContext("/", new MessagesReceiver());
+    	server.createContext("/", new MessagesHandler());
     	server.setExecutor(null); 
     	server.start();
     	
     	// Thread to force IR update on robots and clusters each X milliseconds.
-    	// This procedure takes between 8 and 10 seconds to updates all records.
     	IRUpdater = new Thread(){
 			public void run() {
 				try {
@@ -74,7 +72,7 @@ public class MessagesListener {
 
     }
 
-    static class MessagesReceiver implements HttpHandler {    	
+    static class MessagesHandler implements HttpHandler {    	
     	
 	    @Override
 	    public void handle(HttpExchange exchange) throws IOException {
@@ -111,7 +109,7 @@ public class MessagesListener {
 						}
 					}
 					else {
-						// IT'S IMPORTANT TO CREATE FIRST THE CLUSTER
+						// IT'S IMPORTANT TO CREATE THE CLUSTER FIRST.
 			    		Cluster current_cluster = new Cluster(cluster_id, area_id);
 			    		Robot current_robot = new Robot(robot_id, cluster_id);
 						current_robot.signalCatch(signal_state);
@@ -121,7 +119,7 @@ public class MessagesListener {
 					}
 				}
 				else {
-					// IT'S IMPORTANT TO CREATE FIRST THE CLUSTER
+					// IT'S IMPORTANT TO CREATE THE CLUSTER FIRST.
 		    		Cluster current_cluster = new Cluster(cluster_id, area_id);
 		    		Robot current_robot = new Robot(robot_id, cluster_id);
 		    		current_robot.signalCatch(signal_state);
@@ -135,10 +133,6 @@ public class MessagesListener {
     		catch(JSONException e) {
 				e.printStackTrace();
 			}
-			
-	
-    		//System.out.println(message);
-    		//System.out.println(counter++);
 
     		String response = "This is the response";
     		exchange.sendResponseHeaders(200, response.getBytes().length);
@@ -146,7 +140,7 @@ public class MessagesListener {
     		os.write(response.getBytes());
     		os.close();
  
-    		
+    		// Get some information.
     		if( ++counter == 90000 || counter == 180000 || counter == 270000 || counter == 360000 ||
     			 counter == 450000 || counter == 540000 || counter == 630000 || counter == 720000 ||
     			 counter == 810000 || counter == 900000 || counter == 990000 || counter == 1080000) {
@@ -154,27 +148,6 @@ public class MessagesListener {
     			long endTime   = System.currentTimeMillis();
 	            long totalTime = endTime - startTime;
 	            System.out.println(totalTime);
-	    		/*for( Area area : areas.values() ) {
-	    			System.out.println("\n\n");
-	    			for( Cluster cluster : areas.get(area.getAreaId()).getClusters().values() ) {
-	    				System.out.println(cluster.getDownRobots());
-	    			}
-	    		}*/
-	    		
-    			// Uncomment the following two lines to print the IR of cluster 91.
-    			
-    			//areas.get(9).getClusters().get(91).forceUpdateIR();
-    			//System.out.println(areas.get(9).getClusters().get(91));
-    			
-    			// Printing all robots informations of cluster 91. 
-    			
-    			/*areas.get(9).getClusters().get(91).forceUpdateIR();
-    			for( Map.Entry<Integer, Robot> robot : areas.get(9).getClusters().get(91).getRobots().entrySet() ) {
-    				robot.getValue().forceUpdateIR();
-    				System.out.println(robot.getValue());
-    			}*/
-    			
-    			//System.out.println("Messages: " + counter);
     			
     		}
 				
