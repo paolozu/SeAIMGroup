@@ -1,89 +1,91 @@
 package server;
 
-import java.util.ArrayList;
-import java.util.Queue;
-import java.util.concurrent.ConcurrentLinkedQueue;
-import javax.websocket.OnClose;
-import javax.websocket.OnError;
-import javax.websocket.OnMessage;
-import javax.websocket.OnOpen;
-import javax.websocket.Session;
-import javax.websocket.server.ServerEndpoint;
+import org.java_websocket.WebSocket;
+import org.java_websocket.handshake.ClientHandshake;
+import org.java_websocket.server.WebSocketServer;
+import org.json.JSONException;
+import org.json.JSONObject;
+import java.net.InetSocketAddress;
+import java.net.UnknownHostException;
+import java.util.HashSet;
+import java.util.Set;
 
-@ServerEndpoint(value = "/socket")
 public class ServerSide {
 	
-	// Queue of all opened sessions.
-	private static Queue<Session> queue = new ConcurrentLinkedQueue<Session>();
-	private static Thread thread;
-	
-	// Thread that sends messages via socket to clients.
-	static{
-		thread = new Thread(){
-			public void run() {
-				while(true) {     
-					if( queue != null ) {
-						sendAll("Message");
+	public static void main(String[]args) throws UnknownHostException {
+		ServerSide serverSide = new ServerSide();
+		WebsocketServer a = serverSide.new WebsocketServer();
+		a.start();
+		Thread thread;
+			thread = new Thread(){
+				public void run() {
+					while(true) {     
+						if( !a.conns.isEmpty() ) {
+							for (WebSocket sock : a.conns) {
+								JSONObject b = new JSONObject();
+								try {
+									b.put("ciao", 3);
+								} catch (JSONException e) {
+									e.printStackTrace();
+								}
+					            sock.send(b.toString());
+					        }
+						}
+						try {
+							sleep(5000);
+						}
+						catch (InterruptedException e) {      
+						}
 					}
-					try {
-						sleep(5000);
-					}
-					catch (InterruptedException e) {      
-					}
-				}
-			};
-		} ;
-		thread.start();
-	}
-	 
-	@OnMessage
-	public void onMessage(Session session, String message) {
-	//provided for completeness, in out scenario clients don't send any messages.
-		try {   
-			System.out.println("received msg " + message + " from " + session.getId());
+				};
+			} ;
+			thread.start();
 		}
-		catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
-	 
-	@OnOpen
-	public void open(Session session) {
-		queue.add(session);
-		System.out.println("New session opened: " + session.getId());
-	}
+
+
+	public class WebsocketServer extends WebSocketServer {
 	
-	 @OnError
-	 public void error(Session session, Throwable t) {
-		 queue.remove(session);
-		 System.err.println("Error on session " + session.getId());  
-	 }
-	  
-	 @OnClose
-	 public void closedConnection(Session session) { 
-		 queue.remove(session);
-		 System.out.println("session closed: " + session.getId());
-	 }
-	 
-	 private static void sendAll(String message) {
-		 try {
-			 /* Send the new rate to all open WebSocket sessions */  
-			 ArrayList<Session> closedSessions= new ArrayList<>();
-			 for ( Session session : queue ) {
-				 if( !session.isOpen() ) {
-					 closedSessions.add(session);
-				 }
-				 else {
-					 session.getBasicRemote().sendText(message);
-					 //session.getBasicRemote().sendObject(message);
-					 //session.getBasicRemote().sendStream(message);
-				 }    
-			 }
-			 queue.removeAll(closedSessions);
-			 //System.out.println("Sending " + message + " to " + queue.size() + " clients");
-		 }
-		 catch (Throwable e) {
-			 e.printStackTrace();
-		 }
-	 }
+	    private final static int TCP_PORT = 4444;
+		
+	
+	    public Set<WebSocket> conns;
+	    
+	    
+	
+	    public WebsocketServer() throws UnknownHostException {
+	        super(new InetSocketAddress("192.168.159.111", TCP_PORT));
+	        conns = new HashSet<>();
+	    }
+	
+	    @Override
+	    public void onOpen(WebSocket conn, ClientHandshake handshake) {
+	        conns.add(conn);
+	        System.out.println("New connection from " + conn.getRemoteSocketAddress().getAddress().getHostAddress());
+	    }
+	
+	    @Override
+	    public void onClose(WebSocket conn, int code, String reason, boolean remote) {
+	        conns.remove(conn);
+	        System.out.println("Closed connection to " + conn.getRemoteSocketAddress().getAddress().getHostAddress());
+	    }
+	
+	    @Override
+	    public void onMessage(WebSocket conn, String message) {
+	        System.out.println("Message from client: " + message);
+	        for (WebSocket sock : conns) {
+	            sock.send(message);
+	        }
+	    }
+	
+	    @Override
+	    public void onError(WebSocket conn, Exception ex) {
+	        //ex.printStackTrace();
+	        if (conn != null) {
+	            conns.remove(conn);
+	            // do some thing if required
+	        }
+	        System.out.println("ERROR from " + conn.getRemoteSocketAddress().getAddress().getHostAddress());
+	    }
+	    
+	}
 }

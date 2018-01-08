@@ -1,7 +1,7 @@
 package test;
 
-import java.io.FileWriter;
-import java.io.IOException;
+//import java.io.FileWriter;
+//import java.io.IOException;
 import org.bson.Document;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -77,13 +77,13 @@ public class GetFromDBTest {
 		
 		System.out.println(robots_count.toString());
 		
-		try {
+		/*try {
 			FileWriter a = new FileWriter("C:/Users/Stefano_Martella/Desktop/robots_and_clusters_IR.txt");
 			a.write(robots_and_clusters_IR.toString());
 			a.close();
 		} catch (IOException e) {
 			e.printStackTrace();
-		}
+		}*/
 		
 		long endTime   = System.currentTimeMillis();
         long totalTime = endTime - startTime;
