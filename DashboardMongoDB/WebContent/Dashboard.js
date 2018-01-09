@@ -96,6 +96,8 @@ function showRobotsView(robots_count){
 		$('#section').html("Cluster");
 		$('#section-number').html(selected_cluster);
 		var robots = $('#ir-viewer-container');
+		// REMEMBER !!!
+		robots.css({"margin-left" : "23px"});
 		for (var key in robots_and_clusters_IR[selected_area][selected_cluster]["robots"]) {
 	    if (robots_and_clusters_IR[selected_area][selected_cluster]["robots"].hasOwnProperty(key)) {
 				robots.append("<div class=\"robot\"><span class=\"robot-id\">Robot " + key + "</span>" +
