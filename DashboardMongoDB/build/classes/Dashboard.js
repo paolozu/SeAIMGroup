@@ -4,7 +4,7 @@
 *                                              *
 ************************************************/
 
-var webSocket = new WebSocket("ws://192.168.159.111:4444");
+var webSocket = new WebSocket("ws://127.0.0.1:4444");
 
 selection = 0;
 received = null;
@@ -17,7 +17,10 @@ webSocket.onerror = function(message){ wsError(message); };
 function wsOpen(message){}
 
 function wsGetMessage(message){
-	alert(message.data);
+	var robots_and_clusters_IR = JSON.parse(message.data);
+	var a = robots_and_clusters_IR["9"];
+	var b = a["91"];
+	alert(b["cluster_ir"]);
 }
 
 function wsClose(message){

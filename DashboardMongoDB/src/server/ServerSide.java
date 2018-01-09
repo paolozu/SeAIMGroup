@@ -1,10 +1,21 @@
 package server;
 
+import org.bson.Document;
 import org.java_websocket.WebSocket;
 import org.java_websocket.handshake.ClientHandshake;
 import org.java_websocket.server.WebSocketServer;
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import com.mongodb.client.DistinctIterable;
+import com.mongodb.client.MongoCollection;
+import com.mongodb.client.MongoCursor;
+import com.mongodb.client.MongoDatabase;
+import com.mongodb.client.model.Filters;
+import com.mongodb.client.model.Indexes;
+
+import database.DatabaseConnector;
+
 import java.net.InetSocketAddress;
 import java.net.UnknownHostException;
 import java.util.HashSet;
@@ -19,20 +30,72 @@ public class ServerSide {
 		Thread thread;
 			thread = new Thread(){
 				public void run() {
-					while(true) {     
-						if( !a.conns.isEmpty() ) {
-							for (WebSocket sock : a.conns) {
-								JSONObject b = new JSONObject();
-								try {
-									b.put("ciao", 3);
-								} catch (JSONException e) {
-									e.printStackTrace();
+					
+					MongoDatabase database = DatabaseConnector.CONNECTION.getDatabase();
+					MongoCollection<Document> robots_collection = database.getCollection("robot");
+					MongoCollection<Document> clusters_collection = database.getCollection("cluster");
+					
+					while(true) { 
+						if( ! a.getConnections().isEmpty() ) {
+							JSONObject robots_and_clusters_IR = new JSONObject();
+							
+							robots_collection.createIndex(Indexes.ascending("cluster_id"));
+							clusters_collection.createIndex(Indexes.ascending("area_id"));
+							
+							DistinctIterable<Integer> areas_count = clusters_collection.distinct("area_id", Integer.class);
+							MongoCursor<Integer> areas = areas_count.iterator();
+							
+							try {
+								while(areas.hasNext()) {
+									Integer current_area = areas.next();
+									MongoCursor<Document> clusters = clusters_collection.find(Filters.eq("area_id", current_area)).iterator();
+									JSONObject clusters_index_json = new JSONObject();
+									try {
+										while(clusters.hasNext()) {
+											Document current_cluster = clusters.next();
+											MongoCursor<Document> robots = robots_collection.find(Filters.eq("cluster_id", current_cluster.getInteger("_id"))).iterator();
+											JSONObject robots_json = new JSONObject();
+											JSONObject clusters_json = new JSONObject();
+											try {
+												while(robots.hasNext()) {
+													Document current_robot = robots.next();
+													robots_json.put(current_robot.getInteger("_id").toString(), current_robot.getDouble("robot_ir"));
+												}
+											} catch (JSONException e) {
+												e.printStackTrace();
+											}
+											finally {
+												try {
+													clusters_json.put("cluster_ir", current_cluster.getDouble("cluster_ir"));
+													clusters_json.put("robots", robots_json);
+													clusters_index_json.put(current_cluster.getInteger("_id").toString(), clusters_json);
+												}
+												catch(JSONException e) {
+													e.printStackTrace();
+												}
+												robots.close();
+											}
+										}
+									}
+									finally {
+										try {
+											robots_and_clusters_IR.put(current_area.toString(), clusters_index_json);
+										} catch (JSONException e) {
+											e.printStackTrace();
+										}
+										clusters.close();
+									}
 								}
-					            sock.send(b.toString());
+							}
+							finally{
+								areas.close();
+							}
+							for (WebSocket sock : a.getConnections()) {
+								sock.send(robots_and_clusters_IR.toString());
 					        }
 						}
 						try {
-							sleep(5000);
+							sleep(15000);
 						}
 						catch (InterruptedException e) {      
 						}
@@ -44,47 +107,37 @@ public class ServerSide {
 
 
 	public class WebsocketServer extends WebSocketServer {
-	
+
 	    private final static int TCP_PORT = 4444;
-		
-	
-	    public Set<WebSocket> conns;
-	    
-	    
+	    private final static String IP_ADDRESS = "127.0.0.1";
+	    private Set<WebSocket> connections;	    
 	
 	    public WebsocketServer() throws UnknownHostException {
-	        super(new InetSocketAddress("192.168.159.111", TCP_PORT));
-	        conns = new HashSet<>();
+	        super(new InetSocketAddress(IP_ADDRESS, TCP_PORT));
+	        connections = new HashSet<>();
+	    }
+	    
+	    public Set<WebSocket> getConnections(){
+	    	return this.connections;
 	    }
 	
 	    @Override
-	    public void onOpen(WebSocket conn, ClientHandshake handshake) {
-	        conns.add(conn);
-	        System.out.println("New connection from " + conn.getRemoteSocketAddress().getAddress().getHostAddress());
+	    public void onOpen(WebSocket connection, ClientHandshake handshake) {
+	        connections.add(connection);
 	    }
 	
 	    @Override
-	    public void onClose(WebSocket conn, int code, String reason, boolean remote) {
-	        conns.remove(conn);
-	        System.out.println("Closed connection to " + conn.getRemoteSocketAddress().getAddress().getHostAddress());
+	    public void onClose(WebSocket connection, int code, String reason, boolean remote) {
+	    	connections.remove(connection);
 	    }
 	
 	    @Override
-	    public void onMessage(WebSocket conn, String message) {
-	        System.out.println("Message from client: " + message);
-	        for (WebSocket sock : conns) {
-	            sock.send(message);
-	        }
-	    }
+	    public void onMessage(WebSocket connection, String message) { }
 	
 	    @Override
-	    public void onError(WebSocket conn, Exception ex) {
-	        //ex.printStackTrace();
-	        if (conn != null) {
-	            conns.remove(conn);
-	            // do some thing if required
-	        }
-	        System.out.println("ERROR from " + conn.getRemoteSocketAddress().getAddress().getHostAddress());
+	    public void onError(WebSocket connection, Exception exception) {
+	        if (connection != null) 
+	        	connections.remove(connection);
 	    }
 	    
 	}
