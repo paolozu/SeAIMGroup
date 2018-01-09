@@ -1,12 +1,13 @@
 /* FOR MOBILE VERSION */
 
 @media screen and (max-width:1024px) {
+
   #ir-viewer-container {
-    margin-left: 25px;
+    margin-left: 5px;
     margin-bottom: 60px;
   }
 
-  .object {
+	.robot {
     min-width: 25%;
     display: inline-table;
     border: 1px solid black;
@@ -14,6 +15,29 @@
     padding: 4px;
     margin: 4px;
   }
+
+	.cluster {
+		min-width: 40%;
+    height: 150px;
+    display: inline-table;
+    border: 1px solid black;
+    border-radius: 5px;
+    padding: 4px;
+    margin: 10px;
+	}
+
+  .area {
+    background-color: orange;
+    min-width: 40%;
+    height: 150px;
+    display: inline-table;
+    border: 1px solid black;
+    border-radius: 5px;
+    padding: 4px;
+    margin: 10px;
+    text-align: center;
+  }
+
 }
 
 /* FOR DESKTOP VERSION */
@@ -23,12 +47,13 @@ body {
 }
 
 @media screen and (min-width:1034px) {
+
   #ir-viewer-container {
-    margin-left: 35px;
+    margin-left: 80px;
     margin-bottom: 60px;
   }
 
-  .object {
+	.robot {
     min-width: 8%;
     display: inline-table;
     border: 1px solid black;
@@ -36,6 +61,29 @@ body {
     padding: 4px;
     margin: 4px;
   }
+
+	.cluster {
+		min-width: 16%;
+    height: 150px;
+    display: inline-table;
+    border: 1px solid black;
+    border-radius: 5px;
+    padding: 4px;
+    margin: 10px;
+	}
+
+  .area {
+    background-color: orange;
+    min-width: 16%;
+    height: 150px;
+    display: inline-table;
+    border: 1px solid black;
+    border-radius: 5px;
+    padding: 4px;
+    margin: 10px;
+    text-align: center;
+  }
+
 }
 
 /* FOR BOTH VERSION */
@@ -70,17 +118,14 @@ body {
   padding-right: 25px;
 }
 
-.object:hover {
-  /* choose an effect */
-}
-
-.object-id,
-.object-ir {
+.robot-id,
+.robot-ir {
   color: white;
-  display: flex;
+  display: block;
+	text-align: center;
 }
 
-.object-id {
+.robot-id {
   border-bottom: 0.1px solid white;
   font-size: 15px;
 }
@@ -88,4 +133,32 @@ body {
 .object-ir {
   margin-top: 8px;
   font-size: 17px;
+}
+
+.cluster-id,
+.cluster-ir {
+  display: block;
+  text-align: center;
+  color: white;
+}
+
+.cluster-id {
+	font-size: 30px;
+	margin-top: 8px;
+  padding-bottom: 4px;
+	border-bottom: 0.1px solid white;
+}
+
+.cluster-ir {
+  top: 30px;
+	font-size: 32px;
+}
+
+.area-id {
+	top: 55px;
+	font-size: 30px;
+}
+
+.robot:hover {
+  /* choose an effect */
 }

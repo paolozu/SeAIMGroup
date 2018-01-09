@@ -4,10 +4,11 @@
 *                                              *
 ************************************************/
 
-var webSocket = new WebSocket("ws://127.0.0.1:4444");
+var webSocket = new WebSocket("ws://192.168.159.111:4444");
 
-selection = 0;
-received = null;
+selection = "areas";
+selection_index;
+received;
 
 webSocket.onopen = function(message){ wsOpen(message); };
 webSocket.onmessage = function(message){ wsGetMessage(message); };
@@ -18,9 +19,10 @@ function wsOpen(message){}
 
 function wsGetMessage(message){
 	var robots_and_clusters_IR = JSON.parse(message.data);
-	var a = robots_and_clusters_IR["9"];
-	var b = a["91"];
-	alert(b["cluster_ir"]);
+	if( selection == "areas" ){
+		var areas_count = Object.keys(robots_and_clusters_IR).length;
+		showAreasView(areas_count);
+	}	
 }
 
 function wsClose(message){
@@ -40,11 +42,24 @@ function wserror(message){}
 
 // Function to change background color
 // according to robots and Clusters IR.
-$(document).ready(function(){
-  $('.object').each(function(i, obj) {
-    if( $(this).find(".object-ir").text().split('%')[0] >= 40 )
-      $(this).css({"background-color" : "red"});
-    else
-      $(this).css({"background-color" : "green"});
-  });
-});
+function showAreasView(areas_count){
+	$(document).ready(function(){
+		$('#section').html("Aree");
+		$('#section-number').html("");
+		var a = $('#ir-viewer-container');
+		for( i = 0; i < areas_count; i++ ){
+			a.append("<div class=\"area\"><span class=\"area-id\">Area" + i + "</span></div>");
+		}
+	});
+}
+
+function color(){
+	$(document).ready(function(){
+	  $('.object').each(function(i, obj) {
+	    if( $(this).find(".object-ir").text().split('%')[0] >= 40 )
+	      $(this).css({"background-color" : "red"});
+	    else
+	      $(this).css({"background-color" : "green"});
+	  });
+	});
+}

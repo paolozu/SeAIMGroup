@@ -1,9 +1,27 @@
 /* FOR MOBILE VERSION */
 
 @media screen and (max-width:1024px) {
+	
   #ir-viewer-container {
     margin-left: 25px;
     margin-bottom: 60px;
+  }
+  
+  .area {
+    background-color: orange;
+    min-width: 40%;
+    height: 150px;
+    display: inline-table;
+    border: 1px solid black;
+    border-radius: 5px;
+    padding: 4px;
+    margin: 10px;
+    text-align: center;
+  }
+
+  .area-id {
+    top: 55px;
+    font-size: 30px;
   }
 
   .object {
@@ -23,9 +41,27 @@ body {
 }
 
 @media screen and (min-width:1034px) {
+	
   #ir-viewer-container {
     margin-left: 35px;
     margin-bottom: 60px;
+  }
+  
+  .area {
+    background-color: orange;
+    min-width: 16%;
+    height: 150px;
+    display: inline-table;
+    border: 1px solid black;
+    border-radius: 5px;
+    padding: 4px;
+    margin: 10px;
+    text-align: center;
+  }
+
+  .area-id {
+    top: 55px;
+    font-size: 30px;
   }
 
   .object {
