@@ -46,7 +46,7 @@ public class IRUpdater implements Runnable {
 				new Thread(clientsSender).start();
 			}					
 			try {
-				Thread.sleep(55000);
+				Thread.sleep(30000);
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}

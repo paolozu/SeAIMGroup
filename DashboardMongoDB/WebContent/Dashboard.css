@@ -4,6 +4,7 @@
 
   #ir-viewer-container {
     margin-bottom: 60px;
+    margin-left: 10px;
   }
 
   #section,
@@ -22,7 +23,7 @@
   }
 
 	.robot {
-    min-width: 25%;
+    min-width: 27.5%;
     display: inline-table;
     border: 1px solid black;
     border-radius: 5px;
@@ -63,7 +64,7 @@ body {
 @media screen and (min-width:1034px) {
 
   #ir-viewer-container {
-    margin-left: 10px;
+    margin-left: 80px;
     margin-bottom: 60px;
   }
 
