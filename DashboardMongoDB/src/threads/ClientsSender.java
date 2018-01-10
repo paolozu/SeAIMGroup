@@ -11,7 +11,6 @@ import com.mongodb.client.MongoCursor;
 import com.mongodb.client.MongoDatabase;
 import com.mongodb.client.model.Filters;
 import com.mongodb.client.model.Indexes;
-
 import database.DatabaseConnector;
 
 public class ClientsSender implements Runnable{

@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Set;
 import org.java_websocket.WebSocket;
-
 import model.Area;
 import model.Cluster;
 import model.Robot;

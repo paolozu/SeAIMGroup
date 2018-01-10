@@ -3,7 +3,6 @@ package test;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Map;
-
 import java.util.HashMap;
 
 public class ClusterTest {
