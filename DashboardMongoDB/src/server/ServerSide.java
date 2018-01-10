@@ -109,7 +109,7 @@ public class ServerSide {
 	public class WebsocketServer extends WebSocketServer {
 
 	    private final static int TCP_PORT = 4444;
-	    private final static String IP_ADDRESS = "192.168.159.111";
+	    private final static String IP_ADDRESS = "10.172.13.108";
 	    private Set<WebSocket> connections;	    
 	
 	    public WebsocketServer() throws UnknownHostException {
