@@ -1,6 +1,6 @@
 package database.dao.interfaces;
 
-import applicationCore.Robot;
+import model.Robot;
 
 public interface RobotDAOInterface {
 	

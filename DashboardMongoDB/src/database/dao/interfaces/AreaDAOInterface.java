@@ -1,7 +1,8 @@
 package database.dao.interfaces;
 
 import java.util.ArrayList;
-import applicationCore.Cluster;
+
+import model.Cluster;
 
 public interface AreaDAOInterface {
 	

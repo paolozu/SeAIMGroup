@@ -7,9 +7,10 @@ import com.mongodb.client.MongoCursor;
 import com.mongodb.client.MongoDatabase;
 import com.mongodb.client.model.Filters;
 import com.mongodb.client.model.Indexes;
-import applicationCore.Cluster;
+
 import database.DatabaseConnector;
 import database.dao.interfaces.AreaDAOInterface;
+import model.Cluster;
 
 public class AreaDAO implements AreaDAOInterface {
 	

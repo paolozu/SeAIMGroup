@@ -1,4 +1,4 @@
-package applicationCore;
+package model;
 
 import java.util.HashMap;
 

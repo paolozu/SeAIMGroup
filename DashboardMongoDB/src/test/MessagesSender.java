@@ -1,4 +1,4 @@
-package applicationCore;
+package test;
 
 import java.io.BufferedInputStream;
 import java.io.InputStream;
@@ -11,10 +11,6 @@ import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.TimeUnit;
 
 import org.json.JSONObject;
-
-import test.AreaTest;
-import test.ClusterTest;
-import test.RobotTest;
 
 public class MessagesSender {
 	

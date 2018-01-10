@@ -8,10 +8,11 @@ import com.mongodb.client.MongoDatabase;
 import com.mongodb.client.model.Filters;
 import com.mongodb.client.model.Indexes;
 import com.mongodb.client.model.Updates;
-import applicationCore.Cluster;
-import applicationCore.Robot;
+
 import database.DatabaseConnector;
 import database.dao.interfaces.ClusterDAOInterface;
+import model.Cluster;
+import model.Robot;
 
 public class ClusterDAO implements ClusterDAOInterface {
 

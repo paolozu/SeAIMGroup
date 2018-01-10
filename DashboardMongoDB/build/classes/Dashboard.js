@@ -4,10 +4,10 @@
 *                                              *
 ************************************************/
 
-var webSocket = new WebSocket("ws://192.168.159.111:4444");
+var webSocket = new WebSocket("ws://10.172.13.108:4444");
 
-selected_area = null;
-selected_cluster = null;
+var selected_area = null;
+var selected_cluster = null;
 var robots_and_clusters_IR = null;
 //received;
 
@@ -20,11 +20,12 @@ function wsOpen(message){}
 
 function wsGetMessage(message){
 	robots_and_clusters_IR = JSON.parse(message.data);
-	if( selected_area == null ){
-		selected_area = "areas";
-		var areas_count = Object.keys(robots_and_clusters_IR).length;
-		showAreasView(areas_count);
-	}
+	if( selected_area == null )
+		showAreasView();
+	if( selected_area != null && selected_cluster == null )
+		showClustersView();
+	if( selected_area != null && selected_cluster != null )
+		showRobotsView();
 }
 
 function wsClose(message){
@@ -42,25 +43,43 @@ function wserror(message){}
 *                                              *
 ************************************************/
 
-// Function to change background color
-// according to robots and Clusters IR.
 $(document).on('click', ".area", function(){
-	// selected_area is a string.
 	selected_area = $(this).find('span').html().replace('Area ', '');
-	var cluster_count = Object.keys(robots_and_clusters_IR[selected_area]).length;
-	showClustersView(cluster_count);
+	showClustersView();
 });
 
 $(document).on('click', ".cluster", function(){
-	// selected_area is a string.
 	selected_cluster = $(this).find('span').html().replace('Cluster ', '');
-	var robots_count = Object.keys(robots_and_clusters_IR[selected_area][selected_cluster]["robots"]).length;
-	showRobotsView(robots_count);
+	showRobotsView();
 });
 
-function showAreasView(areas_count){
+$(document).on('click', "#change-selection", function(){
+	if($(this).html() == "Torna ai Clusters"){
+		selected_cluster = null;
+		showClustersView();
+	}
+	else if($(this).html() == "Torna alle Aree"){
+		selected_area = null;
+		showAreasView();
+	}
+});
+
+function color(){
 	$(document).ready(function(){
+	  $('.robot, .cluster').each(function(i, obj) {
+	    if( $(this).find(".cluster-ir").text().split('%')[0] >= 40 )
+	      $(this).css({"background-color" : "red"});
+	    else
+	      $(this).css({"background-color" : "green"});
+	  });
+	});
+}
+
+function showAreasView(){
+	$(document).ready(function(){
+		$("#change-selection").hide();
 		$('.area').remove();
+		$('.cluster').remove();
 		$('#section').html("Aree");
 		$('#section-number').hide();
 		var areas = $('#ir-viewer-container');
@@ -72,9 +91,13 @@ function showAreasView(areas_count){
 	});
 }
 
-function showClustersView(cluster_count){
+function showClustersView(){
 	$(document).ready(function(){
+		$("#change-selection").show();
+		$("#change-selection").html("Torna alle Aree");
 		$('.area').remove();
+		$('.cluster').remove();
+		$('.robot').remove();
 		$('#section').html("Area");
 		$('#section-number').show();
 		$('#section-number').html(selected_area);
@@ -90,14 +113,14 @@ function showClustersView(cluster_count){
 	});
 }
 
-function showRobotsView(robots_count){
+function showRobotsView(){
 	$(document).ready(function(){
+		$("#change-selection").html("Torna ai Clusters");
 		$('.cluster').remove();
+		$('.robot').remove();
 		$('#section').html("Cluster");
 		$('#section-number').html(selected_cluster);
 		var robots = $('#ir-viewer-container');
-		// REMEMBER !!!
-		robots.css({"margin-left" : "23px"});
 		for (var key in robots_and_clusters_IR[selected_area][selected_cluster]["robots"]) {
 	    if (robots_and_clusters_IR[selected_area][selected_cluster]["robots"].hasOwnProperty(key)) {
 				robots.append("<div class=\"robot\"><span class=\"robot-id\">Robot " + key + "</span>" +
@@ -106,16 +129,5 @@ function showRobotsView(robots_count){
 		  }
 		}
 		color();
-	});
-}
-
-function color(){
-	$(document).ready(function(){
-	  $('.robot, .cluster').each(function(i, obj) {
-	    if( $(this).find(".cluster-ir").text().split('%')[0] >= 40 )
-	      $(this).css({"background-color" : "red"});
-	    else
-	      $(this).css({"background-color" : "green"});
-	  });
 	});
 }

@@ -1,8 +1,9 @@
 package database.dao.interfaces;
 
 import java.util.ArrayList;
-import applicationCore.Cluster;
-import applicationCore.Robot;
+
+import model.Cluster;
+import model.Robot;
 
 public interface ClusterDAOInterface {
 	

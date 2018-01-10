@@ -5,9 +5,10 @@ import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
 import com.mongodb.client.model.Filters;
 import com.mongodb.client.model.Updates;
-import applicationCore.Robot;
+
 import database.DatabaseConnector;
 import database.dao.interfaces.RobotDAOInterface;
+import model.Robot;
 
 public class RobotDAO implements RobotDAOInterface {
 	

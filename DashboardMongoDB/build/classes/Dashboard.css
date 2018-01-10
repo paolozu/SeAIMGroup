@@ -3,8 +3,22 @@
 @media screen and (max-width:1024px) {
 
   #ir-viewer-container {
-    margin-left: 5px;
     margin-bottom: 60px;
+  }
+
+  #section,
+  #section-number {
+    left: 5px;
+    top: 15px;
+    font-size: 35px;
+  }
+
+  #change-selection {
+    left: -10px;
+    border-radius: 5px;
+    background-color: white;
+    padding: 3px;
+    width: 80px;
   }
 
 	.robot {
@@ -49,8 +63,22 @@ body {
 @media screen and (min-width:1034px) {
 
   #ir-viewer-container {
-    margin-left: 80px;
+    margin-left: 10px;
     margin-bottom: 60px;
+  }
+
+  #section,
+  #section-number {
+    font-size: 50px;
+  }
+
+  #change-selection {
+    left: -50px;
+    top: -7px;
+    border-radius: 5px;
+    background-color: white;
+    padding: 5px;
+    width: 150px;
   }
 
 	.robot {
@@ -109,13 +137,17 @@ body {
   display: inline;
 }
 
-#section,
-#section-number {
-  font-size: 50px;
-}
-
 #section {
   padding-right: 25px;
+}
+
+#change-selection {
+  display: none;
+}
+
+#change-selection:hover {
+  color: white;
+  background-color: grey;
 }
 
 .robot-id,
@@ -128,11 +160,6 @@ body {
 .robot-id {
   border-bottom: 0.1px solid white;
   font-size: 15px;
-}
-
-.object-ir {
-  margin-top: 8px;
-  font-size: 17px;
 }
 
 .cluster-id,
