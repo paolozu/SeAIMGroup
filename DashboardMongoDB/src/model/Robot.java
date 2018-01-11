@@ -3,6 +3,8 @@ package model;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Map;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 import database.dao.concrete.RobotDAO;
 import java.util.HashMap;
 
@@ -16,6 +18,7 @@ public class Robot {
 	private Timestamp start_downtime;						// To keep trace when down time starts.
 	private HashMap<Timestamp, Long> downtime_intervals;	// Map in which the key is the down time starts and the value is the 
 	 														// down time duration.
+	private Lock lock = new ReentrantLock(true);
 	
 	public Robot() {}
 	
@@ -64,24 +67,36 @@ public class Robot {
 	// In case the number of down signals passes from 0 to 1 the we store
 	// the current time to keep trace of down time beginning.
 	public void signalCatch(int signal) {
-		if ( signal == 0 ){ 
-			this.previous_down_signals = this.down_signals;
-			if( ++this.down_signals == 1 ) 
-				this.start_downtime = new Timestamp(System.currentTimeMillis());	
+		this.lock.lock();
+		try {
+			if ( signal == 0 ){ 
+				this.previous_down_signals = this.down_signals;
+				if( ++this.down_signals == 1 ) 
+					this.start_downtime = new Timestamp(System.currentTimeMillis());	
+			}
+			else { // signal == 1
+				this.previous_down_signals = this.down_signals;
+				if( --down_signals == 0 )
+					this.updateDownTime();
+			}
 		}
-		else { // signal == 1
-			this.previous_down_signals = this.down_signals;
-			if( --down_signals == 0 )
-				this.updateDownTime();
-		}	
+		finally {
+			this.lock.unlock();
+		}
 	}
 	
 	synchronized private void updateDownTime() {
-		if ( this.down_signals > 0 ) {
-			long downtime_duration = new Timestamp(System.currentTimeMillis()).getTime() - start_downtime.getTime();
-			this.downtime_intervals.put(start_downtime, downtime_duration);
-			this.start_downtime = new Timestamp(System.currentTimeMillis());
-		}	
+		this.lock.lock();
+		try {
+			if ( this.down_signals > 0 ) {
+				long downtime_duration = new Timestamp(System.currentTimeMillis()).getTime() - start_downtime.getTime();
+				this.downtime_intervals.put(start_downtime, downtime_duration);
+				this.start_downtime = new Timestamp(System.currentTimeMillis());
+			}	
+		}
+		finally {
+			this.lock.unlock();
+		}
 		this.updateIR();
 	}
 

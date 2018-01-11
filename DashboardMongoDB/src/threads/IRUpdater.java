@@ -42,11 +42,6 @@ public class IRUpdater implements Runnable {
 				// Starting thread to update clients json.
 	            Runnable clientsSender = new ClientsSender(connections);
 				new Thread(clientsSender).start();
-			}					
-			try {
-				Thread.sleep(30000);
-			} catch (InterruptedException e) {
-				e.printStackTrace();
 			}
 		}
 	}
