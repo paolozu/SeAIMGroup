@@ -34,11 +34,9 @@ public class IRUpdater implements Runnable {
 	    			for( Cluster current_cluster : current_clusters ) {
 	    				ArrayList<Robot> current_robots = new ArrayList<Robot>(current_cluster.getRobots().values());
 	    				for( Robot robot : current_robots ) {
-	    					if( robot.getDownSignals() > 0)
-	    						robot.forceUpdateIR();
+	    					robot.forceUpdateIR();
 	    				}
-	    				if ( current_cluster.getDownRobots() > 0 )
-	    					current_cluster.forceUpdateIR();
+	    				current_cluster.forceUpdateIR();
 	    			}	
 	    		}	            
 				// Starting thread to update clients json.

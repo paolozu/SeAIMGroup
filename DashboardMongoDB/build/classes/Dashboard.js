@@ -4,7 +4,7 @@
 *                                              *
 ************************************************/
 
-var webSocket = new WebSocket("ws://10.172.13.108:4444");
+var webSocket = new WebSocket("ws://192.168.159.111:4444");
 
 var selected_area = null;
 var selected_cluster = null;
@@ -67,7 +67,7 @@ $(document).on('click', "#change-selection", function(){
 function color(){
 	$(document).ready(function(){
 	  $('.robot, .cluster').each(function(i, obj) {
-	    if( $(this).find(".cluster-ir").text().split('%')[0] >= 40 )
+	    if( $(this).find(".ir").text().split('%')[0] >= 40 )
 	      $(this).css({"background-color" : "red"});
 	    else
 	      $(this).css({"background-color" : "green"});
@@ -78,6 +78,7 @@ function color(){
 function showAreasView(){
 	$(document).ready(function(){
 		$("#change-selection").hide();
+		$('#loader').hide();
 		$('.area').remove();
 		$('.cluster').remove();
 		$('#section').html("Aree");
@@ -105,7 +106,7 @@ function showClustersView(){
 		for (var key in robots_and_clusters_IR[selected_area]) {
 	    if (robots_and_clusters_IR[selected_area].hasOwnProperty(key)) {
 				clusters.append("<div class=\"cluster\"><span class=\"cluster-id\">Cluster " + key + "</span>" +
-												"<span class=\"cluster-ir\">" + robots_and_clusters_IR[selected_area][key]["cluster_ir"] +
+												"<span class=\"cluster-ir ir\">" + robots_and_clusters_IR[selected_area][key]["cluster_ir"] +
 												"%</span></div>");
 		  }
 		}
@@ -124,7 +125,7 @@ function showRobotsView(){
 		for (var key in robots_and_clusters_IR[selected_area][selected_cluster]["robots"]) {
 	    if (robots_and_clusters_IR[selected_area][selected_cluster]["robots"].hasOwnProperty(key)) {
 				robots.append("<div class=\"robot\"><span class=\"robot-id\">Robot " + key + "</span>" +
-												"<span class=\"robot-ir\">" + robots_and_clusters_IR[selected_area][selected_cluster]["robots"][key] +
+												"<span class=\"robot-ir ir\">" + robots_and_clusters_IR[selected_area][selected_cluster]["robots"][key] +
 												"%</span></div>");
 		  }
 		}

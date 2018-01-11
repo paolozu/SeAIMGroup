@@ -77,8 +77,11 @@ public class Robot {
 	}
 	
 	synchronized private void updateDownTime() {
-		long downtime_duration = new Timestamp(System.currentTimeMillis()).getTime() - start_downtime.getTime();
-		this.downtime_intervals.put(start_downtime, downtime_duration);
+		if ( this.down_signals > 0 ) {
+			long downtime_duration = new Timestamp(System.currentTimeMillis()).getTime() - start_downtime.getTime();
+			this.downtime_intervals.put(start_downtime, downtime_duration);
+			this.start_downtime = new Timestamp(System.currentTimeMillis());
+		}	
 		this.updateIR();
 	}
 
@@ -124,10 +127,7 @@ public class Robot {
 	// We need this function because otherwise we update total_downtime only when down_signals counter
 	// returns to be 0.
 	public double forceUpdateIR() {
-		if ( down_signals > 0 ) {
-			this.updateDownTime();
-			this.start_downtime = new Timestamp(System.currentTimeMillis());
-		}
+		this.updateDownTime();
 		return this.robot_IR;
 	}
 	

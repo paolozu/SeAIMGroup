@@ -2,8 +2,22 @@
 
 @media screen and (max-width:1024px) {
 
+  #loader {
+    position: absolute;
+    right: 40%;
+    top: 120px;
+    border: 8px solid white;
+    border-top: 8px solid grey;
+    border-bottom: 8px solid grey;
+    border-radius: 50%;
+    width: 60px;
+    height: 60px;
+    animation: spin 2s linear infinite;
+  }
+
   #ir-viewer-container {
     margin-bottom: 60px;
+    margin-left: 10px;
   }
 
   #section,
@@ -14,15 +28,15 @@
   }
 
   #change-selection {
-    left: -10px;
+    left: -24px;
     border-radius: 5px;
     background-color: white;
-    padding: 3px;
-    width: 80px;
+    padding: 5px;
+    width: 100px;
   }
 
 	.robot {
-    min-width: 25%;
+    min-width: 27.5%;
     display: inline-table;
     border: 1px solid black;
     border-radius: 5px;
@@ -62,8 +76,21 @@ body {
 
 @media screen and (min-width:1034px) {
 
+  #loader {
+    position: absolute;
+    right: 50%;
+    top: 120px;
+    border: 10px solid white;
+    border-top: 10px solid grey;
+    border-bottom: 10px solid grey;
+    border-radius: 50%;
+    width: 80px;
+    height: 80px;
+    animation: spin 2s linear infinite;
+  }
+
   #ir-viewer-container {
-    margin-left: 10px;
+    margin-left: 80px;
     margin-bottom: 60px;
   }
 
@@ -73,12 +100,13 @@ body {
   }
 
   #change-selection {
+    font-size: 20px;
     left: -50px;
-    top: -7px;
+    top: -10px;
     border-radius: 5px;
     background-color: white;
-    padding: 5px;
-    width: 150px;
+    padding: 10px;
+    width: 200px;
   }
 
 	.robot {
@@ -112,6 +140,18 @@ body {
     text-align: center;
   }
 
+  .robot,
+  .cluster,
+  .area {
+    transition: all 200ms ease;
+  }
+
+  .robot:hover,
+  .cluster:hover,
+  .area:hover {
+    transform: scale(1.05);
+  }
+
 }
 
 /* FOR BOTH VERSION */
@@ -143,6 +183,8 @@ body {
 
 #change-selection {
   display: none;
+  border: .5px solid grey;
+  box-shadow: -4px 4px 6px #888888;
 }
 
 #change-selection:hover {
@@ -160,6 +202,10 @@ body {
 .robot-id {
   border-bottom: 0.1px solid white;
   font-size: 15px;
+}
+
+.robot-ir {
+  padding-top: 7px;
 }
 
 .cluster-id,
@@ -186,6 +232,16 @@ body {
 	font-size: 30px;
 }
 
-.robot:hover {
-  /* choose an effect */
+.robot{
+  box-shadow: -4px 5px 6px #888888;
+}
+
+.cluster,
+.area {
+  box-shadow: -6px 7px 6px #888888;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
 }
