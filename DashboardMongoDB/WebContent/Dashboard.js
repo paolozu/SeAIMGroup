@@ -78,6 +78,7 @@ function color(){
 function showAreasView(){
 	$(document).ready(function(){
 		$("#change-selection").hide();
+		$('#loader').hide();
 		$('.area').remove();
 		$('.cluster').remove();
 		$('#section').html("Aree");

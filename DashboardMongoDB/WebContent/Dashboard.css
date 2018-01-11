@@ -2,6 +2,19 @@
 
 @media screen and (max-width:1024px) {
 
+  #loader {
+    position: absolute;
+    right: 41%;
+    top: 120px;
+    border: 8px solid white;
+    border-top: 8px solid grey;
+    border-bottom: 8px solid grey;
+    border-radius: 50%;
+    width: 60px;
+    height: 60px;
+    animation: spin 2s linear infinite;
+  }
+
   #ir-viewer-container {
     margin-bottom: 60px;
     margin-left: 10px;
@@ -62,6 +75,19 @@ body {
 }
 
 @media screen and (min-width:1034px) {
+
+  #loader {
+    position: absolute;
+    right: 50%;
+    top: 120px;
+    border: 10px solid white; /* Light grey */
+    border-top: 10px solid grey; /* Blue */
+    border-bottom: 10px solid grey;
+    border-radius: 50%;
+    width: 80px;
+    height: 80px;
+    animation: spin 2s linear infinite;
+  }
 
   #ir-viewer-container {
     margin-left: 80px;
@@ -189,4 +215,9 @@ body {
 
 .robot:hover {
   /* choose an effect */
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
 }
