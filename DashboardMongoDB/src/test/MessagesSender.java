@@ -48,7 +48,7 @@ public class MessagesSender {
 			Integer signal_state = 0;		
 			Integer down_signals;
 			
-			for(int t = 0; t < 10; t++) {
+			for(int t = 0; t < 100; t++) {
 				// We send 90000 messages for 10 times each 60 seconds.
 	            for( int i = 0; i < 90000; i++ ) {
 	            	

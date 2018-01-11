@@ -4,7 +4,7 @@
 
   #loader {
     position: absolute;
-    right: 41%;
+    right: 40%;
     top: 120px;
     border: 8px solid white;
     border-top: 8px solid grey;
@@ -28,11 +28,11 @@
   }
 
   #change-selection {
-    left: -10px;
+    left: -24px;
     border-radius: 5px;
     background-color: white;
-    padding: 3px;
-    width: 80px;
+    padding: 5px;
+    width: 100px;
   }
 
 	.robot {
@@ -80,8 +80,8 @@ body {
     position: absolute;
     right: 50%;
     top: 120px;
-    border: 10px solid white; /* Light grey */
-    border-top: 10px solid grey; /* Blue */
+    border: 10px solid white;
+    border-top: 10px solid grey;
     border-bottom: 10px solid grey;
     border-radius: 50%;
     width: 80px;
@@ -100,12 +100,13 @@ body {
   }
 
   #change-selection {
+    font-size: 20px;
     left: -50px;
-    top: -7px;
+    top: -10px;
     border-radius: 5px;
     background-color: white;
-    padding: 5px;
-    width: 150px;
+    padding: 10px;
+    width: 200px;
   }
 
 	.robot {
@@ -139,6 +140,18 @@ body {
     text-align: center;
   }
 
+  .robot,
+  .cluster,
+  .area {
+    transition: all 200ms ease;
+  }
+
+  .robot:hover,
+  .cluster:hover,
+  .area:hover {
+    transform: scale(1.05);
+  }
+
 }
 
 /* FOR BOTH VERSION */
@@ -170,6 +183,8 @@ body {
 
 #change-selection {
   display: none;
+  border: .5px solid grey;
+  box-shadow: -4px 4px 6px #888888;
 }
 
 #change-selection:hover {
@@ -187,6 +202,10 @@ body {
 .robot-id {
   border-bottom: 0.1px solid white;
   font-size: 15px;
+}
+
+.robot-ir {
+  padding-top: 7px;
 }
 
 .cluster-id,
@@ -213,8 +232,13 @@ body {
 	font-size: 30px;
 }
 
-.robot:hover {
-  /* choose an effect */
+.robot{
+  box-shadow: -4px 5px 6px #888888;
+}
+
+.cluster,
+.area {
+  box-shadow: -6px 7px 6px #888888;
 }
 
 @keyframes spin {
