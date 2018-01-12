@@ -3,6 +3,7 @@ package server;
 import org.java_websocket.WebSocket;
 import org.java_websocket.handshake.ClientHandshake;
 import org.java_websocket.server.WebSocketServer;
+import org.json.JSONObject;
 import java.net.InetSocketAddress;
 import java.net.UnknownHostException;
 import java.util.HashSet;
@@ -11,35 +12,51 @@ import java.util.Set;
 public class WebsocketServer extends WebSocketServer {
 
     private final static int TCP_PORT = 4444;
-    private final static String IP_ADDRESS = "192.168.159.111";
-    private Set<WebSocket> connections;	    
+    private final static String IP_ADDRESS = "192.168.1.30";
+    private Set<WebSocket> clients;	
+    private JSONObject message;
 
     public WebsocketServer() throws UnknownHostException {
         super(new InetSocketAddress(IP_ADDRESS, TCP_PORT));
-        connections = new HashSet<>();
+        clients = new HashSet<>();
     }
     
-    public Set<WebSocket> getConnections(){
-    	return this.connections;
+    // Getters and setters.
+    
+    public Set<WebSocket> getClients(){ return this.clients; }
+    public JSONObject getMessage() { return this.message; }
+
+    public void setClients(Set<WebSocket> clients){ this.clients = clients; }
+    public void setMessage(JSONObject message) { this.message = message; }
+    
+    // Method to send message to all connected clients.
+    public void sendMessageToCLients() {
+    	// We better don't iterate on clients variable because it's dynamic.
+    	for(WebSocket client : clients)
+    		client.send(message.toString());
+    }
+    
+    // Overriding methods.
+
+    @Override
+    public void onOpen(WebSocket client, ClientHandshake handshake) {
+        clients.add(client);
+        if( message != null )
+        	client.send(message.toString());
     }
 
     @Override
-    public void onOpen(WebSocket connection, ClientHandshake handshake) {
-        connections.add(connection);
-    }
-
-    @Override
-    public void onClose(WebSocket connection, int code, String reason, boolean remote) {
-    	connections.remove(connection);
+    public void onClose(WebSocket client, int code, String reason, boolean remote) {
+    	clients.remove(client);
     }
 
     @Override
     public void onMessage(WebSocket connection, String message) { }
 
     @Override
-    public void onError(WebSocket connection, Exception exception) {
-        if (connection != null) 
-        	connections.remove(connection);
+    public void onError(WebSocket client, Exception exception) {
+        if (client != null) 
+        	clients.remove(client);
     }
     
 }

@@ -3,7 +3,6 @@ package model;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Map;
-import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 import database.dao.concrete.RobotDAO;
 import java.util.HashMap;
@@ -18,7 +17,7 @@ public class Robot {
 	private Timestamp start_downtime;						// To keep trace when down time starts.
 	private HashMap<Timestamp, Long> downtime_intervals;	// Map in which the key is the down time starts and the value is the 
 	 														// down time duration.
-	private Lock lock = new ReentrantLock(true);
+	private ReentrantLock lock = new ReentrantLock(true);
 	
 	public Robot() {}
 	
@@ -78,14 +77,14 @@ public class Robot {
 				this.previous_down_signals = this.down_signals;
 				if( --down_signals == 0 )
 					this.updateDownTime();
-			}
+			}	
 		}
 		finally {
 			this.lock.unlock();
 		}
 	}
 	
-	synchronized private void updateDownTime() {
+	private void updateDownTime() {
 		this.lock.lock();
 		try {
 			if ( this.down_signals > 0 ) {
@@ -93,11 +92,11 @@ public class Robot {
 				this.downtime_intervals.put(start_downtime, downtime_duration);
 				this.start_downtime = new Timestamp(System.currentTimeMillis());
 			}	
+			this.updateIR();
 		}
 		finally {
 			this.lock.unlock();
 		}
-		this.updateIR();
 	}
 
 	private void updateIR() {
@@ -139,11 +138,10 @@ public class Robot {
 	}
 	
 	// Function to force IR update in case we need current IR and the down_signals is greater than 0.
-	// We need this function because otherwise we update total_downtime only when down_signals counter
+	// We need this function otherwise we update total_downtime only when down_signals counter
 	// returns to be 0.
-	public double forceUpdateIR() {
+	public void forceIRUpdate() {
 		this.updateDownTime();
-		return this.robot_IR;
 	}
 	
 	@Override

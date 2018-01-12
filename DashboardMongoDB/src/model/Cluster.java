@@ -3,7 +3,6 @@ package model;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Map;
-import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 import database.dao.concrete.ClusterDAO;
 import java.util.HashMap;
@@ -18,7 +17,7 @@ public class Cluster {
 	private Timestamp start_downtime;        				 // To keep trace when down time starts.
 	private HashMap<Timestamp, Long> downtime_intervals;	 // Map in which the key is the down time starts and the value is the 
 															 // down time duration.
-	private Lock lock = new ReentrantLock(true);
+	private ReentrantLock lock = new ReentrantLock(true);
 	
 	public Cluster() {}
 	
@@ -65,27 +64,29 @@ public class Cluster {
 	// This function in called either to add a robot to this cluster 
 	// or to update robot's values and then cluster's down robots.
 	public void handleRobot(Robot robot){
+		
 		if ( this.robots.containsKey(robot.getRobotId()) ) {
 			this.updateRobot(robot);
 		}
 		else {
 			// Here we insert new robot in this cluster.
 			this.robots.put(robot.getRobotId(), robot);
-			this.lock.tryLock();
-			try {
-				if( robot.getDownSignals() > 0 )
+			if( robot.getDownSignals() > 0 ) {
+				this.lock.lock();
+				try {
 					if( ++down_robots == 1 )
 						this.start_downtime = new Timestamp(System.currentTimeMillis());
-			}
-			finally {
-				this.lock.unlock();
+				}
+				finally {
+					this.lock.unlock();
+				}
 			}
 		}
 	}
 	
 	private void updateRobot(Robot robot) {
-		
-		this.lock.tryLock();
+
+		this.lock.lock();
 		try {
 			switch( robot.getDownSignals() ) {
 
@@ -93,31 +94,30 @@ public class Cluster {
 							this.updateDownTime();
 						break;
 					
-			case 1:		if( robot.getPreviuosDownSignals() == 0 ) {
+			case 1:		if( robot.getPreviuosDownSignals() == 0 )
 							if( ++this.down_robots == 1 )
 								this.start_downtime = new Timestamp(System.currentTimeMillis());
-						}
-		
+	
 			}
 		}
 		finally {
 			this.lock.unlock();
-		}
+		}		
 	}
 	
-	synchronized private void updateDownTime() {
-		this.lock.tryLock();
+	private void updateDownTime() {
+		this.lock.lock();
 		try {
 			if ( down_robots > 0 ) {	
 				long downtime_duration = new Timestamp(System.currentTimeMillis()).getTime() - start_downtime.getTime();
 				this.downtime_intervals.put(start_downtime, downtime_duration);
 				this.start_downtime = new Timestamp(System.currentTimeMillis());
 			}
+			this.updateIR();
 		}
 		finally {
 			this.lock.unlock();
 		}
-		this.updateIR();
 	}
 
 	private void updateIR() {
@@ -159,11 +159,10 @@ public class Cluster {
 	}
 	
 	// Function to force IR update in case we need current IR and the down_robots is greater than 0.
-	// We need this function because otherwise we update total_downtime only when down_signals counter
+	// We need this function otherwise we update total_downtime only when down_signals counter
 	// returns to be 0.
-	public double forceUpdateIR() {
+	public void forceIRUpdate() {
 		this.updateDownTime();
-		return this.cluster_IR;
 	}
 		
 	@Override

@@ -1,8 +1,6 @@
 package threads;
 
-import java.util.Set;
 import org.bson.Document;
-import org.java_websocket.WebSocket;
 import org.json.JSONException;
 import org.json.JSONObject;
 import com.mongodb.client.DistinctIterable;
@@ -12,13 +10,14 @@ import com.mongodb.client.MongoDatabase;
 import com.mongodb.client.model.Filters;
 import com.mongodb.client.model.Indexes;
 import database.DatabaseConnector;
+import server.WebsocketServer;
 
-public class ClientsSender implements Runnable{
+public class ClientsSender implements Runnable {
 	
-	private Set<WebSocket> connections;	 
+	private WebsocketServer websocketServer;	 
 	
-	public ClientsSender(Set<WebSocket> connections) {
-		this.connections = connections;
+	public ClientsSender(WebsocketServer websocketServer) {
+		this.websocketServer = websocketServer;
 	}
 	
 	@Override
@@ -28,7 +27,7 @@ public class ClientsSender implements Runnable{
 		MongoCollection<Document> robots_collection = database.getCollection("robot");
 		MongoCollection<Document> clusters_collection = database.getCollection("cluster");
 		
-		if( ! connections.isEmpty() ) {
+		if( ! websocketServer.getClients().isEmpty() ) {
 			JSONObject robots_and_clusters_IR = new JSONObject();
 			
 			robots_collection.createIndex(Indexes.ascending("cluster_id"));
@@ -82,9 +81,8 @@ public class ClientsSender implements Runnable{
 			finally{
 				areas.close();
 			}
-			for (WebSocket sock : connections ) {
-				sock.send(robots_and_clusters_IR.toString());
-	        }
+			websocketServer.setMessage(robots_and_clusters_IR);
+			websocketServer.sendMessageToCLients();
 		}
 	}
 }
