@@ -21,7 +21,7 @@ public class Cluster {
 	
 	public Cluster() {}
 	
-	// Using this constructor the robot 
+	// Using this constructor the cluster 
 	// is inserted into the database.
 	public Cluster(int cluster_id, int area_id){
 		this.cluster_id = cluster_id;
