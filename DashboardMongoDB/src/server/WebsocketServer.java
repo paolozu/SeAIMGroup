@@ -6,6 +6,7 @@ import org.java_websocket.server.WebSocketServer;
 import org.json.JSONObject;
 import java.net.InetSocketAddress;
 import java.net.UnknownHostException;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -32,7 +33,8 @@ public class WebsocketServer extends WebSocketServer {
     // Method to send message to all connected clients.
     public void sendMessageToCLients() {
     	// We better don't iterate on clients variable because it's dynamic.
-    	for(WebSocket client : clients)
+    	ArrayList<WebSocket> currentClients = new ArrayList<>(clients);
+    	for(WebSocket client : currentClients)
     		client.send(message.toString());
     }
     
