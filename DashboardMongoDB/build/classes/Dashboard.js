@@ -4,7 +4,7 @@
 *                                              *
 ************************************************/
 
-var webSocket = new WebSocket("ws://192.168.159.111:4444");
+var webSocket = new WebSocket("ws://192.168.1.30:4444");
 
 var selected_area = null;
 var selected_cluster = null;
