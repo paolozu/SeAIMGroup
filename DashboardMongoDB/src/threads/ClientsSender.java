@@ -23,11 +23,11 @@ public class ClientsSender implements Runnable {
 	@Override
 	public void run() {
 		
-		MongoDatabase database = DatabaseConnector.CONNECTION.getDatabase();
-		MongoCollection<Document> robots_collection = database.getCollection("robot");
-		MongoCollection<Document> clusters_collection = database.getCollection("cluster");
-		
 		if( ! websocketServer.getClients().isEmpty() ) {
+			MongoDatabase database = DatabaseConnector.CONNECTION.getDatabase();
+			MongoCollection<Document> robots_collection = database.getCollection("robot");
+			MongoCollection<Document> clusters_collection = database.getCollection("cluster");
+			
 			JSONObject robots_and_clusters_IR = new JSONObject();
 			
 			robots_collection.createIndex(Indexes.ascending("cluster_id"));
