@@ -58,9 +58,8 @@ public class MessagesHandler implements HttpHandler {
 					}
 				}
 				else {
-					// IT'S IMPORTANT TO CREATE THE CLUSTER FIRST.
+					Robot current_robot = new Robot(robot_id, cluster_id);
 		    		Cluster current_cluster = new Cluster(cluster_id, area_id);
-		    		Robot current_robot = new Robot(robot_id, cluster_id);
 					current_robot.signalCatch(signal_state);
 					current_cluster.handleRobot(current_robot);
 					
@@ -68,9 +67,8 @@ public class MessagesHandler implements HttpHandler {
 				}
 			}
 			else {
-				// IT'S IMPORTANT TO CREATE THE CLUSTER FIRST.
+				Robot current_robot = new Robot(robot_id, cluster_id);
 	    		Cluster current_cluster = new Cluster(cluster_id, area_id);
-	    		Robot current_robot = new Robot(robot_id, cluster_id);
 	    		current_robot.signalCatch(signal_state);
 	    		current_cluster.handleRobot(current_robot);
 	    		
