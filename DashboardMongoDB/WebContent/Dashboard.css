@@ -20,10 +20,10 @@
 
   #container {
     text-align: center;
+    margin-bottom: 20px;
   }
 
   #ir-viewer-container {
-    margin-bottom: 20px;
     display: inline;
   }
 
@@ -91,11 +91,11 @@
 
   #container {
     text-align: center;
+    margin-bottom: 60px;
   }
 
   #ir-viewer-container {
     margin: auto;
-    margin-bottom: 60px;
     display: inline;
   }
 
