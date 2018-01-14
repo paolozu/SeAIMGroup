@@ -177,6 +177,10 @@ body {
   display: inline;
 }
 
+#section-container > span {
+  text-shadow: -3px 3px 6px #888888;
+}
+
 #section {
   padding-right: 25px;
 }

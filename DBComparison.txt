@@ -1,7 +1,7 @@
 INSERTION of robots and clusters randomly generated:
 
-MySQL    --> 56846 robots in 3,95243333 minutes.
-MongoDB  --> 56745 robots in 1,22835 minutes.
+MySQL    --> 56846 robots in 2,13238333 minutes.
+MongoDB  --> 56745 robots in 0,35666667 minutes.
 
 
 

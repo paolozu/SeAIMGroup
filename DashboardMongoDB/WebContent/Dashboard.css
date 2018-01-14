@@ -3,21 +3,28 @@
 @media screen and (max-width:1024px) {
 
   #loader {
-    position: absolute;
-    right: 40%;
+    z-index: 99999;
+    height: 60px;
+    width: 60px;
+    margin: auto;
     top: 120px;
+    left: 0;
+    bottom: 0;
+    right: 0;
     border: 8px solid white;
     border-top: 8px solid grey;
     border-bottom: 8px solid grey;
     border-radius: 50%;
-    width: 60px;
-    height: 60px;
     animation: spin 2s linear infinite;
   }
 
+  #container {
+    text-align: center;
+  }
+
   #ir-viewer-container {
-    margin-bottom: 60px;
-    margin-left: 10px;
+    margin-bottom: 20px;
+    display: inline;
   }
 
   #section,
@@ -36,7 +43,7 @@
   }
 
 	.robot {
-    min-width: 27.5%;
+    width: 27.5%;
     display: inline-table;
     border: 1px solid black;
     border-radius: 5px;
@@ -44,8 +51,9 @@
     margin: 4px;
   }
 
-	.cluster {
-		min-width: 40%;
+  .cluster,
+	.area {
+		width: 40%;
     height: 150px;
     display: inline-table;
     border: 1px solid black;
@@ -55,43 +63,40 @@
 	}
 
   .area {
-    background-color: orange;
-    min-width: 40%;
-    height: 150px;
-    display: inline-table;
-    border: 1px solid black;
-    border-radius: 5px;
-    padding: 4px;
-    margin: 10px;
-    text-align: center;
+    background-color: #00c9ff;
   }
 
 }
 
 /* FOR DESKTOP VERSION */
 
-body {
-  background-color: #e8e8e8;
-}
-
 @media screen and (min-width:1034px) {
 
   #loader {
-    position: absolute;
-    right: 50%;
-    top: 120px;
+    position: fixed;
+    z-index: 99999;
+    height: 80px;
+    width: 80px;
+    margin: auto;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
     border: 10px solid white;
     border-top: 10px solid grey;
     border-bottom: 10px solid grey;
     border-radius: 50%;
-    width: 80px;
-    height: 80px;
     animation: spin 2s linear infinite;
   }
 
+  #container {
+    text-align: center;
+  }
+
   #ir-viewer-container {
-    margin-left: 80px;
+    margin: auto;
     margin-bottom: 60px;
+    display: inline;
   }
 
   #section,
@@ -110,16 +115,17 @@ body {
   }
 
 	.robot {
-    min-width: 8%;
-    display: inline-table;
+    width: 8%;
+    display: inline-grid;
     border: 1px solid black;
     border-radius: 5px;
     padding: 4px;
     margin: 4px;
   }
 
-	.cluster {
-		min-width: 16%;
+  .cluster,
+	.area {
+		width: 16.8%;
     height: 150px;
     display: inline-table;
     border: 1px solid black;
@@ -129,15 +135,7 @@ body {
 	}
 
   .area {
-    background-color: orange;
-    min-width: 16%;
-    height: 150px;
-    display: inline-table;
-    border: 1px solid black;
-    border-radius: 5px;
-    padding: 4px;
-    margin: 10px;
-    text-align: center;
+    background-color: #00c9ff;
   }
 
   .robot,
@@ -156,6 +154,15 @@ body {
 
 /* FOR BOTH VERSION */
 
+html, body {
+  background-color: #e8e8e8;
+  height: 100%;
+  width: 100%;
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
 * {
    margin: 0;
    padding: 0;
@@ -168,8 +175,8 @@ body {
 
 #top-div {
   width: 100%;
-  margin-top: 40px;
-  margin-bottom: 60px;
+  padding-top: 40px;
+  padding-bottom: 60px;
   text-align: center;
 }
 
