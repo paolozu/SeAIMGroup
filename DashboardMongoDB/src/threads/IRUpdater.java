@@ -44,12 +44,15 @@ public class IRUpdater implements Runnable {
 	            // Send updated and structured json to clients.
 	            clientsSender.run();
 			}
-			try {
+			
+			// SLEEP TO KEEP UDPATE TIME AROUND 30 SECONDS WITH 90000 ROBOTS.
+			
+			/*try {
 				Thread.sleep(18000);
 			}
 			catch (InterruptedException e) {
 				e.printStackTrace();
-			}
+			}*/
 		}
 	}
 
