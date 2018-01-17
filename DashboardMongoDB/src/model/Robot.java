@@ -65,18 +65,25 @@ public class Robot {
 	// the down time beginning and its duration in downtime_intervals map.
 	// In case the number of down signals passes from 0 to 1 the we store
 	// the current time to keep trace of down time beginning.
-	public void signalCatch(int signal) {
+	public void signalCatch(int signal, long message_time) {
 		this.lock.lock();
 		try {
 			if ( signal == 0 ){ 
 				this.previous_down_signals = this.down_signals;
-				if( ++this.down_signals == 1 ) 
-					this.start_downtime = new Timestamp(System.currentTimeMillis());	
+				if( ++this.down_signals == 1 ) {
+					this.start_downtime = new Timestamp(message_time);
+					new RobotDAO().addInIRTable(this, message_time, 0);
+				}
+				new RobotDAO().updateDownSignals(this);
 			}
 			else { // signal == 1
 				this.previous_down_signals = this.down_signals;
-				if( --down_signals == 0 )
-					this.updateDownTime();
+				if( --down_signals == 0 ) {
+					long downtime_duration = message_time - start_downtime.getTime();
+					this.downtime_intervals.put(start_downtime, downtime_duration);
+					new RobotDAO().addInIRTable(this, start_downtime.getTime(), downtime_duration);
+				}
+				new RobotDAO().updateDownSignals(this);
 			}	
 		}
 		finally {
@@ -84,12 +91,13 @@ public class Robot {
 		}
 	}
 	
-	private void updateDownTime() {
+	public void updateDownTime() {
 		this.lock.lock();
 		try {
 			if ( this.down_signals > 0 ) {
 				long downtime_duration = new Timestamp(System.currentTimeMillis()).getTime() - start_downtime.getTime();
 				this.downtime_intervals.put(start_downtime, downtime_duration);
+				new RobotDAO().addInIRTable(this, start_downtime.getTime(), downtime_duration);
 				this.start_downtime = new Timestamp(System.currentTimeMillis());
 			}	
 			this.updateIR();
@@ -110,7 +118,7 @@ public class Robot {
 			
 			// 3.6e6 milliseconds --> 1 hour.
 			if( time_to_downtime_init > 3.6e6 ) {
-				if( time_to_downtime_init - interval.getValue() > 3.6e6  ) {
+				if( time_to_downtime_init - Math.abs(interval.getValue()) > 3.6e6  ) {
 					more_than_an_hour_ago.add(interval.getKey());		
 				}
 				else {
@@ -125,6 +133,7 @@ public class Robot {
 		
 		for( Timestamp invalid : more_than_an_hour_ago ) {
 			this.downtime_intervals.remove(invalid);
+			new RobotDAO().removeFromIRTable(this, invalid.getTime());
 		}
 		// total_downtime --> milliseconds
 		// * 1.6667e-5    --> minutes
@@ -135,13 +144,6 @@ public class Robot {
  		
  		// Update database.
  		new RobotDAO().updateRobot(this);
-	}
-	
-	// Function to force IR update in case we need current IR and the down_signals is greater than 0.
-	// We need this function otherwise we update total_downtime only when down_signals counter
-	// returns to be 0.
-	public void forceIRUpdate() {
-		this.updateDownTime();
 	}
 	
 	@Override

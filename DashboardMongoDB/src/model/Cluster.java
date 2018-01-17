@@ -63,10 +63,10 @@ public class Cluster {
 	
 	// This function in called either to add a robot to this cluster 
 	// or to update robot's values and then cluster's down robots.
-	public void handleRobot(Robot robot){
+	public void handleRobot(Robot robot, long message_time){
 		
 		if ( this.robots.containsKey(robot.getRobotId()) ) {
-			this.updateRobot(robot);
+			this.updateRobot(robot, message_time);
 		}
 		else {
 			// Here we insert new robot in this cluster.
@@ -74,8 +74,11 @@ public class Cluster {
 			if( robot.getDownSignals() > 0 ) {
 				this.lock.lock();
 				try {
-					if( ++down_robots == 1 )
-						this.start_downtime = new Timestamp(System.currentTimeMillis());
+					if( ++down_robots == 1 ) {
+						this.start_downtime = new Timestamp(message_time);
+						new ClusterDAO().addInIRTable(this, message_time, 0);
+					}
+					new ClusterDAO().updateDownRobots(this);
 				}
 				finally {
 					this.lock.unlock();
@@ -84,19 +87,26 @@ public class Cluster {
 		}
 	}
 	
-	private void updateRobot(Robot robot) {
+	private void updateRobot(Robot robot, long message_time) {
 
 		this.lock.lock();
 		try {
 			switch( robot.getDownSignals() ) {
 
-			case 0:		if( --this.down_robots == 0 )
-							this.updateDownTime();
+			case 0:		if( --this.down_robots == 0 ) {
+							long downtime_duration = message_time - start_downtime.getTime();
+							this.downtime_intervals.put(start_downtime, downtime_duration);
+							new ClusterDAO().addInIRTable(this, start_downtime.getTime(), downtime_duration);
+						}
+						new ClusterDAO().updateDownRobots(this);
 						break;
 					
 			case 1:		if( robot.getPreviuosDownSignals() == 0 )
-							if( ++this.down_robots == 1 )
-								this.start_downtime = new Timestamp(System.currentTimeMillis());
+							if( ++this.down_robots == 1 ) {
+								this.start_downtime = new Timestamp(message_time);
+								new ClusterDAO().addInIRTable(this, message_time, 0);
+							}
+						new ClusterDAO().updateDownRobots(this);
 	
 			}
 		}
@@ -105,12 +115,13 @@ public class Cluster {
 		}		
 	}
 	
-	private void updateDownTime() {
+	public void updateDownTime() {
 		this.lock.lock();
 		try {
 			if ( down_robots > 0 ) {	
 				long downtime_duration = new Timestamp(System.currentTimeMillis()).getTime() - start_downtime.getTime();
 				this.downtime_intervals.put(start_downtime, downtime_duration);
+				new ClusterDAO().addInIRTable(this, start_downtime.getTime(), downtime_duration);
 				this.start_downtime = new Timestamp(System.currentTimeMillis());
 			}
 			this.updateIR();
@@ -131,7 +142,7 @@ public class Cluster {
 			
 			// 3.6e6 milliseconds --> 1 hour.
 			if( time_to_downtime_init > 3.6e6 ) {
-				if( time_to_downtime_init - interval.getValue() > 3.6e6  ) {
+				if( time_to_downtime_init - Math.abs(interval.getValue()) > 3.6e6  ) {
 					more_than_an_hour_ago.add(interval.getKey());			
 				}
 				else {
@@ -146,6 +157,7 @@ public class Cluster {
 		
 		for( Timestamp invalid : more_than_an_hour_ago ) {
 			this.downtime_intervals.remove(invalid);
+			new ClusterDAO().removeFromIRTable(this, invalid.getTime());
 		}
 		// total_downtime --> milliseconds
 		// * 1.6667e-5    --> minutes
@@ -156,13 +168,6 @@ public class Cluster {
  		
  		// Update database.
  		new ClusterDAO().updateCluster(this);
-	}
-	
-	// Function to force IR update in case we need current IR and the down_robots is greater than 0.
-	// We need this function otherwise we update total_downtime only when down_signals counter
-	// returns to be 0.
-	public void forceIRUpdate() {
-		this.updateDownTime();
 	}
 		
 	@Override

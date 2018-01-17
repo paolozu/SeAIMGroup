@@ -138,13 +138,11 @@
     background-color: #00c9ff;
   }
 
-  .robot,
   .cluster,
   .area {
     transition: all 200ms ease;
   }
 
-  .robot:hover,
   .cluster:hover,
   .area:hover {
     transform: scale(1.05);

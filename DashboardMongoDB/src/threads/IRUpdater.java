@@ -33,9 +33,9 @@ public class IRUpdater implements Runnable {
 	    			for( Cluster current_cluster : current_clusters ) {
 	    				ArrayList<Robot> current_robots = new ArrayList<Robot>(current_cluster.getRobots().values());
 	    				for( Robot robot : current_robots ) {
-	    					robot.forceIRUpdate();
+	    					robot.updateDownTime();
 	    				}
-	    				current_cluster.forceIRUpdate();
+	    				current_cluster.updateDownTime();
 	    			}	
 	    		}	            
 				// Starting thread to update clients json.
@@ -47,12 +47,12 @@ public class IRUpdater implements Runnable {
 			
 			// SLEEP TO KEEP UDPATE TIME AROUND 30 SECONDS WITH 90000 ROBOTS.
 			
-			/*try {
-				Thread.sleep(18000);
+			try {
+				Thread.sleep(10000);
 			}
 			catch (InterruptedException e) {
 				e.printStackTrace();
-			}*/
+			}
 		}
 	}
 

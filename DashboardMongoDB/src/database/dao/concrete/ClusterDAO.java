@@ -8,7 +8,6 @@ import com.mongodb.client.MongoDatabase;
 import com.mongodb.client.model.Filters;
 import com.mongodb.client.model.Indexes;
 import com.mongodb.client.model.Updates;
-
 import database.DatabaseConnector;
 import database.dao.interfaces.ClusterDAOInterface;
 import model.Cluster;
@@ -22,7 +21,9 @@ public class ClusterDAO implements ClusterDAOInterface {
 		MongoCollection<Document> clusters_collection = database.getCollection("cluster");
 		Document cluster_db = new Document().append("_id", cluster.getClusterId())
 											.append("area_id", cluster.getAreaId())
-											.append("cluster_ir", cluster.getClusterIR());
+											.append("cluster_ir", cluster.getClusterIR())
+											.append("down_robots", cluster.getDownRobots())
+											.append("ir_table", new Document());
 		
 		clusters_collection.insertOne(cluster_db);
 	}
@@ -31,7 +32,8 @@ public class ClusterDAO implements ClusterDAOInterface {
 	public void updateCluster(Cluster cluster) {
 		MongoDatabase database = DatabaseConnector.CONNECTION.getDatabase();
 		MongoCollection<Document> clusters_collection = database.getCollection("cluster");
-		clusters_collection.updateOne(Filters.eq("_id", cluster.getClusterId()), Updates.set("cluster_ir", cluster.getClusterIR()));
+		clusters_collection.updateOne(Filters.eq("_id", cluster.getClusterId()),
+									  Updates.set("cluster_ir", cluster.getClusterIR()));
 	}
 	
 	@Override
@@ -55,6 +57,30 @@ public class ClusterDAO implements ClusterDAOInterface {
 		}
 		return robots;
 		
+	}
+	
+	@Override
+	public void updateDownRobots(Cluster cluster) {
+		MongoDatabase database = DatabaseConnector.CONNECTION.getDatabase();
+		MongoCollection<Document> clusters_collection = database.getCollection("cluster");
+		clusters_collection.updateOne(Filters.eq("_id", cluster.getClusterId()),
+									  Updates.set("down_robots", cluster.getDownRobots()));
+	}
+	
+	@Override
+	public void addInIRTable(Cluster cluster, long start_downtime, long downtime_duration) {
+		MongoDatabase database = DatabaseConnector.CONNECTION.getDatabase();
+		MongoCollection<Document> clusters_collection = database.getCollection("cluster");
+		clusters_collection.updateOne(Filters.eq("_id", cluster.getClusterId()),
+									  Updates.set("ir_table." + String.valueOf(start_downtime), downtime_duration));
+	}
+	
+	@Override
+	public void removeFromIRTable(Cluster cluster, long start_downtime) {
+		MongoDatabase database = DatabaseConnector.CONNECTION.getDatabase();
+		MongoCollection<Document> clusters_collection = database.getCollection("cluster");
+		clusters_collection.updateOne(Filters.eq("_id", cluster.getClusterId()),
+				  					  Updates.unset("ir_table." + String.valueOf(start_downtime)));
 	}
 	
 }

@@ -30,7 +30,7 @@ public class MessagesHandler implements HttpHandler {
     	InputStream robot_message = exchange.getRequestBody();
     	JSONObject message;
     	
-		// Message formatted like {"signal_state":1,"cluster_id":12,"robot_id":123,"area_id":123}
+		// Message formatted like {"signal_state":1,"cluster_id":12,"robot_id":123,"area_id":123, "message_time": 1234567890}
 
 		try {
 			BufferedReader rd = new BufferedReader(new InputStreamReader(robot_message, Charset.forName("UTF-8")));
@@ -41,27 +41,28 @@ public class MessagesHandler implements HttpHandler {
     		int cluster_id = message.getInt("cluster_id");
     		int robot_id = message.getInt("robot_id");
     		int signal_state = message.getInt("signal_state");
+    		long message_time = message.getLong("message_time");
     			
 			if( areas.containsKey(area_id) ) {
 				if( areas.get(area_id).getClusters().containsKey(cluster_id) ) {
 					if( areas.get(area_id).getClusters().get(cluster_id).getRobots().containsKey(robot_id) ) {
-						areas.get(area_id).getClusters().get(cluster_id).getRobots().get(robot_id).signalCatch(signal_state);
+						areas.get(area_id).getClusters().get(cluster_id).getRobots().get(robot_id).signalCatch(signal_state, message_time);
 						areas.get(area_id).getClusters().get(cluster_id)
 							 .handleRobot(areas.get(area_id).getClusters()
-						     .get(cluster_id).getRobots().get(robot_id));
+						     .get(cluster_id).getRobots().get(robot_id), message_time);
 					}
 					else {
 						Robot current_robot = new Robot(robot_id, cluster_id);
-						current_robot.signalCatch(signal_state);
+						current_robot.signalCatch(signal_state, message_time);
 						
-						areas.get(area_id).getClusters().get(cluster_id).handleRobot(current_robot);
+						areas.get(area_id).getClusters().get(cluster_id).handleRobot(current_robot, message_time);
 					}
 				}
 				else {
 					Robot current_robot = new Robot(robot_id, cluster_id);
 		    		Cluster current_cluster = new Cluster(cluster_id, area_id);
-					current_robot.signalCatch(signal_state);
-					current_cluster.handleRobot(current_robot);
+					current_robot.signalCatch(signal_state, message_time);
+					current_cluster.handleRobot(current_robot, message_time);
 					
 					areas.get(area_id).addCluster(current_cluster);
 				}
@@ -69,8 +70,8 @@ public class MessagesHandler implements HttpHandler {
 			else {
 				Robot current_robot = new Robot(robot_id, cluster_id);
 	    		Cluster current_cluster = new Cluster(cluster_id, area_id);
-	    		current_robot.signalCatch(signal_state);
-	    		current_cluster.handleRobot(current_robot);
+	    		current_robot.signalCatch(signal_state, message_time);
+	    		current_cluster.handleRobot(current_robot, message_time);
 	    		
 				areas.put(area_id, new Area(area_id));
 				areas.get(area_id).getClusters().put(cluster_id, current_cluster);

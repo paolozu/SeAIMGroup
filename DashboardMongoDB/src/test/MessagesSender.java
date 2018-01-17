@@ -47,6 +47,7 @@ public class MessagesSender {
 			Integer robot_id;
 			Integer signal_state = 0;		
 			Integer down_signals;
+			long message_time;
 			
 			for(int t = 0; t < 100; t++) {
 				// We send 90000 messages for 10 times each 60 seconds.
@@ -70,12 +71,15 @@ public class MessagesSender {
 	            		areas.get(area_id).getClusters().get(cluster_id).getRobots().get(robot_id).signalCatch(signal_state);
 	            	}
 	            	
+	            	message_time = System.currentTimeMillis();
+	            	
 	            	
 	            	JSONObject robot_message = new JSONObject();
 	                robot_message.put("robot_id", robot_id);
 	                robot_message.put("cluster_id", cluster_id);
 	                robot_message.put("area_id", area_id);
 	                robot_message.put("signal_state", signal_state);
+	                robot_message.put("message_time", message_time);
 	
 		            URL url = new URL(query);
 		            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
