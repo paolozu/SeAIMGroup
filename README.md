@@ -86,7 +86,7 @@ For more information read the [project specific](doc/Progetto_Soft_Eng_2017-2018
   5) Go on your favorite browser, **disable your ad block if you have one**, and on url bar browse for 127.0.0.1.
   6) The Dasboard will be ready in few seconds.
   
-  ![screen1](Sreenshots/AreG) | ![screen2](Sreenshots/Clusters.PNG) | ![screen3](Sreenshots/Aree.PNG)
+  ![screen1](Screenshots/Aree.PNG) | ![screen2](Screenshots/Clusters.PNG) | ![screen3](Screenshots/Robots.PNG)
   
      
      
