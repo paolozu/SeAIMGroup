@@ -34,10 +34,18 @@ public class Robot {
 	// This constructor is called from ClusterDAO class
 	// to return a collection of robots.
 	// This constructor doesn't insert the robot into the database.
-	public Robot(int robot_id, int cluster_id, double robot_IR) {
+	public Robot(int robot_id, int cluster_id, int previous_down_signals, 
+				 int down_signals, double robot_IR, Timestamp start_downtime, 
+				 HashMap<Timestamp, Long> downtime_intervals) {
+		
 		this.robot_id = robot_id;
 		this.cluster_id = cluster_id;
+		this.previous_down_signals = previous_down_signals;
+		this.down_signals = down_signals;
 		this.robot_IR = robot_IR;
+		this.start_downtime = start_downtime;
+		this.downtime_intervals = downtime_intervals;
+		
 	}
 		
 	// Getters and Setters
@@ -74,7 +82,7 @@ public class Robot {
 					this.start_downtime = new Timestamp(message_time);
 					new RobotDAO().addInIRTable(this, message_time, 0);
 				}
-				new RobotDAO().updateDownSignals(this);
+				new RobotDAO().updateSignals(this);
 			}
 			else { // signal == 1
 				this.previous_down_signals = this.down_signals;
@@ -83,7 +91,7 @@ public class Robot {
 					this.downtime_intervals.put(start_downtime, downtime_duration);
 					new RobotDAO().addInIRTable(this, start_downtime.getTime(), downtime_duration);
 				}
-				new RobotDAO().updateDownSignals(this);
+				new RobotDAO().updateSignals(this);
 			}	
 		}
 		finally {
@@ -149,7 +157,8 @@ public class Robot {
 	@Override
 	public String toString() {
 		return( "Robot ID: " + this.robot_id + "\nCluster ID: " + this.cluster_id +
-				"\nDown signals: " + this.down_signals + "\nRobot IR: " + this.robot_IR + "%\n\n" );
+				"\nprevious down signals: " + this.previous_down_signals + "\nDown signals: " + this.down_signals +
+				"\nRobot IR: " + this.robot_IR + "%\n\n" );
 	}
 	
 }

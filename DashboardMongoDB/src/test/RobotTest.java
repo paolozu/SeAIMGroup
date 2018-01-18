@@ -6,7 +6,7 @@ import java.util.Map;
 import java.util.HashMap;
 
 public class RobotTest {
-	
+
 	private int robot_id;
 	private int cluster_id;
 	private int previous_down_signals;						// To keep trace of down signals evolution.
@@ -22,6 +22,17 @@ public class RobotTest {
 		this.robot_id = robot_id;
 		this.cluster_id = cluster_id;
 		this.downtime_intervals = new HashMap<>();
+	}
+	
+	public RobotTest(int robot_id, int cluster_id, int previous_down_signals, int down_signals, double robot_IR,
+			Timestamp start_downtime, HashMap<Timestamp, Long> downtime_intervals) {
+		this.robot_id = robot_id;
+		this.cluster_id = cluster_id;
+		this.previous_down_signals = previous_down_signals;
+		this.down_signals = down_signals;
+		this.robot_IR = robot_IR;
+		this.start_downtime = start_downtime;
+		this.downtime_intervals = downtime_intervals;
 	}
 		
 	// Getters and Setters
@@ -52,13 +63,15 @@ public class RobotTest {
 	public void signalCatch(int signal) {
 		if ( signal == 0 ){ 
 			this.previous_down_signals = this.down_signals;
-			if( ++this.down_signals == 1 ) 
-				this.start_downtime = new Timestamp(System.currentTimeMillis());	
+			this.down_signals++;
+			//if( ++this.down_signals == 1 ) 
+				//this.start_downtime = new Timestamp(System.currentTimeMillis());	
 		}
 		else { // signal == 1
 			this.previous_down_signals = this.down_signals;
-			if( --down_signals == 0 )
-				this.updateDownTime();
+			this.down_signals--;
+			//if( --down_signals == 0 )
+				//this.updateDownTime();
 		}	
 	}
 	

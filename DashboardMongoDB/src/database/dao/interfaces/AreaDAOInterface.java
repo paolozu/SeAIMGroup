@@ -1,10 +1,11 @@
 package database.dao.interfaces;
 
-import java.util.ArrayList;
+import java.util.HashMap;
 
 import model.Cluster;
 
 public interface AreaDAOInterface {
 	
-	public ArrayList<Cluster> getClusters(Integer area_id);
+	public HashMap<Integer, Cluster> getClusters(Integer area_id);
+	
 }

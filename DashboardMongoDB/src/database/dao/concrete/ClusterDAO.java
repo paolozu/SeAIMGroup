@@ -1,6 +1,8 @@
 package database.dao.concrete;
 
-import java.util.ArrayList;
+import java.sql.Timestamp;
+import java.util.HashMap;
+import java.util.Map;
 import org.bson.Document;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoCursor;
@@ -37,29 +39,6 @@ public class ClusterDAO implements ClusterDAOInterface {
 	}
 	
 	@Override
-	public ArrayList<Robot> getRobots(Integer cluster_id) {
-		ArrayList<Robot> robots = new ArrayList<>();
-		MongoDatabase database = DatabaseConnector.CONNECTION.getDatabase();
-		MongoCollection<Document> robots_collection = database.getCollection("robot");
-		robots_collection.createIndex(Indexes.ascending("cluster_id"));
-		MongoCursor<Document> cursor = robots_collection.find(Filters.eq("cluster_id", cluster_id)).iterator();
-		try {
-		    while (cursor.hasNext()) {
-		        Document current = cursor.next();
-		        Robot robot = new Robot(current.getInteger("_id"),
-		        						current.getInteger("cluster_id"),
-		        						current.getDouble("robot_ir"));
-		        robots.add(robot);
-		    }
-		} 
-		finally {
-		    cursor.close();
-		}
-		return robots;
-		
-	}
-	
-	@Override
 	public void updateDownRobots(Cluster cluster) {
 		MongoDatabase database = DatabaseConnector.CONNECTION.getDatabase();
 		MongoCollection<Document> clusters_collection = database.getCollection("cluster");
@@ -81,6 +60,52 @@ public class ClusterDAO implements ClusterDAOInterface {
 		MongoCollection<Document> clusters_collection = database.getCollection("cluster");
 		clusters_collection.updateOne(Filters.eq("_id", cluster.getClusterId()),
 				  					  Updates.unset("ir_table." + String.valueOf(start_downtime)));
+	}
+	
+	@Override
+	public HashMap<Integer, Robot> getRobots(Integer cluster_id) {
+		
+		MongoDatabase database = DatabaseConnector.CONNECTION.getDatabase();
+		MongoCollection<Document> robots_collection = database.getCollection("robot");
+		robots_collection.createIndex(Indexes.ascending("cluster_id"));
+		MongoCursor<Document> cursor = robots_collection.find(Filters.eq("cluster_id", cluster_id)).iterator();
+		HashMap<Integer, Robot> robots = new HashMap<>();
+		
+		try {
+		    while (cursor.hasNext()) {
+		    	Document current_robot = cursor.next();
+		    	
+		    	int robot_id = current_robot.getInteger("_id");
+		    	int previous_down_signals = current_robot.getInteger("previous_down_signals");
+		    	int down_signals = current_robot.getInteger("down_signals");
+		    	double robot_IR = current_robot.getDouble("robot_ir");
+		    	Timestamp start_downtime;
+		    	HashMap<Timestamp, Long> downtime_intervals = new HashMap<>();
+				long last_ir_table_element = 0;
+
+				Document ir_table = (Document) current_robot.get("ir_table");
+				
+				for (Map.Entry<String, Object> ir_table_entry : ir_table.entrySet()) {
+					downtime_intervals.put(new Timestamp(Long.valueOf(ir_table_entry.getKey())),
+										   Long.valueOf(String.valueOf((ir_table_entry.getValue()))));
+					
+					last_ir_table_element = Long.valueOf(ir_table_entry.getKey());
+				}
+				
+				start_downtime = new Timestamp(last_ir_table_element);
+				
+		        Robot robot = new Robot(robot_id, cluster_id, previous_down_signals,
+		        						down_signals, robot_IR, start_downtime,
+		        						downtime_intervals);
+		        
+		        robots.put(robot_id, robot);
+		    }
+		} 
+		finally {
+		    cursor.close();
+		}
+		return robots;
+		
 	}
 	
 }

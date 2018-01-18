@@ -1,4 +1,4 @@
-package database.dao.concrete;
+package test;
 
 import java.sql.Timestamp;
 import java.util.HashMap;
@@ -10,19 +10,16 @@ import com.mongodb.client.MongoDatabase;
 import com.mongodb.client.model.Filters;
 import com.mongodb.client.model.Indexes;
 import database.DatabaseConnector;
-import database.dao.interfaces.AreaDAOInterface;
-import model.Cluster;
-import model.Robot;
 
-public class AreaDAO implements AreaDAOInterface {
-	
-	@Override
-	public HashMap<Integer, Cluster> getClusters(Integer area_id){
+public class AreaDAO {
+
+	public HashMap<Integer, ClusterTest> getClusters(Integer area_id){
 		MongoDatabase database = DatabaseConnector.CONNECTION.getDatabase();
 		MongoCollection<Document> robots_collection = database.getCollection("cluster");
 		robots_collection.createIndex(Indexes.ascending("area_id"));
 		MongoCursor<Document> cursor = robots_collection.find(Filters.eq("area_id", area_id)).iterator();
-		HashMap<Integer, Cluster> clusters = new HashMap<>();
+		
+		HashMap<Integer, ClusterTest> clusters = new HashMap<>();
 		
 		try {
 		    while (cursor.hasNext()) {
@@ -32,7 +29,7 @@ public class AreaDAO implements AreaDAOInterface {
 		    	int down_robots = current_cluster.getInteger("down_robots");
 		    	double cluster_IR = current_cluster.getDouble("cluster_ir");
 		    	Timestamp start_downtime;
-		    	HashMap<Integer, Robot> robots = new ClusterDAO().getRobots(cluster_id);
+		    	HashMap<Integer, RobotTest> robots = new ClusterDAO().getRobots(cluster_id);
 		    	HashMap<Timestamp, Long> downtime_intervals = new HashMap<>();
 				long last_ir_table_element = 0;
 
@@ -47,9 +44,9 @@ public class AreaDAO implements AreaDAOInterface {
 				
 				start_downtime = new Timestamp(last_ir_table_element);
 				
-		        Cluster cluster = new Cluster(cluster_id, area_id, down_robots,
-		        							  cluster_IR, start_downtime, robots,
-		        						      downtime_intervals);
+		        ClusterTest cluster = new ClusterTest(cluster_id, area_id, down_robots,
+		        							  		  cluster_IR, start_downtime, robots,
+		        							  		  downtime_intervals);
 		        
 		        clusters.put(cluster_id, cluster);
 		    }

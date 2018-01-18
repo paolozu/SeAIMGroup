@@ -6,7 +6,7 @@ import java.util.Map;
 import java.util.HashMap;
 
 public class ClusterTest {
-	
+
 	private HashMap<Integer, RobotTest> robots;   			    // Map in which the key is robot_id and the value is robot itself.
 	private int down_robots; 	              				// Counter of down robots in this cluster.
 	private double cluster_IR;
@@ -21,6 +21,17 @@ public class ClusterTest {
 		this.area_id = area_id;
 		this.robots = new HashMap<>();
 		this.downtime_intervals = new HashMap<>();
+	}
+	
+	public ClusterTest(int cluster_id, int area_id, int down_robots, double cluster_IR,  Timestamp start_downtime,
+			HashMap<Integer, RobotTest> robots, HashMap<Timestamp, Long> downtime_intervals) {
+		this.robots = robots;
+		this.down_robots = down_robots;
+		this.cluster_IR = cluster_IR;
+		this.cluster_id = cluster_id;
+		this.area_id = area_id;
+		this.start_downtime = start_downtime;
+		this.downtime_intervals = downtime_intervals;
 	}
 	
 	// Getters and Setters
@@ -61,13 +72,15 @@ public class ClusterTest {
 		
 		switch( robot.getDownSignals() ) {
 
-			case 0:		if( --this.down_robots == 0 )
-							this.updateDownTime();
+			case 0:		this.down_robots--;
 						break;
+						/*if( --this.down_robots == 0 )
+							this.updateDownTime();
+						break;*/
 					
 			case 1:		if( robot.getPreviuosDownSignals() != 2 ) {
 							this.down_robots++;
-							this.start_downtime = new Timestamp(System.currentTimeMillis());
+							//this.start_downtime = new Timestamp(System.currentTimeMillis());
 						}
 		
 		}

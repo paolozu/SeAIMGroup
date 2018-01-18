@@ -17,11 +17,18 @@ import model.Robot;
 
 public class MessagesHandler implements HttpHandler {    
 	
-	private HashMap<Integer, Area> areas = new HashMap<>();
+	private HashMap<Integer, Area> areas;
 	
-	public HashMap<Integer, Area> getAreas(){
-		return this.areas;
+	public MessagesHandler() {
+		this.areas = new HashMap<>();
 	}
+	
+	public MessagesHandler(HashMap<Integer, Area> areas) {
+		this.areas = areas;
+	}
+	
+	public HashMap<Integer, Area> getAreas(){ return this.areas; }
+	public void serAreas(HashMap<Integer, Area> areas){ this.areas = areas; }
 	
     @Override
     public void handle(HttpExchange exchange) throws IOException {

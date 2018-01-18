@@ -9,25 +9,44 @@ import java.util.Random;
 import java.util.HashMap;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.TimeUnit;
-
 import org.json.JSONObject;
-
 public class MessagesSender {
 	
 	public static void main(String[] args) throws Exception {
 			
 	    	// Useful variables to increase robots and clusters ids
 	    	// to no repeat them in cluster and areas respectively. 
-			int robot_counter = 0;
-			int cluster_counter = 0;
 			
 			// Server and port we're using to send messages.
 			String query = "http://127.0.0.1:8000";
 			
 			// Data structure to keep trace of areas --> clusters --> robots.
-			HashMap<Integer, AreaTest> areas = new HashMap<>();
+			HashMap<Integer, AreaTest> areas = RestoreFromDB.getAreas();
 			
-			// Initializing areas, clusters and robots.
+			int robot_counter = 0;
+			int cluster_counter = 0;
+			
+			for ( int i = 0; i < 10; i++ ) {
+				if( ! areas.containsKey(i) )
+					areas.put(i, new AreaTest(i));
+	    		for( int x = 0; x < 10; x++ ) {
+	    			if( ! areas.get(i).getClusters().containsKey(x + cluster_counter) )
+	    				areas.get(i).addCluster(new ClusterTest(x + cluster_counter, i));
+	    			for( int y = 0; y < 900; y++ ) {
+	    				if( ! areas.get(i).getClusters().get(x + cluster_counter).getRobots().containsKey(y + robot_counter) )
+	    					areas.get(i).getClusters().get(x + cluster_counter)
+	    						 .handleRobot(new RobotTest(y + robot_counter, x + cluster_counter));
+	    			}
+	    			robot_counter += 900;
+	    		}
+    			cluster_counter += 10;
+	    	}
+			
+			/*HashMap<Integer, AreaTest> areas = new HashMap<>();
+			
+			//int robot_counter = 0;
+			//int cluster_counter = 0;
+			
 			for ( int i = 0; i < 10; i++ ) {
 	    		areas.put(i, new AreaTest(i));
 	    		for( int x = 0; x < 10; x++ ) {
@@ -39,7 +58,9 @@ public class MessagesSender {
 	    			robot_counter += 900;
 	    		}
     			cluster_counter += 10;
-	    	}
+	    	}*/
+			
+			
 			
 			// Variables to generate random messages.
 			Integer area_id;
@@ -101,6 +122,6 @@ public class MessagesSender {
 		            conn.disconnect();
 	            }
 	            TimeUnit.MINUTES.sleep(1);
-			}    
+			} 
 	}
 }

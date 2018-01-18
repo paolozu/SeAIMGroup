@@ -9,12 +9,12 @@ import java.util.HashMap;
 
 public class Cluster {
 	
-	private HashMap<Integer, Robot> robots;   			     // Map in which the key is robot_id and the value is robot itself.
-	private int down_robots; 	              				 // Counter of down robots in this cluster.
-	private double cluster_IR;
 	private int cluster_id;
 	private int area_id;
+	private int down_robots; 	              				 // Counter of down robots in this cluster.
+	private double cluster_IR;
 	private Timestamp start_downtime;        				 // To keep trace when down time starts.
+	private HashMap<Integer, Robot> robots;   			     // Map in which the key is robot_id and the value is robot itself.
 	private HashMap<Timestamp, Long> downtime_intervals;	 // Map in which the key is the down time starts and the value is the 
 															 // down time duration.
 	private ReentrantLock lock = new ReentrantLock(true);
@@ -35,10 +35,18 @@ public class Cluster {
 	// This constructor is called from AreaDAO class
 	// to return a collection of clusters.
 	// This constructor doesn't insert the cluster into the database.
-	public Cluster(int cluster_id, int area_id, double cluster_IR){
+	public Cluster(int cluster_id, int area_id, int down_robots,
+				   double cluster_IR, Timestamp start_downtime, HashMap<Integer, Robot> robots,
+				   HashMap<Timestamp, Long> downtime_intervals) {
+		
 		this.cluster_id = cluster_id;
 		this.area_id = area_id;
+		this.down_robots = down_robots;
 		this.cluster_IR = cluster_IR;
+		this.start_downtime = start_downtime;
+		this.robots = robots;
+		this.downtime_intervals = downtime_intervals;
+		
 	}
 	
 	// Getters and Setters

@@ -14,6 +14,11 @@ public class Area {
 		this.clusters = new HashMap<>();
 	}
 	
+	public Area(int area_id, HashMap<Integer, Cluster> clusters) {
+		this.area_id = area_id;
+		this.clusters = clusters;
+	}
+	
 	// Getters and Setters
 	
 	public int getAreaId() { return this.area_id; }

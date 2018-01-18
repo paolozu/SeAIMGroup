@@ -3,6 +3,7 @@ package model;
 import java.io.IOException;
 import java.net.InetSocketAddress;
 import com.sun.net.httpserver.HttpServer;
+import database.dao.concrete.RestoreFromDB;
 import server.MessagesHandler;
 import server.WebsocketServer;
 import threads.IRUpdater;
@@ -23,7 +24,8 @@ public class StartSystem {
 		
 		// Starting server to handle received messages.
 		HttpServer listenerServer = HttpServer.create(new InetSocketAddress(8000), 0);
-		MessagesHandler messagesHandler = new MessagesHandler();
+		//MessagesHandler messagesHandler = new MessagesHandler();
+		MessagesHandler messagesHandler = new MessagesHandler(RestoreFromDB.getAreas());
 		listenerServer.createContext("/", messagesHandler);
 		listenerServer.setExecutor(null); 
 		listenerServer.start();
