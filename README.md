@@ -51,12 +51,13 @@ with:
 
 ```<IfModule dir_module>
 DirectoryIndex Dashboard.html
-</IfModule>```
-
+</IfModule>
+```
 3. Open XAMPP Control Panel and start apache service.
 
 You're almost ready to start the dashboard, you need to change IP address into Dashboard.js(seAIMgroup\DashboardMongoDB\WebContent)     file as follow:
-```$.getJSON('https://api.ipify.org?format=json', function(data){
+```
+$.getJSON('https://api.ipify.org?format=json', function(data){
 	var IP_ADDRESS;
 	if( data.ip == "YOUR_PUBLIC_IP" )   // OPTIONAL
 		IP_ADDRESS = "YOUR_LOCAL_IP";
