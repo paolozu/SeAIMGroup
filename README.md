@@ -7,18 +7,18 @@ For more information read the [project specific](doc/Progetto_Soft_Eng_2017-2018
 
 ## Team
 
-- Cupido Giammarco
-- Icaro Iari
-- Martella Stefano
-- Morelli Davide
-- Tramontozzi Paolo
+&nbsp;&nbsp;&nbsp;&nbsp;\- Cupido Giammarco  
+&nbsp;&nbsp;&nbsp;&nbsp;\- Icaro Iari  
+&nbsp;&nbsp;&nbsp;&nbsp;\- Martella Stefano  
+&nbsp;&nbsp;&nbsp;&nbsp;\- Morelli Davide  
+&nbsp;&nbsp;&nbsp;&nbsp;\- Tramontozzi Paolo
 
 ## Prerequisites
 
- - [Java](https://www.java.com/it/download/) to run application (**required**).
- - [MongoDB](https://www.mongodb.com/download-center#community) to make app work with database (**required**).
- - [Apache](https://www.apachefriends.org/it/download.html) to run app on a server (**required**).
- - [Robo 3T](https://robomongo.org/) MongoDB GUI (optional).
+- [Java](https://www.java.com/it/download/) to run application (**required**).
+- [MongoDB](https://www.mongodb.com/download-center#community) to make app work with database (**required**).
+- [Apache](https://www.apachefriends.org/it/download.html) to run app on a server (**required**).
+- [Robo 3T](https://robomongo.org/) MongoDB GUI (optional).
 
 ## Start using it
 
@@ -89,5 +89,16 @@ For more information read the [project specific](doc/Progetto_Soft_Eng_2017-2018
   
   ![screen1](Screenshots/Aree.PNG) | ![screen2](Screenshots/Clusters.PNG) | ![screen3](Screenshots/Robots.PNG)
   --- | --- | ---
-     
-     
+  
+  ## Contacts
+
+ - giammarco.cupido@student.univaq.it
+ - iari.icaro@student.univaq.it
+ - stefano.martella@student.univaq.it
+ - davide.morelli1@student.univaq.it
+ - paolo.tramontozzi@student.univaq.it
+
+
+## License
+
+ This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details.
