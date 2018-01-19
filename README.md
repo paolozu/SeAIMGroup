@@ -42,15 +42,15 @@ If you are here the database is ready, now let's set up apache:
 2. Open a text editor and edit C:\xampp\apache\conf\httpd.conf file changing:
 ```
 <IfModule dir_module>
-DirectoryIndex index.php index.pl index.cgi index.asp index.shtml index.html index.htm \
-	    default.php default.pl default.cgi default.asp default.shtml default.html default.htm \
-	    home.php home.pl home.cgi home.asp home.shtml home.html home.htm
+    DirectoryIndex index.php index.pl index.cgi index.asp index.shtml index.html index.htm \
+	           default.php default.pl default.cgi default.asp default.shtml default.html default.htm \
+	           home.php home.pl home.cgi home.asp home.shtml home.html home.htm
 </IfModule>
 ```
 with:
 ```
 <IfModule dir_module>
-DirectoryIndex Dashboard.html
+    DirectoryIndex Dashboard.html
 </IfModule>
 ```
 3. Open XAMPP Control Panel and start apache service.
