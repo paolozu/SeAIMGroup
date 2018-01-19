@@ -82,7 +82,7 @@ to simulate messages sent.
 
 Dashboard aspect:
 
-![screen0](screenshots/loading.PNG) | ![screen1](screenshots/aras.PNG)
+![screen0](screenshots/loading.PNG) | ![screen1](screenshots/areas.PNG)
 --- | ---  
 ![screen2](screenshots/clusters.PNG) | ![screen3](screenshots/robots.PNG)
 
