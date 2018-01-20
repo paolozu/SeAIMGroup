@@ -38,7 +38,7 @@ db.createCollection("cluster");
 ```  
 If you are here the database is ready, now let's set up apache:
 
-1. From project folder you cloned/donwload move on WebContent folder(seAIMgroup\DashboardMongoDB\WebContent) copy all files                except for folders and than paste them into C:\xampp\htdocs (or your XAMPP installation directory).
+1. From project folder you cloned/downloaded move on WebContent folder(seAIMgroup\DashboardMongoDB\WebContent) copy all files    except for folders and than paste them into C:\xampp\htdocs (or your XAMPP installation directory).
 2. Open a text editor and edit C:\xampp\apache\conf\httpd.conf file changing:
 ```
 <IfModule dir_module>
