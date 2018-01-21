@@ -130,7 +130,7 @@ public class Cluster {
 				long downtime_duration = new Timestamp(System.currentTimeMillis()).getTime() - start_downtime.getTime();
 				this.downtime_intervals.put(start_downtime, downtime_duration);
 				new ClusterDAO().addInIRTable(this, start_downtime.getTime(), downtime_duration);
-				this.start_downtime = new Timestamp(System.currentTimeMillis());
+				this.start_downtime = new Timestamp(start_downtime.getTime() + downtime_duration);
 			}
 			this.updateIR();
 		}
@@ -150,7 +150,7 @@ public class Cluster {
 			
 			// 3.6e6 milliseconds --> 1 hour.
 			if( time_to_downtime_init > 3.6e6 ) {
-				if( time_to_downtime_init - Math.abs(interval.getValue()) > 3.6e6  ) {
+				if( time_to_downtime_init - interval.getValue() > 3.6e6  ) {
 					more_than_an_hour_ago.add(interval.getKey());			
 				}
 				else {

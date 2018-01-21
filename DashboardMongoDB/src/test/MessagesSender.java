@@ -120,8 +120,8 @@ public class MessagesSender {
 		
 		            in.close();
 		            conn.disconnect();
-	            }
-	            TimeUnit.MINUTES.sleep(1);
-			} 
+		        }
+	        TimeUnit.MINUTES.sleep(1);
+		} 
 	}
 }

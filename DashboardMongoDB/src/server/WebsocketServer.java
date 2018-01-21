@@ -13,7 +13,7 @@ import java.util.Set;
 public class WebsocketServer extends WebSocketServer {
 
     private final static int TCP_PORT = 4444;
-    private final static String IP_ADDRESS = "192.168.159.111";  //Put your local IP
+    private final static String IP_ADDRESS = "192.168.1.31";  //Put your local IP
     private Set<WebSocket> clients;	
     private JSONObject message;
 

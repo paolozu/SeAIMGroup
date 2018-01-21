@@ -6,7 +6,7 @@ import com.sun.net.httpserver.HttpServer;
 import database.dao.concrete.RestoreFromDB;
 import server.MessagesHandler;
 import server.WebsocketServer;
-import threads.IRUpdater;
+import services.IRUpdater;
 
 public class StartSystem {
 	
@@ -22,6 +22,10 @@ public class StartSystem {
 		 * 
 		 */
 		
+		// Starting server to create web socket with clients.
+		WebsocketServer websocketServer = new WebsocketServer();
+		websocketServer.start();
+		
 		// Starting server to handle received messages.
 		HttpServer listenerServer = HttpServer.create(new InetSocketAddress(8000), 0);
 		//MessagesHandler messagesHandler = new MessagesHandler();
@@ -30,13 +34,9 @@ public class StartSystem {
 		listenerServer.setExecutor(null); 
 		listenerServer.start();
 		
-		// Starting server to create web socket with clients.
-		WebsocketServer websocketServer = new WebsocketServer();
-		websocketServer.start();
-		
-		// Starting thread to update records into the database
-		// This thread calls the run method of ClientsSender to send messages to clients.
-		Runnable ir_updater = new IRUpdater(websocketServer, messagesHandler.getAreas());
+		// Starting service to update records into the database
+		// This method calls the run method of ClientsSender to send messages to clients.
+		IRUpdater ir_updater = new IRUpdater(websocketServer, messagesHandler.getAreas());
 		ir_updater.run();
 		
 	}

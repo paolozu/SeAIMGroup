@@ -1,4 +1,4 @@
-package threads;
+package services;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -7,7 +7,7 @@ import model.Cluster;
 import model.Robot;
 import server.WebsocketServer;
 
-public class IRUpdater implements Runnable {
+public class IRUpdater {
 	
 	private WebsocketServer websocketServer;
 	private HashMap<Integer, Area> areas;
@@ -16,8 +16,7 @@ public class IRUpdater implements Runnable {
 		this.websocketServer = websocketServer;
 		this.areas = areas;
 	}
-	
-	@Override
+
 	public void run() {
 		try {
 			Thread.sleep(15000);
@@ -38,8 +37,8 @@ public class IRUpdater implements Runnable {
 	    				current_cluster.updateDownTime();
 	    			}	
 	    		}	            
-				// Starting thread to update clients json.
-	            Runnable clientsSender = new ClientsSender(websocketServer);
+				// Starting service to update clients json.
+	            ClientsSender clientsSender = new ClientsSender(websocketServer);
 	            
 	            // Send updated and structured json to clients.
 	            clientsSender.run();
@@ -55,5 +54,5 @@ public class IRUpdater implements Runnable {
 			}
 		}
 	}
-
+	
 }

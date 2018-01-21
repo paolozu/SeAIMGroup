@@ -1,4 +1,4 @@
-package threads;
+package services;
 
 import org.bson.Document;
 import org.json.JSONException;
@@ -12,7 +12,7 @@ import com.mongodb.client.model.Indexes;
 import database.DatabaseConnector;
 import server.WebsocketServer;
 
-public class ClientsSender implements Runnable {
+public class ClientsSender {
 	
 	private WebsocketServer websocketServer;	 
 	
@@ -20,7 +20,6 @@ public class ClientsSender implements Runnable {
 		this.websocketServer = websocketServer;
 	}
 	
-	@Override
 	public void run() {
 		
 		if( ! websocketServer.getClients().isEmpty() ) {
