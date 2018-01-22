@@ -31,7 +31,7 @@ public class ClusterDAO implements ClusterDAOInterface {
 	}
 	
 	@Override
-	public void updateCluster(Cluster cluster) {
+	public void updateClusterIR(Cluster cluster) {
 		MongoDatabase database = DatabaseConnector.CONNECTION.getDatabase();
 		MongoCollection<Document> clusters_collection = database.getCollection("cluster");
 		clusters_collection.updateOne(Filters.eq("_id", cluster.getClusterId()),

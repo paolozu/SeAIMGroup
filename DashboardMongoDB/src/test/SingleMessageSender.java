@@ -51,9 +51,9 @@ public class SingleMessageSender {
 			area_id = 0;
         	cluster_id =  0;
         	robot_id = 4;
-        	signal_state = 0;
+        	signal_state = 1;
         	
-        	message_time = System.currentTimeMillis() - 36000000;
+        	message_time = System.currentTimeMillis() - 1500000;
         	
         	
         	JSONObject robot_message = new JSONObject();

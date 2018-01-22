@@ -26,7 +26,7 @@ public class RobotDAO implements RobotDAOInterface {
 	}
 	
 	@Override
-	public void updateRobot(Robot robot) {
+	public void updateRobotIR(Robot robot) {
 		MongoDatabase database = DatabaseConnector.CONNECTION.getDatabase();
 		MongoCollection<Document> robots_collection = database.getCollection("robot");
 		robots_collection.updateOne(Filters.eq("_id", robot.getRobotId()),
