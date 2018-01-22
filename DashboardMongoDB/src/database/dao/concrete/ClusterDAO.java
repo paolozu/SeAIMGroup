@@ -97,7 +97,7 @@ public class ClusterDAO implements ClusterDAOInterface {
 		        Robot robot = new Robot(robot_id, cluster_id, previous_down_signals,
 		        						down_signals, robot_IR, start_downtime,
 		        						downtime_intervals);
-		        
+
 		        robots.put(robot_id, robot);
 		    }
 		} 

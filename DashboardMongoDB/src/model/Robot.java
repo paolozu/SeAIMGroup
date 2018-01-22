@@ -122,7 +122,8 @@ public class Robot {
 			// 3.6e6 milliseconds --> 1 hour.
 			if( time_to_downtime_init > 3.6e6 ) {
 				if( time_to_downtime_init - interval.getValue() > 3.6e6  ) {
-					more_than_an_hour_ago.add(interval.getKey());		
+					if( interval.getValue() > 0 )
+						more_than_an_hour_ago.add(interval.getKey());		
 				}
 				else {
 					downtime_last_hour += (3.6e6 - time_to_downtime_init + interval.getValue());
