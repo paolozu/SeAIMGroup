@@ -15,7 +15,7 @@ $.getJSON('https://api.ipify.org?format=json', function(data){
 		if( data.ip == "195.32.88.220" )   // PUT PUBLIC IP HERE.
 			IP_ADDRESS = "192.168.1.34";     // PUT YOUR LOCAL IP HERE.
 		else
-			IP_ADDRESS = "195.32.88.220";    // PUT PUBLIC IP HERE.
+			IP_ADDRESS = "192.168.1.34";    // PUT PUBLIC IP HERE.
 
 		webSocket = new WebSocket("ws://" + IP_ADDRESS + ":4444");
 
