@@ -14,22 +14,22 @@ public class WebsocketServer extends WebSocketServer {
 
     private final static int TCP_PORT = 4444;
     private final static String IP_ADDRESS = "192.168.1.34";  //Put your local IP here
-    private Set<WebSocket> clients;	
+    private Set<WebSocket> clients;
     private JSONObject message;
 
     public WebsocketServer() throws UnknownHostException {
         super(new InetSocketAddress(IP_ADDRESS, TCP_PORT));
         clients = new HashSet<>();
     }
-    
+
     // Getters and setters.
-    
+
     public Set<WebSocket> getClients(){ return this.clients; }
     public JSONObject getMessage() { return this.message; }
 
     public void setClients(Set<WebSocket> clients){ this.clients = clients; }
     public void setMessage(JSONObject message) { this.message = message; }
-    
+
     // Method to send message to all connected clients.
     public void sendMessageToCLients() {
     	// We better don't iterate on clients variable because it's dynamic.
@@ -37,7 +37,7 @@ public class WebsocketServer extends WebSocketServer {
     	for(WebSocket client : currentClients)
     		client.send(message.toString());
     }
-    
+
     // Overriding methods.
 
     @Override
@@ -57,8 +57,8 @@ public class WebsocketServer extends WebSocketServer {
 
     @Override
     public void onError(WebSocket client, Exception exception) {
-        if (client != null) 
+        if (client != null)
         	clients.remove(client);
     }
-    
+
 }
