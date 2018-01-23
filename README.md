@@ -27,7 +27,16 @@ Now you need to set up the database:
 
 1. First of all add MongoDB bin path to PATH.
 2. Than you need to start MongoDB service, so open a terminal and run the following command:
-   `mongod`
+   `mongod`<br />
+   **NOTE:** if you got an error containing the following message:
+   ```
+   Data directory C:\data\db\ not found., terminating
+   ```
+   you need to create the folders with:
+   ```
+   mkdir C:\data\db
+   ```
+   now try to restart MongoDB service.
 3. Now open a new shell and run the following command: 
    `mongo`
    than create the database and its collections with:
