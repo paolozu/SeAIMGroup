@@ -98,67 +98,62 @@ public class Robot {
 			this.lock.unlock();
 		}
 	}
-	
-	public void updateDownTime() {
+
+	public void updateIR() {
 		this.lock.lock();
 		try {
-			this.updateIR();
+			double current_IR = 0;
+			long downtime_last_hour = 0;
+			ArrayList<Timestamp> more_than_an_hour_ago = new ArrayList<>();
+				
+			for( Map.Entry<Timestamp, Long> interval : downtime_intervals.entrySet() ) {
+				
+				long time_to_downtime_init = new Timestamp(System.currentTimeMillis()).getTime() - interval.getKey().getTime();
+				
+				// 3.6e6 milliseconds --> 1 hour.
+				if( time_to_downtime_init > 3.6e6 ) {
+					if( time_to_downtime_init - interval.getValue() > 3.6e6  ) {
+						if( interval.getValue() > 0 )
+							more_than_an_hour_ago.add(interval.getKey());		
+					}
+					else {
+						downtime_last_hour += (3.6e6 - time_to_downtime_init + interval.getValue());
+					}
+				}
+				else {
+					downtime_last_hour += interval.getValue();
+				}
+				
+			}
+			
+			if( this.down_signals > 0 ) {
+				if( downtime_last_hour +  new Timestamp(System.currentTimeMillis()).getTime() - start_downtime.getTime() > 3.6e6 )
+					downtime_last_hour = 3600000;
+				else
+					downtime_last_hour += new Timestamp(System.currentTimeMillis()).getTime() - start_downtime.getTime();
+			}
+			
+			for( Timestamp invalid : more_than_an_hour_ago ) {
+				this.downtime_intervals.remove(invalid);
+				new RobotDAO().removeFromIRTable(this, invalid.getTime());
+			}
+			
+			// total_downtime --> milliseconds
+			// * 1.6667e-5    --> minutes
+			// divide by 60   --> IR not in percentage
+			// divide by 60   --> IR in percentage
+			// Round, * 100d and than / 100d to have 2 decimal places.
+	 		current_IR = (double) Math.round((((downtime_last_hour * 1.6666667e-5) / 60) * 100) * 100d) / 100d;
+	 		
+	 		// Update database.
+	 		if( this.robot_IR != current_IR ) {
+	 			this.robot_IR = current_IR;
+	 			new RobotDAO().updateRobotIR(this);
+	 		}
 		}
 		finally {
 			this.lock.unlock();
 		}
-	}
-
-	private void updateIR() {
-		
-		double current_IR = 0;
-		long downtime_last_hour = 0;
-		ArrayList<Timestamp> more_than_an_hour_ago = new ArrayList<>();
-			
-		for( Map.Entry<Timestamp, Long> interval : downtime_intervals.entrySet() ) {
-			
-			long time_to_downtime_init = new Timestamp(System.currentTimeMillis()).getTime() - interval.getKey().getTime();
-			
-			// 3.6e6 milliseconds --> 1 hour.
-			if( time_to_downtime_init > 3.6e6 ) {
-				if( time_to_downtime_init - interval.getValue() > 3.6e6  ) {
-					if( interval.getValue() > 0 )
-						more_than_an_hour_ago.add(interval.getKey());		
-				}
-				else {
-					downtime_last_hour += (3.6e6 - time_to_downtime_init + interval.getValue());
-				}
-			}
-			else {
-				downtime_last_hour += interval.getValue();
-			}
-			
-		}
-		
-		if( this.down_signals > 0 ) {
-			if( downtime_last_hour +  new Timestamp(System.currentTimeMillis()).getTime() - start_downtime.getTime() > 3.6e6 )
-				downtime_last_hour = 3600000;
-			else
-				downtime_last_hour += new Timestamp(System.currentTimeMillis()).getTime() - start_downtime.getTime();
-		}
-		
-		for( Timestamp invalid : more_than_an_hour_ago ) {
-			this.downtime_intervals.remove(invalid);
-			new RobotDAO().removeFromIRTable(this, invalid.getTime());
-		}
-		
-		// total_downtime --> milliseconds
-		// * 1.6667e-5    --> minutes
-		// divide by 60   --> IR not in percentage
-		// divide by 60   --> IR in percentage
-		// Round, * 100d and than / 100d to have 2 decimal places.
- 		current_IR = (double) Math.round((((downtime_last_hour * 1.6666667e-5) / 60) * 100) * 100d) / 100d;
- 		
- 		// Update database.
- 		if( this.robot_IR != current_IR ) {
- 			this.robot_IR = current_IR;
- 			new RobotDAO().updateRobotIR(this);
- 		}
 	}
 	
 	@Override

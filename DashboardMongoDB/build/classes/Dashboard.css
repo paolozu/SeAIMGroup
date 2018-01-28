@@ -42,7 +42,7 @@
     width: 100px;
   }
 
-	.robot {
+  .robot {
     width: 27.5%;
     display: inline-table;
     border: 1px solid black;
@@ -52,8 +52,8 @@
   }
 
   .cluster,
-	.area {
-		width: 40%;
+  .area {
+	width: 40%;
     height: 150px;
     display: inline-table;
     border: 1px solid black;
@@ -114,7 +114,7 @@
     width: 200px;
   }
 
-	.robot {
+  .robot {
     width: 8%;
     display: inline-grid;
     border: 1px solid black;
@@ -124,8 +124,8 @@
   }
 
   .cluster,
-	.area {
-		width: 16.8%;
+  .area {
+	width: 16.8%;
     height: 150px;
     display: inline-table;
     border: 1px solid black;
@@ -162,13 +162,13 @@ html, body {
 }
 
 * {
-   margin: 0;
-   padding: 0;
-   font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-   letter-spacing: 0.1px;
-   -moz-user-select: none;
-   user-select: none;
-   position: relative;
+  margin: 0;
+  padding: 0;
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  letter-spacing: 0.1px;
+  -moz-user-select: none;
+  user-select: none;
+  position: relative;
 }
 
 #top-div {
@@ -205,7 +205,7 @@ html, body {
 .robot-ir {
   color: white;
   display: block;
-	text-align: center;
+  text-align: center;
 }
 
 .robot-id {
@@ -225,20 +225,20 @@ html, body {
 }
 
 .cluster-id {
-	font-size: 30px;
-	margin-top: 8px;
+  font-size: 30px;
+  margin-top: 8px;
   padding-bottom: 4px;
-	border-bottom: 0.1px solid white;
+  border-bottom: 0.1px solid white;
 }
 
 .cluster-ir {
   top: 30px;
-	font-size: 32px;
+  font-size: 32px;
 }
 
 .area-id {
-	top: 55px;
-	font-size: 30px;
+  top: 55px;
+  font-size: 30px;
 }
 
 .robot{

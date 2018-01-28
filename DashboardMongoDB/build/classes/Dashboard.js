@@ -12,10 +12,10 @@ var robots_and_clusters_IR = null;
 
 $.getJSON('https://api.ipify.org?format=json', function(data){
 		var IP_ADDRESS;
-		if( data.ip == "195.32.88.220" )   // PUT PUBLIC IP HERE.
-			IP_ADDRESS = "192.168.1.34";     // PUT YOUR LOCAL IP HERE.
+		if( data.ip == "PUT_PUBLIC_IP_HERE" )
+			IP_ADDRESS = "PUT_YOUR_LOCAL_IP_HERE";
 		else
-			IP_ADDRESS = "192.168.1.34";    // PUT PUBLIC IP HERE.
+			IP_ADDRESS = "PUT_PUBLIC_IP_HERE";
 
 		webSocket = new WebSocket("ws://" + IP_ADDRESS + ":4444");
 

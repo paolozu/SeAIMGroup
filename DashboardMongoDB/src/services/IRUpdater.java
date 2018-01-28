@@ -28,9 +28,9 @@ public class IRUpdater {
 				for( Area current_area :  areas.values() ) {
 	    			for( Cluster current_cluster : current_area.getClusters().values() ) {
 	    				for( Robot robot : current_cluster.getRobots().values() ) {
-	    					robot.updateDownTime();
+	    					robot.updateIR();
 	    				}
-	    				current_cluster.updateDownTime();
+	    				current_cluster.updateIR();
 	    			}	
 	    		}	            
 				// Starting service to update clients json.

@@ -74,34 +74,31 @@ public class Cluster {
 	// This function in called either to add a robot to this cluster 
 	// or to update robot's values and then cluster's down robots.
 	public void handleRobot(Robot robot, long message_time){
-		
-		if ( this.robots.containsKey(robot.getRobotId()) ) {
-			this.updateRobot(robot, message_time);
-		}
-		else {
-			// Here we insert new robot in this cluster.
-			this.robots.put(robot.getRobotId(), robot);
-			if( robot.getDownSignals() > 0 ) {
-				this.lock.lock();
-				try {
+		this.lock.lock();
+		try {
+			if ( this.robots.containsKey(robot.getRobotId()) ) {
+				this.updateRobot(robot, message_time);
+			}
+			else {
+				// Here we insert new robot in this cluster.
+				this.robots.put(robot.getRobotId(), robot);
+				if( robot.getDownSignals() > 0 ) {
 					if( ++down_robots == 1 ) {
 						this.start_downtime = new Timestamp(message_time);
 						new ClusterDAO().addInIRTable(this, message_time, 0);
 					}
 					new ClusterDAO().updateDownRobots(this);
 				}
-				finally {
-					this.lock.unlock();
-				}
 			}
+		}
+		finally {
+			this.lock.unlock();
 		}
 	}
 	
 	private void updateRobot(Robot robot, long message_time) {
 
-		this.lock.lock();
-		try {
-			switch( robot.getDownSignals() ) {
+		switch( robot.getDownSignals() ) {
 
 			case 0:		if( --this.down_robots == 0 ) {
 							long downtime_duration = message_time - start_downtime.getTime();
@@ -117,74 +114,65 @@ public class Cluster {
 								new ClusterDAO().addInIRTable(this, message_time, 0);
 							}
 						new ClusterDAO().updateDownRobots(this);
+		}
 	
-			}
-		}
-		finally {
-			this.lock.unlock();
-		}		
-	}
-	
-	public void updateDownTime() {
-		this.lock.lock();
-		try {
-			this.updateIR();
-		}
-		finally {
-			this.lock.unlock();
-		}
 	}
 
-	private void updateIR() {
-		
-		double current_IR = 0;
-		long downtime_last_hour = 0;
-		ArrayList<Timestamp> more_than_an_hour_ago = new ArrayList<>();
-			
-		for( Map.Entry<Timestamp, Long> interval : downtime_intervals.entrySet() ) {
-			
-			long time_to_downtime_init = new Timestamp(System.currentTimeMillis()).getTime() - interval.getKey().getTime();
-			
-			// 3.6e6 milliseconds --> 1 hour.
-			if( time_to_downtime_init > 3.6e6 ) {
-				if( time_to_downtime_init - interval.getValue() > 3.6e6  ) {
-					if( interval.getValue() > 0 )
-						more_than_an_hour_ago.add(interval.getKey());			
+	public void updateIR() {
+		this.lock.lock();
+		try {
+			double current_IR = 0;
+			long downtime_last_hour = 0;
+			ArrayList<Timestamp> more_than_an_hour_ago = new ArrayList<>();
+				
+			for( Map.Entry<Timestamp, Long> interval : downtime_intervals.entrySet() ) {
+				
+				long time_to_downtime_init = new Timestamp(System.currentTimeMillis()).getTime() - interval.getKey().getTime();
+				
+				// 3.6e6 milliseconds --> 1 hour.
+				if( time_to_downtime_init > 3.6e6 ) {
+					if( time_to_downtime_init - interval.getValue() > 3.6e6  ) {
+						if( interval.getValue() > 0 )
+							more_than_an_hour_ago.add(interval.getKey());			
+					}
+					else {
+						downtime_last_hour += (3.6e6 - time_to_downtime_init + interval.getValue());
+					}
 				}
 				else {
-					downtime_last_hour += (3.6e6 - time_to_downtime_init + interval.getValue());
+					downtime_last_hour += interval.getValue();
 				}
-			}
-			else {
-				downtime_last_hour += interval.getValue();
+				
 			}
 			
+			if( this.down_robots > 0 ) {
+				if( downtime_last_hour +  new Timestamp(System.currentTimeMillis()).getTime() - start_downtime.getTime() > 3.6e6 )
+					downtime_last_hour = 3600000;
+				else
+					downtime_last_hour += new Timestamp(System.currentTimeMillis()).getTime() - start_downtime.getTime();
+			}
+			
+			for( Timestamp invalid : more_than_an_hour_ago ) {
+				this.downtime_intervals.remove(invalid);
+				new ClusterDAO().removeFromIRTable(this, invalid.getTime());
+			}
+			
+			// total_downtime --> milliseconds
+			// * 1.6667e-5    --> minutes
+			// divide by 60   --> IR not in percentage
+			// divide by 60   --> IR in percentage
+			// Round, * 100d and than / 100d to have 2 decimal places.
+	 		current_IR = (double) Math.round((((downtime_last_hour * 1.6666667e-5) / 60) * 100) * 100d) / 100d;
+	 		
+	 		// Update database if necessary.
+	 		if( this.cluster_IR != current_IR ) {
+	 			this.cluster_IR = current_IR;
+	 			new ClusterDAO().updateClusterIR(this);
+	 		}
 		}
-		
-		if( this.down_robots > 0 ) {
-			if( downtime_last_hour +  new Timestamp(System.currentTimeMillis()).getTime() - start_downtime.getTime() > 3.6e6 )
-				downtime_last_hour = 3600000;
-			else
-				downtime_last_hour += new Timestamp(System.currentTimeMillis()).getTime() - start_downtime.getTime();
+		finally {
+			this.lock.unlock();
 		}
-		
-		for( Timestamp invalid : more_than_an_hour_ago ) {
-			this.downtime_intervals.remove(invalid);
-			new ClusterDAO().removeFromIRTable(this, invalid.getTime());
-		}
-		
-		// total_downtime --> milliseconds
-		// * 1.6667e-5    --> minutes
-		// divide by 60   --> IR not in percentage
-		// divide by 60   --> IR in percentage
-		// Round, * 100d and than / 100d to have 2 decimal places.
- 		current_IR = (double) Math.round((((downtime_last_hour * 1.6666667e-5) / 60) * 100) * 100d) / 100d;
- 		
- 		// Update database if necessary.
- 		if( this.cluster_IR != current_IR ) {
- 			this.cluster_IR = current_IR;
- 			new ClusterDAO().updateClusterIR(this);
- 		}
 	}
 		
 	@Override

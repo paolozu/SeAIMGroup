@@ -11,7 +11,7 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 public class WebsocketServer extends WebSocketServer {
 
     private final static int TCP_PORT = 4444;
-    private final static String IP_ADDRESS = "192.168.1.33";  //Put your local IP here
+    private final static String IP_ADDRESS = "192.168.1.2";  //Put your local IP here
     private ConcurrentLinkedQueue<WebSocket> clients;
     private JSONObject message;
 
@@ -31,12 +31,7 @@ public class WebsocketServer extends WebSocketServer {
     // Method to send message to all connected clients.
     public void sendMessageToCLients() {
     	for(WebSocket client : clients)
-    		try {
-    			client.send(message.toString());
-    		}
-    		catch(Exception e) {
-    			e.printStackTrace();
-    		}
+    		client.send(message.toString());
     }
 
     // Overriding methods.
@@ -45,12 +40,7 @@ public class WebsocketServer extends WebSocketServer {
     public void onOpen(WebSocket client, ClientHandshake handshake) {
         clients.add(client);
         if( message != null )
-        	try {
-        		client.send(message.toString());
-        	}
-        	catch(Exception e) {
-        		e.printStackTrace();
-        	}
+        	client.send(message.toString());
     }
 
     @Override
