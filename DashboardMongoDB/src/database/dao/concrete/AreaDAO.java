@@ -2,7 +2,8 @@ package database.dao.concrete;
 
 import java.sql.Timestamp;
 import java.util.HashMap;
-import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
 import org.bson.Document;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoCursor;
@@ -17,12 +18,12 @@ import model.Robot;
 public class AreaDAO implements AreaDAOInterface {
 	
 	@Override
-	public HashMap<Integer, Cluster> getClusters(Integer area_id){
+	public ConcurrentHashMap<Integer, Cluster> getClusters(Integer area_id){
 		MongoDatabase database = DatabaseConnector.CONNECTION.getDatabase();
 		MongoCollection<Document> robots_collection = database.getCollection("cluster");
 		robots_collection.createIndex(Indexes.ascending("area_id"));
 		MongoCursor<Document> cursor = robots_collection.find(Filters.eq("area_id", area_id)).iterator();
-		HashMap<Integer, Cluster> clusters = new HashMap<>();
+		ConcurrentHashMap<Integer, Cluster> clusters = new ConcurrentHashMap<>();
 		
 		try {
 		    while (cursor.hasNext()) {
@@ -32,13 +33,13 @@ public class AreaDAO implements AreaDAOInterface {
 		    	int down_robots = current_cluster.getInteger("down_robots");
 		    	double cluster_IR = current_cluster.getDouble("cluster_ir");
 		    	Timestamp start_downtime;
-		    	HashMap<Integer, Robot> robots = new ClusterDAO().getRobots(cluster_id);
+		    	ConcurrentHashMap<Integer, Robot> robots = new ClusterDAO().getRobots(cluster_id);
 		    	HashMap<Timestamp, Long> downtime_intervals = new HashMap<>();
 				long last_ir_table_element = 0;
 
 				Document ir_table = (Document) current_cluster.get("ir_table");
 				
-				for (Map.Entry<String, Object> ir_table_entry : ir_table.entrySet()) {
+				for (ConcurrentMap.Entry<String, Object> ir_table_entry : ir_table.entrySet()) {
 					downtime_intervals.put(new Timestamp(Long.valueOf(ir_table_entry.getKey())),
 										   Long.valueOf(String.valueOf((ir_table_entry.getValue()))));
 					

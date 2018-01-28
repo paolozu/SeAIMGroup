@@ -3,20 +3,20 @@ package model;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Map;
+import java.util.HashMap;
 import java.util.concurrent.locks.ReentrantLock;
 import database.dao.concrete.RobotDAO;
-import java.util.HashMap;
 
 public class Robot {
 	
 	private int robot_id;
 	private int cluster_id;
-	private int previous_down_signals;						// To keep trace of down signals evolution.
-	private int down_signals;								// To keep trace of down signals numbers.
+	private int previous_down_signals;								// To keep trace of down signals evolution.
+	private int down_signals;										// To keep trace of down signals numbers.
 	private double robot_IR;
-	private Timestamp start_downtime;						// To keep trace when down time starts.
-	private HashMap<Timestamp, Long> downtime_intervals;	// Map in which the key is the down time starts and the value is the 
-	 														// down time duration.
+	private Timestamp start_downtime;								// To keep trace when down time starts.
+	private HashMap<Timestamp, Long> downtime_intervals;			// Map in which the key is the down time starts and the value is the 
+	 																// down time duration.
 	private ReentrantLock lock = new ReentrantLock(true);
 	
 	public Robot() {}

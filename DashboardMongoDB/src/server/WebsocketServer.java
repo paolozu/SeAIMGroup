@@ -6,36 +6,37 @@ import org.java_websocket.server.WebSocketServer;
 import org.json.JSONObject;
 import java.net.InetSocketAddress;
 import java.net.UnknownHostException;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.concurrent.ConcurrentLinkedQueue;
 
 public class WebsocketServer extends WebSocketServer {
 
     private final static int TCP_PORT = 4444;
-    private final static String IP_ADDRESS = "192.168.1.34";  //Put your local IP here
-    private Set<WebSocket> clients;
+    private final static String IP_ADDRESS = "192.168.1.33";  //Put your local IP here
+    private ConcurrentLinkedQueue<WebSocket> clients;
     private JSONObject message;
 
     public WebsocketServer() throws UnknownHostException {
         super(new InetSocketAddress(IP_ADDRESS, TCP_PORT));
-        clients = new HashSet<>();
+        clients = new ConcurrentLinkedQueue<>();
     }
 
     // Getters and setters.
 
-    public Set<WebSocket> getClients(){ return this.clients; }
+    public ConcurrentLinkedQueue<WebSocket> getClients(){ return this.clients; }
     public JSONObject getMessage() { return this.message; }
 
-    public void setClients(Set<WebSocket> clients){ this.clients = clients; }
+    public void setClients(ConcurrentLinkedQueue<WebSocket> clients){ this.clients = clients; }
     public void setMessage(JSONObject message) { this.message = message; }
 
     // Method to send message to all connected clients.
     public void sendMessageToCLients() {
-    	// We better don't iterate on clients variable because it's dynamic.
-    	ArrayList<WebSocket> currentClients = new ArrayList<>(clients);
-    	for(WebSocket client : currentClients)
-    		client.send(message.toString());
+    	for(WebSocket client : clients)
+    		try {
+    			client.send(message.toString());
+    		}
+    		catch(Exception e) {
+    			e.printStackTrace();
+    		}
     }
 
     // Overriding methods.
@@ -44,7 +45,12 @@ public class WebsocketServer extends WebSocketServer {
     public void onOpen(WebSocket client, ClientHandshake handshake) {
         clients.add(client);
         if( message != null )
-        	client.send(message.toString());
+        	try {
+        		client.send(message.toString());
+        	}
+        	catch(Exception e) {
+        		e.printStackTrace();
+        	}
     }
 
     @Override

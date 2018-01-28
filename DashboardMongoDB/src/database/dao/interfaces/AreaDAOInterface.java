@@ -1,11 +1,11 @@
 package database.dao.interfaces;
 
-import java.util.HashMap;
+import java.util.concurrent.ConcurrentHashMap;
 
 import model.Cluster;
 
 public interface AreaDAOInterface {
 	
-	public HashMap<Integer, Cluster> getClusters(Integer area_id);
+	public ConcurrentHashMap<Integer, Cluster> getClusters(Integer area_id);
 	
 }

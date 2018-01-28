@@ -2,7 +2,8 @@ package database.dao.concrete;
 
 import java.sql.Timestamp;
 import java.util.HashMap;
-import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
 import org.bson.Document;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoCursor;
@@ -63,13 +64,13 @@ public class ClusterDAO implements ClusterDAOInterface {
 	}
 	
 	@Override
-	public HashMap<Integer, Robot> getRobots(Integer cluster_id) {
+	public ConcurrentHashMap<Integer, Robot> getRobots(Integer cluster_id) {
 		
 		MongoDatabase database = DatabaseConnector.CONNECTION.getDatabase();
 		MongoCollection<Document> robots_collection = database.getCollection("robot");
 		robots_collection.createIndex(Indexes.ascending("cluster_id"));
 		MongoCursor<Document> cursor = robots_collection.find(Filters.eq("cluster_id", cluster_id)).iterator();
-		HashMap<Integer, Robot> robots = new HashMap<>();
+		ConcurrentHashMap<Integer, Robot> robots = new ConcurrentHashMap<>();
 		
 		try {
 		    while (cursor.hasNext()) {
@@ -85,7 +86,7 @@ public class ClusterDAO implements ClusterDAOInterface {
 
 				Document ir_table = (Document) current_robot.get("ir_table");
 				
-				for (Map.Entry<String, Object> ir_table_entry : ir_table.entrySet()) {
+				for (ConcurrentMap.Entry<String, Object> ir_table_entry : ir_table.entrySet()) {
 					downtime_intervals.put(new Timestamp(Long.valueOf(ir_table_entry.getKey())),
 										   Long.valueOf(String.valueOf((ir_table_entry.getValue()))));
 					

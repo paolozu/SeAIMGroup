@@ -3,20 +3,22 @@ package model;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Map;
+import java.util.HashMap;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.locks.ReentrantLock;
 import database.dao.concrete.ClusterDAO;
-import java.util.HashMap;
+
 
 public class Cluster {
 	
 	private int cluster_id;
 	private int area_id;
-	private int down_robots; 	              				 // Counter of down robots in this cluster.
+	private int down_robots; 	              						 // Counter of down robots in this cluster.
 	private double cluster_IR;
-	private Timestamp start_downtime;        				 // To keep trace when down time starts.
-	private HashMap<Integer, Robot> robots;   			     // Map in which the key is robot_id and the value is robot itself.
-	private HashMap<Timestamp, Long> downtime_intervals;	 // Map in which the key is the down time starts and the value is the 
-															 // down time duration.
+	private Timestamp start_downtime;        						 // To keep trace when down time starts.
+	private ConcurrentHashMap<Integer, Robot> robots;   			 // Map in which the key is robot_id and the value is robot itself.
+	private HashMap<Timestamp, Long> downtime_intervals;			 // Map in which the key is the down time starts and the value is the 
+															 		 // down time duration.
 	private ReentrantLock lock = new ReentrantLock(true);
 	
 	public Cluster() {}
@@ -26,7 +28,7 @@ public class Cluster {
 	public Cluster(int cluster_id, int area_id){
 		this.cluster_id = cluster_id;
 		this.area_id = area_id;
-		this.robots = new HashMap<>();
+		this.robots = new ConcurrentHashMap<>();
 		this.downtime_intervals = new HashMap<>();
 		// Add cluster to database.
 		new ClusterDAO().insertCluster(this);
@@ -36,7 +38,7 @@ public class Cluster {
 	// to return a collection of clusters.
 	// This constructor doesn't insert the cluster into the database.
 	public Cluster(int cluster_id, int area_id, int down_robots,
-				   double cluster_IR, Timestamp start_downtime, HashMap<Integer, Robot> robots,
+				   double cluster_IR, Timestamp start_downtime, ConcurrentHashMap<Integer, Robot> robots,
 				   HashMap<Timestamp, Long> downtime_intervals) {
 		
 		this.cluster_id = cluster_id;
@@ -51,7 +53,7 @@ public class Cluster {
 	
 	// Getters and Setters
 	
-	public HashMap<Integer, Robot> getRobots() { return robots; }
+	public ConcurrentHashMap<Integer, Robot> getRobots() { return robots; }
 	public int getDownRobots() { return this.down_robots; }
 	public double getClusterIR() { return cluster_IR; }
 	public int getClusterId() { return cluster_id; }
@@ -59,7 +61,7 @@ public class Cluster {
 	public Timestamp getStartDowntime() { return start_downtime; }
 	public HashMap<Timestamp, Long> getDowntimeIntervals() { return this.downtime_intervals; }
 
-	public void setRobots(HashMap<Integer, Robot> robots) { this.robots = robots; }
+	public void setRobots(ConcurrentHashMap<Integer, Robot> robots) { this.robots = robots; }
 	public void setDownRobots(int down_robots) { this.down_robots = down_robots; }
 	public void setClusterIR(int cluster_IR) { this.cluster_IR = cluster_IR; }
 	public void setClusterId(int cluster_id) { this.cluster_id = cluster_id; }

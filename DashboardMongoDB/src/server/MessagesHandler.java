@@ -7,7 +7,7 @@ import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.Reader;
 import java.nio.charset.Charset;
-import java.util.HashMap;
+import java.util.concurrent.ConcurrentHashMap;
 import org.json.JSONException;
 import org.json.JSONObject;
 import com.sun.net.httpserver.*;
@@ -17,18 +17,18 @@ import model.Robot;
 
 public class MessagesHandler implements HttpHandler {    
 	
-	private HashMap<Integer, Area> areas;
+	private ConcurrentHashMap<Integer, Area> areas;
 	
 	public MessagesHandler() {
-		this.areas = new HashMap<>();
+		this.areas = new ConcurrentHashMap<>();
 	}
 	
-	public MessagesHandler(HashMap<Integer, Area> areas) {
+	public MessagesHandler(ConcurrentHashMap<Integer, Area> areas) {
 		this.areas = areas;
 	}
 	
-	public HashMap<Integer, Area> getAreas(){ return this.areas; }
-	public void serAreas(HashMap<Integer, Area> areas){ this.areas = areas; }
+	public ConcurrentHashMap<Integer, Area> getAreas(){ return this.areas; }
+	public void serAreas(ConcurrentHashMap<Integer, Area> areas){ this.areas = areas; }
 	
     @Override
     public void handle(HttpExchange exchange) throws IOException {

@@ -1,6 +1,6 @@
 package database.dao.concrete;
 
-import java.util.HashMap;
+import java.util.concurrent.ConcurrentHashMap;
 import org.bson.Document;
 import com.mongodb.client.DistinctIterable;
 import com.mongodb.client.MongoCollection;
@@ -13,12 +13,12 @@ import model.Area;
 
 public class RestoreFromDB {
 
-	public static HashMap<Integer, Area> getAreas() {
+	public static ConcurrentHashMap<Integer, Area> getAreas() {
 		
 		MongoDatabase database = DatabaseConnector.CONNECTION.getDatabase();
 		MongoCollection<Document> clusters_collection = database.getCollection("cluster");	
 		
-		HashMap<Integer, Area> areas = new HashMap<>();
+		ConcurrentHashMap<Integer, Area> areas = new ConcurrentHashMap<>();
 		
 		DistinctIterable<Integer> areas_count = clusters_collection.distinct("area_id", Integer.class);
 		MongoCursor<Integer> areas_iterator = areas_count.iterator();
